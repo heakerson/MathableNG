@@ -1,6 +1,7 @@
-import { Addable } from "../interfaces/addable.interface";
+import { Addable } from "../../interfaces/addable.interface";
+import { Multipliable } from "../../interfaces/multipliable.interface";
+import { Factor } from "./factor/factor.model";
 import { MathObject } from "./math-object.model";
-import { Multipliable } from "../interfaces/multipliable.interface";
 
 export class Term extends MathObject implements Addable<Term>, Multipliable<Term> {
     add(mathObject: Term): Term {
@@ -11,5 +12,9 @@ export class Term extends MathObject implements Addable<Term>, Multipliable<Term
     }
     toString(): string {
         throw new Error("Method not implemented.");
+    }
+
+    constructor(public readonly factors: Factor[]) {
+        super();
     }
 }
