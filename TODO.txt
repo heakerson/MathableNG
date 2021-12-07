@@ -1,0 +1,9 @@
+- I think I need to change all of the constructors to accept strings and then create static constructors that accept objects
+- How should I handle the following types of situations? They require editing the input slightly. I think I should do options 2 and store the
+    original strings and the formatted strings AND FIX THE FAILING UNIT TEST
+    - a+-b
+        - Option 1 => a-b
+        - Option 2 => a+(-b)
+    - a--b
+        - Option 1 => a+b
+        - Option 2 => a--b

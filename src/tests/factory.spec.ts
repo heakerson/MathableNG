@@ -4,10 +4,13 @@ describe('Factory', () => {
 
     describe('parseTermStrings', () => {
         const inputs: { input: string, expectedResult: string[] }[] = [
-            // { input: 'a+b+c', expectedResult: ['a', 'b', 'c'] },
-            // { input: '1-2-3', expectedResult: ['1', '-2', '-3'] },
+            { input: 'a+b+c', expectedResult: ['a', 'b', 'c'] },
+            { input: '-a+b+c', expectedResult: ['-a', 'b', 'c'] },
+            { input: '1-2-3', expectedResult: ['1', '-2', '-3'] },
             { input: '(1+2)+3-x*4', expectedResult: ['(1+2)', '3', '-x*4'] },
-            
+            { input: '-(1+2)+3-x*4', expectedResult: ['-(1+2)', '3', '-x*4'] },
+            { input: 'a+-b+c', expectedResult: ['a', '-b', 'c'] },
+
             // { input: ' a +b=c', expectedResult: ['a+b', 'c'] },
             // { input: '1+2=- 3   ', expectedResult: ['1+2', '-3'] },
             // { input: ' 1  +2   =3  =x*   4 ', expectedResult: ['1+2', '3', 'x*4'] },
