@@ -5,25 +5,6 @@ import { Variable } from "./math-object/factor/variable.model";
 import { Term } from "./math-object/term.model";
 
 export class Factory {
-
-    public static buildEquation(input: string): Equation {
-        const expressionStrings = this.parseExpressionStrings(input);
-        const expressions = expressionStrings.map(e => this.buildExpression(e));
-        return new Equation(expressions);
-    }
-
-    public static buildExpression(input: string): Expression {
-        const termStrings = this.parseTermStrings(input);
-        const terms = termStrings.map(t => this.buildTerm(t));
-        return new Expression(terms);
-    }
-
-    public static buildTerm(input: string): Term {
-        const factorStrings = this.parseFactorStrings(input);
-        const factors = factorStrings.map(f => this.buildFactor(f));
-        return new Term(factors);
-    }
-
     public static buildFactor(input: string): Factor {
         return new Variable(input);
     }

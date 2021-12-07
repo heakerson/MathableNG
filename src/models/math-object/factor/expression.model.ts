@@ -1,14 +1,13 @@
 import { MathObject } from "../math-object.model";
-import { Term } from "../term.model";
 
 export class Expression extends MathObject {
 
-    constructor(public readonly terms: Term[]) {
-        super();
+    constructor(input: string) {
+        super(input);
     }
 
     clone(): Expression {
-        return new Expression(this.terms.map(t => t.clone()));
+        return new Expression(this.input);
     }
 
     toString(): string {

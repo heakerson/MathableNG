@@ -3,12 +3,14 @@ import { MathObject } from "./math-object.model";
 
 export class Term extends MathObject {
 
-    constructor(public readonly factors: Factor[]) {
-        super();
+    public readonly factors: Factor[] = [];
+
+    constructor(input: string) {
+        super(input);
     }
 
     clone(): Term {
-        return new Term(this.factors.map(f => f.clone()));
+        return new Term(this.input);
     }
 
     toString(): string {

@@ -2,12 +2,12 @@ import { Factor } from './factor.model';
 
 export class Variable extends Factor {
 
-    constructor(public readonly variableName: string) {
-        super();
+    constructor(input: string) {
+        super(input);
     }
 
     clone(): Variable {
-        return new Variable(this.variableName);
+        return new Variable(this.input);
     }
 
     toString(): string {
