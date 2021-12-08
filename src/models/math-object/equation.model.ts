@@ -1,18 +1,17 @@
-import { Factory } from "../factory.model";
+import { StringFormatter } from "../factory.model";
 import { Expression } from "./factor/expression.model";
 import { MathObject } from "./math-object.model";
 
 export class Equation extends MathObject {
 
+    public readonly expressions: Expression[];
+
     constructor(input: string) {
         super(input);
+        this.expressions = StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
     }
 
     clone(): Equation {
-        return new Equation(this.input);
-    }
-
-    toString(): string {
-        throw new Error("Method not implemented.");
+        return new Equation(this.formattedInput);
     }
 }

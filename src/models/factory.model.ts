@@ -4,7 +4,7 @@ import { Factor } from "./math-object/factor/factor.model";
 import { Variable } from "./math-object/factor/variable.model";
 import { Term } from "./math-object/term.model";
 
-export class Factory {
+export class StringFormatter {
     public static buildFactor(input: string): Factor {
         return new Variable(input);
     }

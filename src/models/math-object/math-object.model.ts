@@ -1,11 +1,21 @@
-import { Factory } from "../factory.model";
+import { StringFormatter } from "../factory.model";
 
 export abstract class MathObject {
     protected readonly inputWhitespaceRemoved: string;
-    abstract toString(): string;
+    protected readonly formattedInput: string;
+
     abstract clone(): MathObject;
 
     constructor(protected input: string) {
-        this.inputWhitespaceRemoved = Factory.removeEmptySpace(input);
+        this.inputWhitespaceRemoved = StringFormatter.removeEmptySpace(input);
+        this.formattedInput = this.getFormattedInputString();
+    }
+
+    protected getFormattedInputString(): string {
+        return this.inputWhitespaceRemoved;
+    }
+
+    toString(): string {
+        return this.formattedInput;
     }
 }

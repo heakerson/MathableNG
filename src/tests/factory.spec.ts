@@ -1,6 +1,6 @@
-import { Factory } from "src/models/factory.model";
+import { StringFormatter } from "src/models/factory.model";
 
-describe('Factory', () => {
+describe('StringFormatter', () => {
 
     describe('parseTermStrings', () => {
         const inputs: { input: string, expectedResult: string[] }[] = [
@@ -32,7 +32,7 @@ describe('Factory', () => {
 
         inputs.forEach((test) => {
             it(`Should parse '${test.input}' as ${test.expectedResult}`, () => {
-                const result = Factory.parseTermStrings(test.input);
+                const result = StringFormatter.parseTermStrings(test.input);
                 expect(result).toEqual(test.expectedResult);
             });
         });
@@ -64,7 +64,7 @@ describe('Factory', () => {
 
         inputs.forEach((test) => {
             it(`Should parse '${test.input}' as ${test.expectedResult}`, () => {
-                const result = Factory.parseExpressionStrings(test.input);
+                const result = StringFormatter.parseExpressionStrings(test.input);
                 expect(result).toEqual(test.expectedResult);
             });
         });
@@ -80,7 +80,7 @@ describe('Factory', () => {
 
         inputs.forEach((test) => {
             it(`Should return '${test.input}' as ${test.expectedResult}`, () => {
-                const result = Factory.removeEmptySpace(test.input);
+                const result = StringFormatter.removeEmptySpace(test.input);
                 expect(result).toEqual(test.expectedResult);
             });
         });
