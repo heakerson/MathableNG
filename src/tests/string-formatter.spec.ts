@@ -1,4 +1,4 @@
-import { StringFormatter } from "src/models/factory.model";
+import { StringFormatter } from "src/models/string-formatter.model";
 
 describe('StringFormatter', () => {
 

@@ -1,4 +1,4 @@
-import { StringFormatter } from "../factory.model";
+import { StringFormatter } from "../string-formatter.model";
 import { Expression } from "./factor/expression.model";
 import { MathObject } from "./math-object.model";
 

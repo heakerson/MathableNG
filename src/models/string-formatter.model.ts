@@ -1,8 +1,5 @@
-import { Equation } from "./math-object/equation.model";
-import { Expression } from "./math-object/factor/expression.model";
 import { Factor } from "./math-object/factor/factor.model";
 import { Variable } from "./math-object/factor/variable.model";
-import { Term } from "./math-object/term.model";
 
 export class StringFormatter {
     public static buildFactor(input: string): Factor {
@@ -59,6 +56,13 @@ export class StringFormatter {
     
 
         return terms;
+    }
+
+    public static parseRationalExpressions(input: string): { numerator: string, denominator: string } {
+        return {
+            numerator: '',
+            denominator: ''
+        };
     }
 
     public static parseFactorStrings(input: string): string[] {

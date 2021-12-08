@@ -1,4 +1,4 @@
-import { StringFormatter } from "../factory.model";
+import { StringFormatter } from "../string-formatter.model";
 
 export abstract class MathObject {
     protected readonly inputWhitespaceRemoved: string;
