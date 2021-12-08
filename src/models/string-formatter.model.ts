@@ -29,18 +29,11 @@ export class StringFormatter {
                     parenthCount--;
                     break;
                 case '+':
-                    if (parenthCount === 0) {
-                        if (i !== 0) {
-                            terms.push(input.substring(lastSign === '-' ? lastTermBreakIndex : lastTermBreakIndex+1, i));
-                        }
-                        lastTermBreakIndex = i;
-                        lastSign = c;
-                    }
-                    break;
                 case '-':
-                    if (parenthCount === 0) {
+                    const previousCharIsSign = input[i-1] === '+' || input[i-1] === '-';
+                    if (parenthCount === 0 && !previousCharIsSign) {
                         if (i !== 0) {
-                            terms.push(input.substring(lastSign === '-' ? lastTermBreakIndex : lastTermBreakIndex+1, i));
+                            terms.push(input.substring(lastTermBreakIndex, i));
                         }
                         lastTermBreakIndex = i;
                         lastSign = c;
@@ -48,7 +41,7 @@ export class StringFormatter {
                     break;
                 default:
                     if (i === input.length - 1) {
-                        terms.push(input.substring(lastSign === '-' ? lastTermBreakIndex : lastTermBreakIndex+1));
+                        terms.push(input.substring(lastTermBreakIndex));
                     }
                     break;
             }
@@ -65,9 +58,16 @@ export class StringFormatter {
         };
     }
 
+    public static parsePowerFactor(input: string): { base: string, exponent: string } {
+        return {
+            base: '',
+            exponent: ''
+        };
+    }
+
     public static parseFactorStrings(input: string): string[] {
         return [];
-    }
+    } 
 
     public static removeEmptySpace(input: string): string {
         return input.replace(/\s+/g, '');

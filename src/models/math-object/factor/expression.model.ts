@@ -1,8 +1,8 @@
 import { StringFormatter } from "src/models/string-formatter.model";
-import { MathObject } from "../math-object.model";
 import { Term } from "../term.model";
+import { Factor } from "./factor.model";
 
-export class Expression extends MathObject {
+export class Expression extends Factor {
 
     public readonly terms: Term[];
 

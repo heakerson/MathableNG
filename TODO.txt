@@ -1,4 +1,14 @@
-- I think I need to change all of the constructors to accept strings and then create static constructors that accept objects
+- Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
+    - parseTermStrings
+    - parseRationalExpressions
+    - parsePowerFactor
+    - parseFactorStrings
+- Add a protected function that tests for various input errors and throw specific errors 
+- FORMATTING INPUT STRINGS: 
+    - Expression 
+        - turn a+-b*c => ?
+        - turn a--b*c => a-(-b*c) OR a-(-b)*c?
+
 - How should I handle the following types of situations? They require editing the input slightly. I think I should do options 2 and store the
     original strings and the formatted strings AND FIX THE FAILING UNIT TEST
     - a+-b
@@ -7,3 +17,5 @@
     - a--b
         - Option 1 => a+b
         - Option 2 => a--b
+- Add sign enum to factor
+- Add sign getter to term

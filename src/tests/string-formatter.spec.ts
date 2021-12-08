@@ -4,30 +4,14 @@ describe('StringFormatter', () => {
 
     describe('parseTermStrings', () => {
         const inputs: { input: string, expectedResult: string[] }[] = [
-            { input: 'a+b+c', expectedResult: ['a', 'b', 'c'] },
-            { input: '-a+b+c', expectedResult: ['-a', 'b', 'c'] },
+            { input: 'a+b+c', expectedResult: ['a', '+b', '+c'] },
+            { input: '-a+b+c', expectedResult: ['-a', '+b', '+c'] },
             { input: '1-2-3', expectedResult: ['1', '-2', '-3'] },
-            { input: '(1+2)+3-x*4', expectedResult: ['(1+2)', '3', '-x*4'] },
-            { input: '-(1+2)+3-x*4', expectedResult: ['-(1+2)', '3', '-x*4'] },
-            { input: 'a+-b+c', expectedResult: ['a', '-b', 'c'] },
-
-            // { input: ' a +b=c', expectedResult: ['a+b', 'c'] },
-            // { input: '1+2=- 3   ', expectedResult: ['1+2', '-3'] },
-            // { input: ' 1  +2   =3  =x*   4 ', expectedResult: ['1+2', '3', 'x*4'] },
-            // { input: 'a+b<=c', expectedResult: ['a+b', 'c'] },
-            // { input: '1+2<=3', expectedResult: ['1+2', '3'] },
-            // { input: '1+2< =3=x*-4', expectedResult: ['1+2', '3', 'x*-4'] },
-            // { input: ' a +b  <=c', expectedResult: ['a+b', 'c'] },
-            // { input: '1-2>=3   ', expectedResult: ['1-2', '3'] },
-            // { input: ' 1  +2   > = 3  =x*   4 ', expectedResult: ['1+2', '3', 'x*4'] },
-            // { input: 'a+b> =c', expectedResult: ['a+b', 'c'] },
-            // { input: '-1+2>3', expectedResult: ['-1+2', '3'] },
-            // { input: '1+2> =3=x*4', expectedResult: ['1+2', '3', 'x*4'] },
-            // { input: ' a +b  >c', expectedResult: ['a+b', 'c'] },
-            // { input: '1+2<3   ', expectedResult: ['1+2', '3'] },
-            // { input: ' 1  +2   < = 3  >=x*   4 ', expectedResult: ['1+2', '3', 'x*4'] },
-            // { input: '  a* b', expectedResult: ['a*b'] },
-            // { input: '  ', expectedResult: [''] },
+            { input: '(1+2)+3-x*4', expectedResult: ['(1+2)', '+3', '-x*4'] },
+            { input: '-(1+2)+3-x*4', expectedResult: ['-(1+2)', '+3', '-x*4'] },
+            { input: 'a+-b*x+c', expectedResult: ['a', '+-b*x', '+c'] },
+            { input: 'a+ -b*x - -c', expectedResult: ['a', '+-b*x', '--c'] },
+            { input: '+a+ -b*(x+ y*z*(b*(1+2))) - -c', expectedResult: ['+a', '+-b*(x+y*z*(b*(1+2)))', '--c'] },
         ];
 
         inputs.forEach((test) => {
