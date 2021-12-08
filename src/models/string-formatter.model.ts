@@ -72,4 +72,44 @@ export class StringFormatter {
     public static removeEmptySpace(input: string): string {
         return input.replace(/\s+/g, '');
     }
+
+    public static hasParenthesisCountMismatch(input: string): boolean {
+        let count = 0;
+
+        [...input].forEach((c) => {
+            switch (c) {
+                case '(':
+                    count++;
+                    break;
+                case ')':
+                    count--;
+                    break;
+            }
+        });
+
+        return count !== 0;
+    }
+
+    public static tooManyOperators(input: string): string | null {
+        let operatorString: string = '';
+        let foundError = false;
+        const operators = ['+', '-', '/', '*', '^'];
+        const exceptions = operators.map(o => `${o}-`);
+
+        [...input].forEach((c, i) => {
+            if (!foundError) {
+                if (operators.includes(c)) {
+                    operatorString+=c;
+                } else {
+                    if (operatorString && !exceptions.includes(operatorString) && operatorString.length > 1) {
+                        foundError = true;
+                    } else {
+                        operatorString = '';
+                    }
+                }
+            }
+        });
+
+        return foundError ? operatorString : null;
+    }
 }

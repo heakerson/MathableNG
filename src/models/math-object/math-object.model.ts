@@ -8,11 +8,15 @@ export abstract class MathObject {
 
     constructor(protected input: string) {
         this.inputWhitespaceRemoved = StringFormatter.removeEmptySpace(input);
+        this.checkFormattingErrors();
         this.formattedInput = this.getFormattedInputString();
     }
 
     protected getFormattedInputString(): string {
         return this.inputWhitespaceRemoved;
+    }
+
+    protected checkFormattingErrors(): void {
     }
 
     toString(): string {

@@ -69,4 +69,49 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('hasParenthesisCountMismatch', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: ' a +b=c', expectedResult: false },
+            { input: '1+(2)=3   ', expectedResult: false },
+            { input: '( 1  +2)   =3  =(x*   4 )', expectedResult: false },
+            { input: 'a+b^(x)<=c', expectedResult: false },
+            { input: ' a +(b=c', expectedResult: true },
+            { input: '1+2)=3   ', expectedResult: true },
+            { input: '1  +2)   =3  =(x*   4 )', expectedResult: true },
+            { input: 'a+b^(x<=c', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasParenthesisCountMismatch(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
+    describe('tooManyOperators', () => {
+        const inputs: { input: string, expectedResult: string | null }[] = [
+            { input: ' a +-b=c--d', expectedResult: null },
+            { input: '1+(2)=3   ', expectedResult: null },
+            { input: 'x^-y', expectedResult: null },
+            { input: '--x*-y', expectedResult: null },
+            { input: 'x^-(y)', expectedResult: null },
+            { input: 'a+b^(x)<=c/-d', expectedResult: null },
+            { input: '1++2=3', expectedResult: '++' },
+            { input: '1+-2=3++b', expectedResult: '++' },
+            { input: '1+--2=3++b', expectedResult: '+--' },
+            { input: '1+-2=3**b', expectedResult: '**' },
+            { input: '1/-2=3//b', expectedResult: '//' },
+            { input: 'x^*b', expectedResult: '^*' },
+            { input: 'x^/b', expectedResult: '^/' },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.tooManyOperators(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });
