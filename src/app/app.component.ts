@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const mo = new Expression('((a+b)');
-    console.log(mo);
+    // const mo = new Expression('((a+b)');
+    // console.log(mo);
   }
 }

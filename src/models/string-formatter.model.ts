@@ -90,6 +90,10 @@ export class StringFormatter {
         return count !== 0;
     }
 
+    public static hasEmptyParenthesis(input: string): boolean {
+        return this.removeEmptySpace(input).indexOf('()') > -1;
+    }
+
     public static tooManyOperators(input: string): string | null {
         let operatorString: string = '';
         let foundError = false;
