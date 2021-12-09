@@ -2,7 +2,7 @@ import { StringFormatter } from "src/models/string-formatter.model";
 
 describe('StringFormatter', () => {
 
-    fdescribe('parseTermStrings', () => {
+    describe('parseTermStrings', () => {
         const inputs: { input: string, expectedResult: string[] }[] = [
             { input: 'a+b+c', expectedResult: ['a', '+b', '+c'] },
             { input: '-a+b+c', expectedResult: ['-a', '+b', '+c'] },
@@ -236,6 +236,59 @@ describe('StringFormatter', () => {
         inputs.forEach((test) => {
             it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
                 const result = StringFormatter.hasMisorderedClosingParenthesis(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
+    describe('parseFactorStrings', () => {
+        const inputs: { input: string, expectedResult: string[] }[] = [
+            { input: 'a', expectedResult: ['a']},
+            { input: '-a', expectedResult: ['-a']},
+            { input: '(-a)', expectedResult: ['(-a)']},
+            { input: 'a*b', expectedResult: ['a', 'b'] },
+            { input: '-a*-b', expectedResult: ['-a', '-b'] },
+            { input: '-bob*-fred', expectedResult: ['-bob', '-fred'] },
+            { input: '-(x+y)*-a*-b', expectedResult: ['-(x+y)','-a', '-b'] },
+            { input: '-(x+y)*-(r)*-a*-b', expectedResult: ['-(x+y)','-(r)','-a', '-b'] },
+            { input: '(x+y)*-a*-b', expectedResult: ['(x+y)','-a', '-b'] },
+            { input: 'a^(b)', expectedResult: ['a^(b)'] },
+            { input: '-a^(b)', expectedResult: ['-a^(b)'] },
+            { input: '-a^-(b)', expectedResult: ['-a^-(b)'] },
+            { input: '-a^-(b)*x', expectedResult: ['-a^-(b)', 'x'] },
+            { input: 'a^b*c', expectedResult: ['a^b', 'c'] },
+            { input: '-a^b*c', expectedResult: ['-a^b', 'c'] },
+            { input: 'a^-b*c', expectedResult: ['a^-b', 'c'] },
+            { input: '((a)/(b))', expectedResult: ['((a)/(b))'] },
+            { input: 'x*((a)/(b))', expectedResult: ['x','((a)/(b))'] },
+            { input: 'x*-((a)/(b))', expectedResult: ['x','-((a)/(b))'] },
+            { input: 'x^((a)/(b))', expectedResult: ['x^((a)/(b))'] },
+            { input: 'x^-((a)/(b))', expectedResult: ['x^-((a)/(b))'] },
+            { input: 'a/b', expectedResult: ['a/b'] },
+            { input: 'a/b*x', expectedResult: ['a/b', 'x'] },
+            { input: 'a/-b*x', expectedResult: ['a/-b', 'x'] },
+            { input: '(a)/(b)', expectedResult: ['(a)/(b)'] },
+            { input: 'x*(a)/(b)', expectedResult: ['x','(a)/(b)'] },
+            { input: 'x*-(a)/(b)', expectedResult: ['x','-(a)/(b)'] },
+            { input: 'x^(a)/(b)', expectedResult: ['x^(a)/(b)'] },
+            { input: 'x^-(a)/(b)', expectedResult: ['x^-(a)/(b)'] },
+            { input: 'x^(a)/(b)/c', expectedResult: ['x^(a)/(b)/c'] },
+            { input: 'x^-(a)/(b)/c', expectedResult: ['x^-(a)/(b)/c'] },
+            { input: 'x^a/b', expectedResult: ['x^a/b'] },
+            { input: 'x^-a/b', expectedResult: ['x^-a/b'] },
+            { input: 'x^a/b/c', expectedResult: ['x^a/b/c'] },
+            { input: 'x^-a/b/c', expectedResult: ['x^-a/b/c'] },
+            { input: 'x^-a/-b/c', expectedResult: ['x^-a/-b/c'] },
+            { input: 'x*-a/b/c', expectedResult: ['x','-a/b/c'] },
+            { input: 'x*-a/-b/c', expectedResult: ['x','-a/-b/c'] },
+            { input: '(a)*b', expectedResult: ['(a)','b'] },
+            { input: '(a)*(b)', expectedResult: ['(a)','(b)'] },
+            { input: '-(a)*-(b)', expectedResult: ['-(a)','-(b)'] },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should parse '${test.input}' as ${test.expectedResult}`, () => {
+                const result = StringFormatter.parseFactorStrings(test.input);
                 expect(result).toEqual(test.expectedResult);
             });
         });

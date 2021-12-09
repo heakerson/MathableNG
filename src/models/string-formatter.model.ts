@@ -75,7 +75,46 @@ export class StringFormatter {
     }
 
     public static parseFactorStrings(input: string): string[] {
-        return [];
+        input = this.removeEmptySpace(input);
+        const factors: string[] = [];
+        let parenthCount = 0;
+        let lastFactorBreakIndex = -1;
+        let lastSign = '+';
+
+        [...input].forEach((c, i) => {
+            switch(c) {
+                case '(':
+                    parenthCount++;
+                    break;
+                case ')':
+                    parenthCount--;
+                    if (i === input.length - 1) {
+                        factors.push(input.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+                case '*':
+                    const previousCharIsOperator = this.operators.includes(input[i-1]);
+                    if (parenthCount === 0 && !previousCharIsOperator) {
+                        if (i !== 0) {
+                            factors.push(input.substring(lastFactorBreakIndex+1, i));
+                        }
+                        lastFactorBreakIndex = i;
+                        lastSign = c;
+                    }
+                    break;
+                default:
+                    if (i === input.length - 1) {
+                        factors.push(input.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+            }
+        })
+    
+        if (factors.length === 0) {
+            factors.push(input);
+        }
+
+        return factors;
     } 
 
     public static removeEmptySpace(input: string): string {

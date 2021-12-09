@@ -1,7 +1,6 @@
-LEFT OFF: 
-- Finish writing tests for parsing factors
+LEFT OFF:
+- add base formatting to replace )( with )*(
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
-    - parseFactorStrings
     - parseRationalExpressions
     - parsePowerFactor
 - Add the rest of the string formatter error checkers to checkFormattingErrors
