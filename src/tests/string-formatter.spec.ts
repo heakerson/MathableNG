@@ -179,4 +179,30 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('hasMisorderedClosingParenthesis', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: '', expectedResult: false },
+            { input: ' ', expectedResult: false },
+            { input: '(a)+b', expectedResult: false },
+            { input: '(((a)+b))', expectedResult: false },
+            { input: '((((x))))', expectedResult: false },
+            { input: '(((())))', expectedResult: false },
+            { input: '()()()()', expectedResult: false },
+            { input: '1+(2)=(3)   ', expectedResult: false },
+            { input: '1+)2)=(3)   ', expectedResult: true },
+            { input: ')(a)', expectedResult: true },
+            { input: ')(', expectedResult: true },
+            { input: '())', expectedResult: true },
+            { input: '(((a)+b+)))', expectedResult: true },
+            { input: '()())()()', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasMisorderedClosingParenthesis(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });

@@ -1,6 +1,5 @@
 LEFT OFF:
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
-    - check for ))))((((
     - parseRationalExpressions
     - parsePowerFactor
     - parseFactorStrings
