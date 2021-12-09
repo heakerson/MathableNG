@@ -31,7 +31,7 @@ export abstract class MathObject {
     }
 
     protected getFormattedInputString(): string {
-        return this.inputWhitespaceRemoved;
+        return this.inputWhitespaceRemoved.replace(')(', ')*(');
     }
 
     public toString(): string {
