@@ -2,7 +2,7 @@ import { StringFormatter } from "src/models/string-formatter.model";
 
 describe('StringFormatter', () => {
 
-    describe('parseTermStrings', () => {
+    fdescribe('parseTermStrings', () => {
         const inputs: { input: string, expectedResult: string[] }[] = [
             { input: 'a+b+c', expectedResult: ['a', '+b', '+c'] },
             { input: '-a+b+c', expectedResult: ['-a', '+b', '+c'] },
@@ -12,6 +12,41 @@ describe('StringFormatter', () => {
             { input: 'a+-b*x+c', expectedResult: ['a', '+-b*x', '+c'] },
             { input: 'a+ -b*x - -c', expectedResult: ['a', '+-b*x', '--c'] },
             { input: '+a+ -b*(x+ y*z*(b*(1+2))) - -c', expectedResult: ['+a', '+-b*(x+y*z*(b*(1+2)))', '--c'] },
+            { input: 'x^a/b', expectedResult: ['x^a/b'] },
+            { input: 'x^-a/b', expectedResult: ['x^-a/b'] },
+            { input: 'x^a/b/c', expectedResult: ['x^a/b/c'] },
+            { input: 'x^-a/b/c', expectedResult: ['x^-a/b/c'] },
+            { input: 'x^-a/-b/c', expectedResult: ['x^-a/-b/c'] },
+            { input: 'x*-a/b/c', expectedResult: ['x*-a/b/c'] },
+            { input: 'x*-a/-b/c', expectedResult: ['x*-a/-b/c'] },
+            { input: '-a^(b)', expectedResult: ['-a^(b)'] },
+            { input: '-a^-(b)', expectedResult: ['-a^-(b)'] },
+            { input: '-a^-(b)*x', expectedResult: ['-a^-(b)*x'] },
+            { input: '-a^-(b)(x)', expectedResult: ['-a^-(b)(x)'] },
+            { input: '-(b)-(x)', expectedResult: ['-(b)', '-(x)'] },
+            { input: 'a^b*c', expectedResult: ['a^b*c'] },
+            { input: '-a^b*c', expectedResult: ['-a^b*c'] },
+            { input: 'a^-b*c', expectedResult: ['a^-b*c'] },
+            { input: '((a)/(b))', expectedResult: ['((a)/(b))'] },
+            { input: 'x*((a)/(b))', expectedResult: ['x*((a)/(b))'] },
+            { input: 'x*-((a)/(b))', expectedResult: ['x*-((a)/(b))'] },
+            { input: 'x^((a)/(b))', expectedResult: ['x^((a)/(b))'] },
+            { input: 'x^-((a)/(b))', expectedResult: ['x^-((a)/(b))'] },
+            { input: 'a/b', expectedResult: ['a/b'] },
+            { input: 'a/b*x', expectedResult: ['a/b*x'] },
+            { input: 'a/-b*x', expectedResult: ['a/-b*x'] },
+            { input: '(a)/(b)', expectedResult: ['(a)/(b)'] },
+            { input: 'x*(a)/(b)', expectedResult: ['x*(a)/(b)'] },
+            { input: 'x-(a)/(b)', expectedResult: ['x', '-(a)/(b)'] },
+            { input: 'x+(a)/(b)', expectedResult: ['x', '+(a)/(b)'] },
+            { input: 'x-a/b', expectedResult: ['x', '-a/b'] },
+            { input: 'x*-(a)/(b)', expectedResult: ['x*-(a)/(b)'] },
+            { input: 'x*(a)/(b)/c', expectedResult: ['x*(a)/(b)/c'] },
+            { input: 'x*-(a)/(b)/c', expectedResult: ['x*-(a)/(b)/c'] },
+            { input: 'x^(a)/(b)', expectedResult: ['x^(a)/(b)'] },
+            { input: 'x^-(a)/(b)', expectedResult: ['x^-(a)/(b)'] },
+            { input: 'x*-(a)/(b)-a/(b)', expectedResult: ['x*-(a)/(b)', '-a/(b)'] },
+            { input: 'x*(a)/(b)/c+a/b', expectedResult: ['x*(a)/(b)/c', '+a/b'] },
         ];
 
         inputs.forEach((test) => {

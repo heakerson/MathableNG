@@ -1,8 +1,9 @@
-LEFT OFF:
+LEFT OFF: 
+- Finish writing tests for parsing factors
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
+    - parseFactorStrings
     - parseRationalExpressions
     - parsePowerFactor
-    - parseFactorStrings
 - Add the rest of the string formatter error checkers to checkFormattingErrors
 - TEST checkFormattingErrors
 - Add Optional Parents to constructors
@@ -29,3 +30,11 @@ LEFT OFF:
         - Option 2 => a--b
 - Add sign enum to factor
 - Add sign getter to term
+
+
+GENERAL RULES:
+================
+- I am allowing ambiguous rational inputs like a/b/c but it will make assumptions without ()
+- I am allowing inputs of (a)(b) - it will assume these are two factors
+- I am allowing a^b/c => ((a^(b))/(c))
+- I am allowing a^b*c => a^(b)*c

@@ -30,11 +30,14 @@ export class StringFormatter {
                     break;
                 case ')':
                     parenthCount--;
+                    if (i === input.length - 1) {
+                        terms.push(input.substring(lastTermBreakIndex));
+                    }
                     break;
                 case '+':
                 case '-':
-                    const previousCharIsSign = input[i-1] === '+' || input[i-1] === '-';
-                    if (parenthCount === 0 && !previousCharIsSign) {
+                    const previousCharIsOperator = this.operators.includes(input[i-1]);
+                    if (parenthCount === 0 && !previousCharIsOperator) {
                         if (i !== 0) {
                             terms.push(input.substring(lastTermBreakIndex, i));
                         }
@@ -50,6 +53,9 @@ export class StringFormatter {
             }
         })
     
+        if (terms.length === 0) {
+            terms.push(input);
+        }
 
         return terms;
     }
