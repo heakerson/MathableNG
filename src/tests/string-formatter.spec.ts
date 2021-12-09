@@ -146,6 +146,7 @@ describe('StringFormatter', () => {
     describe('hasMisplacedOperators', () => {
         const inputs: { input: string, expectedResult: string | null }[] = [
             { input: 'a+b=c-d', expectedResult: null },
+            { input: '()', expectedResult: null },
             { input: '(a)', expectedResult: null },
             { input: '(-a)', expectedResult: null },
             { input: '(+a)', expectedResult: null },
@@ -159,6 +160,16 @@ describe('StringFormatter', () => {
             { input: '(a+b^-(/x))', expectedResult: '(/' },
             { input: '(-a+b^-(*x)', expectedResult: '(*' },
             { input: '(-a+b^-(*(x))', expectedResult: '(*' },
+            { input: '*)', expectedResult: '*)' },
+            { input: '^)', expectedResult: '^)' },
+            { input: '(a*)', expectedResult: '*)' },
+            { input: '(a/)', expectedResult: '/)' },
+            { input: '(a^)', expectedResult: '^)' },
+            { input: '(a-)', expectedResult: '-)' },
+            { input: '(a+)', expectedResult: '+)' },
+            { input: '(a+b^-(x/))', expectedResult: '/)' },
+            { input: '(-a+b^-(x*)', expectedResult: '*)' },
+            { input: '(-a+b^-((x)*)', expectedResult: '*)' },
         ];
 
         inputs.forEach((test) => {
