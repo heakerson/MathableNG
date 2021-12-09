@@ -1,10 +1,11 @@
 LEFT OFF:
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
-    - check for empty parenthesis: ()
     - check for parenthesis that follow or lead operators in the wrong way (*, (/ etc
+    - check for ))))((((
     - parseRationalExpressions
     - parsePowerFactor
     - parseFactorStrings
+- Add the rest of the string formatter error checkers to checkFormattingErrors
 - TEST checkFormattingErrors
 - Add Optional Parents to constructors
     - THINK ABOUT THIS AND HOW I WANT UPDATING OBJECTS TO WORK!

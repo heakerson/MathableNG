@@ -142,4 +142,30 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('hasMisplacedOperators', () => {
+        const inputs: { input: string, expectedResult: string | null }[] = [
+            { input: 'a+b=c-d', expectedResult: null },
+            { input: '(a)', expectedResult: null },
+            { input: '(-a)', expectedResult: null },
+            { input: '(+a)', expectedResult: null },
+            { input: '(a+b^-(x))', expectedResult: null },
+            { input: '(-a+b^-(x))', expectedResult: null },
+            { input: '(*', expectedResult: '(*' },
+            { input: '(^', expectedResult: '(^' },
+            { input: '(*a)', expectedResult: '(*' },
+            { input: '(/a)', expectedResult: '(/' },
+            { input: '(^a)', expectedResult: '(^' },
+            { input: '(a+b^-(/x))', expectedResult: '(/' },
+            { input: '(-a+b^-(*x)', expectedResult: '(*' },
+            { input: '(-a+b^-(*(x))', expectedResult: '(*' },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasMisplacedOperators(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });

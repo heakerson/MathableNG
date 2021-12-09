@@ -2,6 +2,9 @@ import { Factor } from "./math-object/factor/factor.model";
 import { Variable } from "./math-object/factor/variable.model";
 
 export class StringFormatter {
+    private static operators = ['+', '-', '/', '*', '^'];
+    private static nonSignOperators = ['/', '*', '^'];
+
     public static buildFactor(input: string): Factor {
         return new Variable(input);
     }
@@ -97,12 +100,11 @@ export class StringFormatter {
     public static tooManyOperators(input: string): string | null {
         let operatorString: string = '';
         let foundError = false;
-        const operators = ['+', '-', '/', '*', '^'];
-        const exceptions = operators.map(o => `${o}-`);
+        const exceptions = this.operators.map(o => `${o}-`);
 
         [...input].forEach((c, i) => {
             if (!foundError) {
-                if (operators.includes(c)) {
+                if (this.operators.includes(c)) {
                     operatorString+=c;
                 } else {
                     if (operatorString && !exceptions.includes(operatorString) && operatorString.length > 1) {
@@ -115,5 +117,38 @@ export class StringFormatter {
         });
 
         return foundError ? operatorString : null;
+    }
+
+    public static hasMisplacedOperators(input: string): string | null {
+        let operatorError: string = '';
+        let foundError = false;
+        const leftErrors = this.nonSignOperators.map(o => `(${o}`);
+        const rightErrors = this.operators.map(o => `${o})`);
+        const inputArray = [...input];
+
+        inputArray.forEach((c, i) => {
+            if (!foundError) {
+                switch (c) {
+                    case '(':
+                        if (input.length - 1 > i) {
+                            const subStr = input.substring(i, i+2);
+                            if (leftErrors.includes(subStr)) {
+                                operatorError = subStr;
+                                foundError = true;
+                            }
+                        }
+                        break;
+                    case ')':
+                        const subStr = input.substring(i-1, i+1);
+                        if (rightErrors.includes(subStr)) {
+                            operatorError = subStr;
+                            foundError = true;
+                        }
+                        break;
+                }
+            }
+        });
+
+        return foundError ? operatorError : null;
     }
 }
