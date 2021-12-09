@@ -1,10 +1,15 @@
 LEFT OFF:
-
-- Add a protected function that tests for various input errors and throw specific errors
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
+    - check for empty parenthesis: ()
+    - check for parenthesis that follow or lead operators in the wrong way (*, (/ etc
     - parseRationalExpressions
     - parsePowerFactor
     - parseFactorStrings
+- TEST checkFormattingErrors
+- Add Optional Parents to constructors
+    - THINK ABOUT THIS AND HOW I WANT UPDATING OBJECTS TO WORK!
+        - probably return an ENTIRELY clone object but a pointer to the object in the same position
+            - will need a way to get an object based on positioning
 - FORMATTING INPUT STRINGS: 
     - Expression 
         - turn a+-b*c => ?
