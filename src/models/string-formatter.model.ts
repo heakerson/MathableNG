@@ -1,4 +1,3 @@
-import { Input } from "@angular/core";
 import { Factor } from "./math-object/factor/factor.model";
 import { Variable } from "./math-object/factor/variable.model";
 
