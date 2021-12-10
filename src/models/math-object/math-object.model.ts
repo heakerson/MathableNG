@@ -1,12 +1,16 @@
 import { StringFormatter } from "../string-formatter.model";
+import * as uuid from 'uuid';
 
 export abstract class MathObject {
+    public readonly id: any;
+
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;
 
     abstract clone(): MathObject;
 
     constructor(protected input: string) {
+        this.id = uuid.v1();
         this.inputWhitespaceRemoved = StringFormatter.removeEmptySpace(input);
         this.checkFormattingErrors();
         this.formattedInput = this.getFormattedInputString();
