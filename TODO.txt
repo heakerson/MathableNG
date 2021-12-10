@@ -1,5 +1,7 @@
 LEFT OFF:
 - Write and test the formatting functions for child classes
+    - Write/test getMatchingParenth
+    - Write/test ensureParenthesis function
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
     - parseRationalExpressions
     - parsePowerFactor

@@ -107,5 +107,8 @@
       }
     }
   },
-  "defaultProject": "MathableNG"
+  "defaultProject": "MathableNG",
+  "cli": {
+    "analytics": false
+  }
 }

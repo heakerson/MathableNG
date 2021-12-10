@@ -117,6 +117,10 @@ export class StringFormatter {
         return factors;
     } 
 
+    public static getMatchingParenthesis(input: string, startIndex: number): number {
+        return 0;
+    }
+
     public static removeEmptySpace(input: string): string {
         return input.replace(/\s+/g, '');
     }
