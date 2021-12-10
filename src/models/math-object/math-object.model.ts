@@ -3,6 +3,7 @@ import * as uuid from 'uuid';
 
 export abstract class MathObject {
     public readonly id: any;
+    public readonly children: MathObject[];
 
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;
@@ -14,6 +15,7 @@ export abstract class MathObject {
         this.inputWhitespaceRemoved = StringFormatter.removeEmptySpace(input);
         this.checkFormattingErrors();
         this.formattedInput = this.getFormattedInputString();
+        this.children = this.setChildren();
     }
 
     protected checkFormattingErrors(): void {
@@ -32,6 +34,10 @@ export abstract class MathObject {
         if (parenthesisError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
         }
+    }
+
+    protected setChildren(): MathObject[] {
+        return [];
     }
 
     protected getFormattedInputString(): string {

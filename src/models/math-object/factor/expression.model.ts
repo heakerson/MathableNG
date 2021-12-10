@@ -4,11 +4,8 @@ import { Factor } from "./factor.model";
 
 export class Expression extends Factor {
 
-    public readonly terms: Term[];
-
     constructor(input: string) {
         super(input);
-        this.terms = StringFormatter.parseTermStrings(this.formattedInput).map(t => new Term(t));
     }
 
     protected override getFormattedInputString(): string {
@@ -19,6 +16,10 @@ export class Expression extends Factor {
         }
 
         return StringFormatter.ensureSurroundingParenthesis(parentFormatted);
+    }
+
+    protected override setChildren(): Term[] {
+        return StringFormatter.parseTermStrings(this.formattedInput).map(t => new Term(t));
     }
 
     clone(): Expression {

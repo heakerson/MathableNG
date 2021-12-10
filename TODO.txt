@@ -1,4 +1,9 @@
 LEFT OFF:
+- Add these to ALL of objects and test?
+    - id
+    - children
+        - setChildren
+- Add/test validate parent?
 - Write and test the formatting functions for child classes
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
     - parseRationalExpressions
