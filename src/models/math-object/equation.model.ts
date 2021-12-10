@@ -4,11 +4,12 @@ import { MathObject } from "./math-object.model";
 
 export class Equation extends MathObject {
 
-    public readonly expressions: Expression[];
-
     constructor(input: string) {
         super(input);
-        this.expressions = StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
+    }
+
+    protected override setChildren(): Expression[] {
+        return StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
     }
 
     copy(): Equation {
