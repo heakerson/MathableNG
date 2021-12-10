@@ -11,7 +11,7 @@ export class Equation extends MathObject {
         this.expressions = StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
     }
 
-    clone(): Equation {
+    copy(): Equation {
         return new Equation(this.formattedInput);
     }
 }

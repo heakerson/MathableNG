@@ -14,7 +14,7 @@ export class Rational extends Factor {
         this.denominator = new Expression(denominator);
     }
 
-    clone(): Rational {
+    copy(): Rational {
         return new Rational(this.formattedInput);
     }
 }

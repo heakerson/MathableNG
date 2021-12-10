@@ -14,7 +14,7 @@ export class Power extends Factor {
         this.base = new Expression(base);
     }
 
-    clone(): Power {
+    copy(): Power {
         return new Power(this.formattedInput);
     }
 }

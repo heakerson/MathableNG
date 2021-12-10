@@ -12,7 +12,7 @@ export class Term extends MathObject {
         return StringFormatter.parseFactorStrings(this.formattedInput).map(f => StringFormatter.buildFactor(f));
     }
 
-    clone(): Term {
+    copy(): Term {
         return new Term(this.formattedInput);
     }
 }

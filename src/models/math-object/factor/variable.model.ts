@@ -10,7 +10,7 @@ export class Variable extends Factor {
         super(input);
     }
 
-    clone(): Variable {
+    copy(): Variable {
         return new Variable(this.formattedInput);
     }
 }

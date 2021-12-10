@@ -8,7 +8,7 @@ export abstract class MathObject {
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;
 
-    abstract clone(): MathObject;
+    abstract copy(): MathObject;
 
     constructor(protected input: string) {
         this.id = uuid.v1();

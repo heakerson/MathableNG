@@ -22,7 +22,7 @@ export class Expression extends Factor {
         return StringFormatter.parseTermStrings(this.formattedInput).map(t => new Term(t));
     }
 
-    clone(): Expression {
+    copy(): Expression {
         return new Expression(this.formattedInput);
     }
 }
