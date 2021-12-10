@@ -157,6 +157,17 @@ export class StringFormatter {
         return -1;
     }
 
+    public static ensureSurroundingParenthesis(input: string): string {
+        if (input[0] === '(') {
+            const matchingIndex = this.getMatchingParenthesisIndex(input, 0);
+            if (matchingIndex === input.length - 1) {
+                return input;
+            }
+        }
+
+        return `(${input})`;
+    }
+
     public static removeEmptySpace(input: string): string {
         return input.replace(/\s+/g, '');
     }

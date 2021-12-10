@@ -325,4 +325,27 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('ensureSurroundingParenthesis', () => {
+        const inputs: { input: string, expectedResult: string }[] = [
+            { input: '', expectedResult: '()' },
+            { input: '   a', expectedResult: '(   a)' },
+            { input: '   a)', expectedResult: '(   a))' },
+            { input: '(   a', expectedResult: '((   a)' },
+            { input: 'a', expectedResult: '(a)' },
+            { input: '(a)', expectedResult: '(a)' },
+            { input: '((((a))))', expectedResult: '((((a))))' },
+            { input: '(a+b)*(x-y)^(t)', expectedResult: '((a+b)*(x-y)^(t))' },
+            { input: '-(a+b)*(x-y)^(t)', expectedResult: '(-(a+b)*(x-y)^(t))' },
+            { input: '(a)/b', expectedResult: '((a)/b)' },
+            { input: '(a)/(b)', expectedResult: '((a)/(b))' },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should transform '${test.input}' to '${test.expectedResult}'`, () => {
+                const result = StringFormatter.ensureSurroundingParenthesis(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });
