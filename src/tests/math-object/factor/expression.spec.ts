@@ -30,7 +30,7 @@ describe('Expression', () => {
         inputs.forEach((test) => {
             const mo = new Expression(test.input);
 
-            fit(`Should transform '${test.input}' to '${test.toString}'`, () => {
+            it(`Should transform '${test.input}' to '${test.toString}'`, () => {
                 expect(mo.toString()).toEqual(test.toString);
             });
         });
