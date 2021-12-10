@@ -3,15 +3,22 @@ import { Expression } from "./expression.model";
 import { Factor } from "./factor.model";
 
 export class Power extends Factor {
+
+    get base(): Factor {
+        return this.children[0] as Factor;
+    }
     
-    public readonly exponent: Expression;
-    public readonly base: Expression;
+    get exponent(): Expression {
+        return this.children[1] as Expression;
+    }
 
     constructor(input: string) {
         super(input);
-        const { exponent, base } = StringFormatter.parsePowerFactor(this.formattedInput);
-        this.exponent = new Expression(exponent);
-        this.base = new Expression(base);
+    }
+
+    protected override setChildren(): Factor[] {
+        const { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
+        return [ StringFormatter.buildFactor(base) , new Expression(exponent) ];
     }
 
     copy(): Power {
