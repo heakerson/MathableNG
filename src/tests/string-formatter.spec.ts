@@ -293,4 +293,36 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('getMatchingParenthesisIndex', () => {
+        const inputs: { input: string, start: number; expectedResult: number }[] = [
+            { input: '(a)', start: 0, expectedResult: 2 },
+            { input: '(a)', start: 2, expectedResult: 0 },
+            { input: '(a)*3', start: 0, expectedResult: 2 },
+            { input: '(a)*3', start: 2, expectedResult: 0 },
+            { input: 'x*(a)', start: 2, expectedResult: 4 },
+            { input: 'x*(a)', start: 4, expectedResult: 2 },
+            { input: '(a )* 3', start: 0, expectedResult: 3 },
+            { input: '(a )* 3', start: 3, expectedResult: 0 },
+            { input: '(a)*3', start: 1, expectedResult: -1 },
+            { input: '(a)*3', start: 3, expectedResult: -1 },
+            { input: '(a)*3', start: 4, expectedResult: -1 },
+            { input: 'x*(-a*((b)/(a)))*3', start: 7, expectedResult: 9 },
+            { input: 'x*(-a*((b)/(a)))*3', start: 9, expectedResult: 7 },
+            { input: 'x*(-a*((b)/(a)))*3', start: 2, expectedResult: 15 },
+            { input: 'x*(-a*((b)/(a)))*3', start: 15, expectedResult: 2 },
+            { input: '', start: 3, expectedResult: -1 },
+            { input: '(a)*x^-(y+(r -q))', start: 7, expectedResult: 16 },
+            { input: '(a)*x^-(y+(r -q))', start: 16, expectedResult: 7 },
+            { input: 'sin(a)', start: 3, expectedResult: 5 },
+            { input: 'sin(a)', start: 5, expectedResult: 3 },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return index ${test.expectedResult}, start: ${test.start} in '${test.input}'`, () => {
+                const result = StringFormatter.getMatchingParenthesisIndex(test.input, test.start);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });

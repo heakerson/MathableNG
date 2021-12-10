@@ -1,3 +1,4 @@
+import { Input } from "@angular/core";
 import { Factor } from "./math-object/factor/factor.model";
 import { Variable } from "./math-object/factor/variable.model";
 
@@ -117,8 +118,43 @@ export class StringFormatter {
         return factors;
     } 
 
-    public static getMatchingParenthesis(input: string, startIndex: number): number {
-        return 0;
+    public static getMatchingParenthesisIndex(input: string, parenthIndex: number): number {
+        const startParenth = input[parenthIndex];
+        const direction = startParenth === '(' ? 1 : (startParenth === ')' ? -1 : 0);
+        const startIndex = parenthIndex += direction;
+        let count = 0;
+
+        if (direction) {
+            for (let i = startIndex; i < input.length && i > -1; i+=direction) {
+                const char = input[i];
+    
+                switch (char) {
+                    case '(':
+                        if (count === 0 && direction < 0) {
+                            return i;
+                        }
+                        if (direction < 0) {
+                            count--;
+                        } else {
+                            count++;
+                        }
+                        break;
+                    case ')':
+                        if (count === 0 && direction > 0) {
+                            return i;
+                        }
+                        if (direction < 0) {
+                            count++;
+                        } else {
+                            count--;
+                        }
+                        break;
+                }
+            }
+        }
+
+
+        return -1;
     }
 
     public static removeEmptySpace(input: string): string {
