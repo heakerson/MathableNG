@@ -1,4 +1,6 @@
 LEFT OFF:
+- Fill in the base functions of new classes
+- Start writing constructor tests????
 - Add these to ALL of objects and test?
     - id
     - children
