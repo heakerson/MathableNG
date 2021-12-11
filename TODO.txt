@@ -1,15 +1,14 @@
 LEFT OFF:
 - Fill in AND TEST the base functions of new classes
-    - sign getter
-    - flip sign
     - static constructors
     - insert, append, prepend, replace child - probably can do this in math object??
         - add special ones to rational and exponent 
     - add operator to term
+    - toString
 - static constructors
 - fill in buildFactor
-- Start writing constructor tests????
-    - sign
+- Start writing constructor tests and function tests!!!
+    - go through each type and function
 - Add these to ALL of objects and test?
     - id
     - children

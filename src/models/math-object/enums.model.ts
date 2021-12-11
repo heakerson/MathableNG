@@ -1,6 +1,6 @@
 export enum Sign {
-    Positive,
-    Negative
+    Positive = '',
+    Negative = '-'
 }
 
 export enum Operators {
