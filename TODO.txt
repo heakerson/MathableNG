@@ -1,7 +1,8 @@
 LEFT OFF:
 - Fill in AND TEST the base functions of new classes
     - static constructors
-    - insert, append, prepend, replace child - probably can do this in math object??
+    - get, insert, append, prepend, replace child - probably can do this in math object??
+        - use a PROTECTED function and then expose it as public as needed
         - add special ones to rational and exponent 
     - add operator to term
     - toString

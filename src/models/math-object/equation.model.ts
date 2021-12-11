@@ -4,6 +4,18 @@ import { MathObject } from "./math-object.model";
 
 export class Equation extends MathObject {
 
+    get expressions(): Expression[] {
+        return this.children as Expression[];
+    }
+
+    get expressionCount(): number {
+        return this.children.length;
+    }
+
+    get isSingleExpression(): boolean {
+        return this.expressionCount === 1;
+    }
+
     constructor(input: string) {
         super(input);
     }

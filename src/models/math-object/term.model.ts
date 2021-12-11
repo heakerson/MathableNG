@@ -4,6 +4,18 @@ import { MathObject } from "./math-object.model";
 
 export class Term extends MathObject {
 
+    get factors(): Factor[] {
+        return this.children as Factor[];
+    }
+
+    get factorCount(): number {
+        return this.children.length;
+    }
+
+    get isSingleFactor(): boolean {
+        return this.factorCount === 1;
+    }
+
     constructor(input: string) {
         super(input);
     }

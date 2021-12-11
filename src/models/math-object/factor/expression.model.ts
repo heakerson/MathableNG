@@ -4,6 +4,18 @@ import { Factor } from "./factor.model";
 
 export class Expression extends Factor {
 
+    get terms(): Term[] {
+        return this.children as Term[];
+    }
+
+    get termCount(): number {
+        return this.children.length;
+    }
+
+    get isSingleTerm(): boolean {
+        return this.termCount === 1;
+    }
+
     constructor(input: string) {
         super(input);
     }
