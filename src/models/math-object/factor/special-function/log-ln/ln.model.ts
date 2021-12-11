@@ -5,6 +5,7 @@ import { LogLn } from "./log-ln.model";
 export class Ln extends LogLn {
 
     public readonly logType: LogTypes = LogTypes.log;
+    public readonly base = Math.E;
 
     constructor(input: string) {
         super(input);
