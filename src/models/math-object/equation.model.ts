@@ -20,11 +20,11 @@ export class Equation extends MathObject {
         super(input);
     }
 
-    protected override setChildren(): Expression[] {
-        return StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
+    public copy(): Equation {
+        return new Equation(this.toString());
     }
 
-    copy(): Equation {
-        return new Equation(this.toString());
+    protected override setChildren(): Expression[] {
+        return StringFormatter.parseExpressionStrings(this.formattedInput).map(e => new Expression(e));
     }
 }

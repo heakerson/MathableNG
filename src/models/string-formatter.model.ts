@@ -171,6 +171,22 @@ export class StringFormatter {
         return `(${input})`;
     }
 
+    public static stripSurroundParenthesis(input: string): string {
+        if (input[0] === '(') {
+            const matchingIndex = this.getMatchingParenthesisIndex(input, 0);
+            if (matchingIndex === input.length - 1) {
+                return input.substring(1, input.length - 1);
+            }
+        } else if (input[0] === '-' && input[1] === '(') {
+            const matchingIndex = this.getMatchingParenthesisIndex(input, 1);
+            if (matchingIndex === input.length - 1) {
+                return input.substring(2, input.length - 1);
+            }
+        }
+
+        return input;
+    }
+
     public static removeEmptySpace(input: string): string {
         return input.replace(/\s+/g, '');
     }
