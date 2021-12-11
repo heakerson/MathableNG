@@ -74,6 +74,10 @@ export class StringFormatter {
         };
     }
 
+    public static parseFunctionString(factorString: string): string {
+        return '';
+    }
+
     public static parseFactorStrings(input: string): string[] {
         input = this.removeEmptySpace(input);
         const factors: string[] = [];
