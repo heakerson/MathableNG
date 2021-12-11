@@ -13,6 +13,6 @@ export class Term extends MathObject {
     }
 
     copy(): Term {
-        return new Term(this.formattedInput);
+        return new Term(this.toString());
     }
 }

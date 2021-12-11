@@ -13,6 +13,6 @@ export class Equation extends MathObject {
     }
 
     copy(): Equation {
-        return new Equation(this.formattedInput);
+        return new Equation(this.toString());
     }
 }

@@ -1,11 +1,19 @@
 LEFT OFF:
-- Fill in the base functions of new classes
+- Fill in AND TEST the base functions of new classes
+    - sign getter
+    - flip sign
+    - static constructors
+    - insert, append, prepend, replace child - probably can do this in math object??
+        - add special ones to rational and exponent 
+    - add operator to term
+- static constructors
+- fill in buildFactor
 - Start writing constructor tests????
+    - sign
 - Add these to ALL of objects and test?
     - id
     - children
         - setChildren
-- Add/test validate parent?
 - Update all the copy functions with the tostring?
 - Write and test the formatting functions for child classes
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
