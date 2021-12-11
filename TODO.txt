@@ -10,10 +10,16 @@ LEFT OFF:
 - fill in buildFactor
 - Start writing constructor tests and function tests!!!
     - go through each type and function
+    - term
+        - add a test that there should NOT be an additional operator in the input - this should be stored (if it
+            exists) at the expression level
+    - expression
+        - make sure that the additional operators are stored
 - Add these to ALL of objects and test?
     - id
     - children
         - setChildren
+- parse the base for log - I think it should EITHER look for the base in the string input OR an optional parameter?
 - Update all the copy functions with the tostring?
 - Write and test the formatting functions for child classes
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS

@@ -4,10 +4,11 @@ export enum Sign {
 }
 
 export enum Operators {
-    Addition,
-    Subtraction,
-    Division,
-    Multiplication
+    None = '',
+    Addition = '+',
+    Subtraction = '-',
+    Division = '/',
+    Multiplication = '*'
 }
 
 export enum TrigTypes {
