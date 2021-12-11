@@ -20,11 +20,18 @@ export class Term extends MathObject {
         super(input);
     }
 
-    protected override setChildren(): Factor[] {
-        return StringFormatter.parseFactorStrings(this.formattedInput).map(f => StringFormatter.buildFactor(f));
+    public static fromFactors(factors: Factor[]): Term {
+        let factorString = '';
+        factors.forEach((term, i) => factorString += `${i > 0 ? '*' : ''}${term.toString()}`);
+
+        return new Term(factorString);
     }
 
-    copy(): Term {
+    public copy(): Term {
         return new Term(this.toString());
+    }
+
+    protected override setChildren(): Factor[] {
+        return StringFormatter.parseFactorStrings(this.formattedInput).map(f => StringFormatter.buildFactor(f));
     }
 }

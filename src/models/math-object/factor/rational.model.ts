@@ -16,6 +16,10 @@ export class Rational extends Factor {
         super(input);
     }
 
+    public static fromExpressions(numerator: Expression, denominator: Expression): Rational {
+        return new Rational(`(${numerator.toString()}/${denominator.toString()})`);
+    }
+
     protected override setChildren(): Expression[] {
         const { numerator, denominator } = StringFormatter.parseRationalExpressions(this.formattedInput);
         return [ new Expression(numerator), new Expression(denominator) ];

@@ -16,12 +16,16 @@ export class Power extends Factor {
         super(input);
     }
 
+    public static fromFactors(base: Factor, exponent: Expression): Power {
+        return new Power(`${base.toString()}^${exponent.toString()}`);
+    }
+
+    public copy(): Power {
+        return new Power(this.formattedInput);
+    }
+
     protected override setChildren(): Factor[] {
         const { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
         return [ StringFormatter.buildFactor(base) , new Expression(exponent) ];
-    }
-
-    copy(): Power {
-        return new Power(this.formattedInput);
     }
 }
