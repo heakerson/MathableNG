@@ -26,6 +26,6 @@ export class Rational extends Factor {
     }
 
     copy(): Rational {
-        return new Rational(this.formattedInput);
+        return new Rational(this.toString());
     }
 }

@@ -21,7 +21,7 @@ export class Power extends Factor {
     }
 
     public copy(): Power {
-        return new Power(this.formattedInput);
+        return new Power(this.toString());
     }
 
     protected override setChildren(): Factor[] {

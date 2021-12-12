@@ -11,6 +11,6 @@ export class Variable extends Factor {
     }
 
     copy(): Variable {
-        return new Variable(this.formattedInput);
+        return new Variable(this.toString());
     }
 }
