@@ -20,11 +20,40 @@ export class Term extends MathObject {
         super(input);
     }
 
-    public static fromFactors(factors: Factor[]): Term {
+    public static fromFactors(...factors: Factor[]): Term {
         let factorString = '';
         factors.forEach((term, i) => factorString += `${i > 0 ? '*' : ''}${term.toString()}`);
 
         return new Term(factorString);
+    }
+
+    public getFactor<TFactor extends Factor>(index: number): TFactor {
+        return this.getChild(index) as TFactor;
+    }
+
+    public appendFactors(...factors: Factor[]): Term {
+        const newChildren = this.appendChildren<Factor>(...factors);
+        return Term.fromFactors(...newChildren);
+    }
+
+    public prependFactors(...factors: Factor[]): Term {
+        const newChildren = this.prependChildren<Factor>(...factors);
+        return Term.fromFactors(...newChildren);
+    }
+
+    public insertFactors(index: number, ...factors: Factor[]): Term {
+        const newChildren = this.insertChildren<Factor>(index, ...factors);
+        return Term.fromFactors(...newChildren);
+    }
+
+    public removeFactors(...factors: Factor[]): Term {
+        const newChildren = this.removeChildrenById<Factor>(...factors.map(f => f.id));
+        return Term.fromFactors(...newChildren);
+    }
+
+    public removeFactorsAtIndices(...indices: number[]): Term {
+        const newChildren = this.removeChildrenByIndex<Factor>(...indices);
+        return Term.fromFactors(...newChildren);
     }
 
     public copy(): Term {

@@ -22,38 +22,38 @@ export abstract class MathObject {
         return this.formattedInput;
     }
 
-    protected getChild(childIndex: number): MathObject {
-        return this.children[childIndex];
+    protected getChild<TChild extends MathObject>(childIndex: number): TChild {
+        return this.children[childIndex] as TChild;
     }
 
-    protected insertChildren(index: number, ...newChildren: MathObject[]): MathObject[] {
+    protected insertChildren<TChild extends MathObject>(index: number, ...newChildren: MathObject[]): TChild[] {
         return [
             ...this.children.slice(0, index),
             ...newChildren,
             ...this.children.slice(index)
-        ];
+        ] as TChild[];
     }
 
-    protected appendChildren(...newChildren: MathObject[]): MathObject[] {
+    protected appendChildren<TChild extends MathObject>(...newChildren: MathObject[]): TChild[] {
         return [
             ...this.children,
             ...newChildren,
-        ];
+        ] as TChild[];
     }
 
-    protected preChildren(...newChildren: MathObject[]): MathObject[] {
+    protected prependChildren<TChild extends MathObject>(...newChildren: MathObject[]): TChild[] {
         return [
             ...newChildren,
             ...this.children,
-        ];
+        ] as TChild[];
     }
 
-    protected removeChildrenById(...idsToRemove: uuid.V1Options[]): MathObject[] {
-        return this.children.filter(c => !idsToRemove.includes(c.id));
+    protected removeChildrenById<TChild extends MathObject>(...idsToRemove: uuid.V1Options[]): TChild[] {
+        return this.children.filter(c => !idsToRemove.includes(c.id)) as TChild[];
     }
 
-    protected removeChildrenByIndex(...indicesToRemove: number[]): MathObject[] {
-        return this.children.filter((c, i) => !indicesToRemove.includes(i));
+    protected removeChildrenByIndex<TChild extends MathObject>(...indicesToRemove: number[]): TChild[] {
+        return this.children.filter((c, i) => !indicesToRemove.includes(i)) as TChild[];
     }
 
     protected checkFormattingErrors(): void {
