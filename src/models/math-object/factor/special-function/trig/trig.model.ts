@@ -20,4 +20,8 @@ export abstract class Trig extends SpecialFunction {
     public static fromExpression<TTrig extends Trig>(expression: Expression, sign: Sign, trigType: TrigTypes): TTrig {
         return StringFormatter.buildFactor(`${sign}${trigType}[${expression}]`) as TTrig;
     }
+
+    public override setChildren(): Expression[] {
+        return [ new Expression(this.formattedInput) ];
+    }
 }

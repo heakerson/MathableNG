@@ -52,6 +52,7 @@ export class StringFormatter {
         if (fnString) {
             const strippedFn = this.stripSurroundBrackets(input.substring(fnString.length));
             const parameters = strippedFn.split(',');
+
             switch (fnString) {
                 case TrigTypes.sin:
                     return new Sin(`${sign}${parameters[0]}`, sign);
@@ -83,15 +84,15 @@ export class StringFormatter {
             }
         }
 
-        try {
-            Number.parseInt(`${sign}${input}`);
+        const isInt = !!parseInt(`${sign}${input}`);
+        if (isInt) {
             return new Integer(`${sign}${input}`);
-        } catch {}
+        }
 
-        try {
-            Number.parseFloat(`${sign}${input}`);
+        const isFloat = !!parseFloat(`${sign}${input}`);
+        if (isFloat) {
             return new Double(`${sign}${input}`);
-        } catch {}
+        }
         
         return new Variable(`${sign}${input}`);
     }
@@ -269,6 +270,45 @@ export class StringFormatter {
         return -1;
     }
 
+    public static getMatchingBracketIndex(input: string, bracket: number): number {
+        const startBracket = input[bracket];
+        const direction = startBracket === '[' ? 1 : (startBracket === ']' ? -1 : 0);
+        const startIndex = bracket += direction;
+        let count = 0;
+
+        if (direction) {
+            for (let i = startIndex; i < input.length && i > -1; i+=direction) {
+                const char = input[i];
+    
+                switch (char) {
+                    case '[':
+                        if (count === 0 && direction < 0) {
+                            return i;
+                        }
+                        if (direction < 0) {
+                            count--;
+                        } else {
+                            count++;
+                        }
+                        break;
+                    case ']':
+                        if (count === 0 && direction > 0) {
+                            return i;
+                        }
+                        if (direction < 0) {
+                            count++;
+                        } else {
+                            count--;
+                        }
+                        break;
+                }
+            }
+        }
+
+
+        return -1;
+    }
+
     public static ensureSurroundingParenthesis(input: string): string {
         if (input[0] === '(') {
             const matchingIndex = this.getMatchingParenthesisIndex(input, 0);
@@ -298,17 +338,16 @@ export class StringFormatter {
 
     public static stripSurroundBrackets(input: string): string {
         if (input[0] === '[') {
-            const matchingIndex = this.getMatchingParenthesisIndex(input, 0);
+            const matchingIndex = this.getMatchingBracketIndex(input, 0);
             if (matchingIndex === input.length - 1) {
                 return input.substring(1, input.length - 1);
             }
         } else if (input[0] === '-' && input[1] === '[') {
-            const matchingIndex = this.getMatchingParenthesisIndex(input, 1);
+            const matchingIndex = this.getMatchingBracketIndex(input, 1);
             if (matchingIndex === input.length - 1) {
                 return input.substring(2, input.length - 1);
             }
         }
-
         return input;
     }
 
