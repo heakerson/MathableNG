@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Expression } from 'src/models/math-object/factor/expression.model';
+import { Term } from 'src/models/math-object/term.model';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,12 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const mo = new Expression('(*a+b)');
-    // console.log(mo);
+    const expression = new Expression('(a+b+c*(e+f))');
+    const type = Term;
+    // console.log('traverse for', type);
+  
+    expression.travsere(Term, (term: Term) => {
+      // console.log('FOUND TERM', term);
+    });
   }
 }

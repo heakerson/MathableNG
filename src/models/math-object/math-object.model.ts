@@ -1,5 +1,6 @@
 import { StringFormatter } from "../string-formatter.model";
 import * as uuid from 'uuid';
+import { Type } from "@angular/core";
 
 export abstract class MathObject {
     public readonly id: any;
@@ -20,6 +21,36 @@ export abstract class MathObject {
 
     public toString(): string {
         return this.formattedInput;
+    }
+
+    public travsere<TMathObject extends MathObject>(type: Type<TMathObject>, fn: (mo: TMathObject) => void): void {
+        if (this instanceof type) {
+            fn(this as any);
+        }
+
+        this.children.forEach(c => {
+            c.travsere(type, fn);
+        });
+    }
+
+    public find<TMathObject extends MathObject>(type: Type<TMathObject>, fn: (mo: TMathObject) => boolean): TMathObject {
+        let found = false;
+        if (this instanceof type) {
+            found = fn(this as any);
+
+            if (found) {
+                return this;
+            }
+        }
+
+        let foundChild: any;
+        this.children.forEach(c => {
+            if (!foundChild) {
+                foundChild = c.find<TMathObject>(type, fn);
+            }
+        });
+
+        return foundChild;
     }
 
     protected getChild<TChild extends MathObject>(childIndex: number): TChild {
