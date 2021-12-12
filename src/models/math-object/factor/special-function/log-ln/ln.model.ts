@@ -15,7 +15,7 @@ export class Ln extends LogLn {
         return StringFormatter.buildFactor(`${sign}${LogTypes.ln}[${expression}]`) as Ln;
     }
     
-    copy(): MathObject {
-        throw new Error("Method not implemented.");
+    public copy(): Ln {
+        return Ln.fromExpression(this.expression, this.sign);
     }
 }

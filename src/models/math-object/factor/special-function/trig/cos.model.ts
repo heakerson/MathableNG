@@ -5,7 +5,7 @@ import { Trig } from "./trig.model";
 export class Cos extends Trig {
     public readonly trigType: TrigTypes = TrigTypes.cos;
 
-    copy(): MathObject {
-        throw new Error("Method not implemented.");
+    public copy(): Cos {
+        return Trig.fromExpression<Cos>(this.expression, this.sign, this.trigType);
     }
 }

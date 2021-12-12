@@ -5,7 +5,7 @@ import { Trig } from "./trig.model";
 export class Sec extends Trig {
     public readonly trigType: TrigTypes = TrigTypes.sec;
     
-    copy(): MathObject {
-        throw new Error("Method not implemented.");
+    public copy(): Sec {
+        return Trig.fromExpression<Sec>(this.expression, this.sign, this.trigType);
     }
 }
