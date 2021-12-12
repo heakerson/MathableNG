@@ -24,3 +24,8 @@ export enum LogTypes {
     log = 'log',
     ln = 'ln'
 }
+
+export enum Constants {
+    E = 'E',
+    PI = 'PI'
+}
