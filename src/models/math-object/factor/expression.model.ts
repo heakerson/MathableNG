@@ -23,11 +23,40 @@ export class Expression extends Factor {
         super(input);
     }
 
-    public static fromTerms(terms: Term[]): Expression {
+    public static fromTerms(...terms: Term[]): Expression {
         let innerTerms = '';
         terms.forEach((term) => innerTerms += `${term.toString()}`);
 
         return new Expression(innerTerms);
+    }
+
+    public getTerm(index: number): Term {
+        return this.getChild<Term>(index);
+    }
+
+    public appendTerms(...terms: Term[]): Expression {
+        const newChildren = this.appendChildren<Term>(...terms);
+        return Expression.fromTerms(...newChildren);
+    }
+
+    public prependTerms(...terms: Term[]): Expression {
+        const newChildren = this.prependChildren<Term>(...terms);
+        return Expression.fromTerms(...newChildren);
+    }
+
+    public insertTerms(index: number, ...terms: Term[]): Expression {
+        const newChildren = this.insertChildren<Term>(index, ...terms);
+        return Expression.fromTerms(...newChildren);
+    }
+
+    public removeTerms(...terms: Term[]): Expression {
+        const newChildren = this.removeChildrenById<Term>(...terms.map(f => f.id));
+        return Expression.fromTerms(...newChildren);
+    }
+
+    public removeTermsAtIndices(...indices: number[]): Expression {
+        const newChildren = this.removeChildrenByIndex<Term>(...indices);
+        return Expression.fromTerms(...newChildren);
     }
 
     public override toString(): string {

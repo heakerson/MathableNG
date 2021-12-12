@@ -4,6 +4,7 @@ LEFT OFF:
         - use a PROTECTED function and then expose it as public as needed
         - add special ones to rational and exponent 
     - toString
+    - ADD FIND FUNCTIONS - CREATE BASE FUNCTION IN MATH OBJECT AND THEN EXPOSE AS NEEDED
 - test static constructors
 - fill in buildFactor
 - Start writing constructor tests and function tests!!!

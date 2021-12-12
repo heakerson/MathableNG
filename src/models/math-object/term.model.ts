@@ -28,7 +28,7 @@ export class Term extends MathObject {
     }
 
     public getFactor<TFactor extends Factor>(index: number): TFactor {
-        return this.getChild(index) as TFactor;
+        return this.getChild<TFactor>(index);
     }
 
     public appendFactors(...factors: Factor[]): Term {
