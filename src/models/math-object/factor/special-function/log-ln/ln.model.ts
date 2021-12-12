@@ -1,5 +1,4 @@
 import { LogTypes, Sign } from "src/models/math-object/enums.model";
-import { MathObject } from "src/models/math-object/math-object.model";
 import { StringFormatter } from "src/models/string-formatter.model";
 import { Expression } from "../../expression.model";
 import { LogLn } from "./log-ln.model";
@@ -7,8 +6,8 @@ import { LogLn } from "./log-ln.model";
 export class Ln extends LogLn {
     public readonly logType: LogTypes = LogTypes.log;
 
-    constructor(expressionString: string) {
-        super(expressionString, Math.E);
+    constructor(expressionString: string, sign: Sign) {
+        super(expressionString, sign, Math.E);
     }
 
     public static fromExpression(expression: Expression, sign: Sign): Ln {

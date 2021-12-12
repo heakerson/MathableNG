@@ -8,8 +8,8 @@ export class Log extends LogLn {
 
     public readonly logType: LogTypes = LogTypes.log;
 
-    constructor(expressionString: string, logBase: number = 10) {
-        super(expressionString, logBase);
+    constructor(expressionString: string, sign: Sign, logBase: number = 10) {
+        super(expressionString, sign, logBase);
     }
 
     public static fromExpression(expression: Expression, sign: Sign, base: number = 10): Log {
