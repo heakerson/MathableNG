@@ -50,7 +50,7 @@ export class StringFormatter {
 
         const fnString = this.getStartingFnString(input);
         if (fnString) {
-            const strippedFn = this.stripSurroundBrackets(input.substring(fnString.length));
+            const strippedFn = this.stripSurroundingBrackets(input.substring(fnString.length));
             const parameters = strippedFn.split(',');
 
             switch (fnString) {
@@ -171,9 +171,43 @@ export class StringFormatter {
     }
 
     public static parseRationalExpressions(input: string): { numerator: string, denominator: string } {
+        input = this.stripSurroundingParenthesis(input);
+        let bracketCt = 0;
+        let parenthCt = 0;
+        let found = false;
+        let num = '';
+        let denom = '';
+
+        [...input].forEach((c, i) => {
+            if (!found) {
+                switch(c) {
+                    case '[':
+                        bracketCt++;
+                        break;
+                    case ']':
+                        bracketCt--;
+                        break;
+                    case '(':
+                        parenthCt++;
+                        break;
+                    case ')':
+                        parenthCt--;
+                        break;
+                    case '/':
+                        if (bracketCt === 0 && parenthCt === 0) {
+                            num = input.substring(0, i);
+                            denom = input.substring(i+1);
+                            found = true;
+                        }
+                        break;
+    
+                }
+            }
+        })
+
         return {
-            numerator: '',
-            denominator: ''
+            numerator: num,
+            denominator: denom
         };
     }
 
@@ -182,10 +216,6 @@ export class StringFormatter {
             base: '',
             exponent: ''
         };
-    }
-
-    public static parseFunctionString(factorString: string): string {
-        return '';
     }
 
     public static parseFactorStrings(input: string): string[] {
@@ -320,7 +350,7 @@ export class StringFormatter {
         return `(${input})`;
     }
 
-    public static stripSurroundParenthesis(input: string): string {
+    public static stripSurroundingParenthesis(input: string): string {
         if (input[0] === '(') {
             const matchingIndex = this.getMatchingParenthesisIndex(input, 0);
             if (matchingIndex === input.length - 1) {
@@ -336,7 +366,7 @@ export class StringFormatter {
         return input;
     }
 
-    public static stripSurroundBrackets(input: string): string {
+    public static stripSurroundingBrackets(input: string): string {
         if (input[0] === '[') {
             const matchingIndex = this.getMatchingBracketIndex(input, 0);
             if (matchingIndex === input.length - 1) {

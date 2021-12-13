@@ -91,7 +91,7 @@ export class Expression extends Factor {
     }
 
     protected override setChildren(): Term[] {
-        const removedParenth = StringFormatter.stripSurroundParenthesis(this.formattedInput);
+        const removedParenth = StringFormatter.stripSurroundingParenthesis(this.formattedInput);
         let parsedTerms = StringFormatter.parseTermStrings(removedParenth);
 
         parsedTerms = parsedTerms.map((termString, i) => {

@@ -1,10 +1,11 @@
 LEFT OFF:
-- fill in buildFactor
-- add tests and validations for []s. Probably need all the same logic as ()
+- TEST ALL UNTESTED FUNCTIONS IN STRING FORMATTER
+    - WRITE EMPTY TESTS FOR parseRationalExpressions
+- add validations and tests for []s. Probably need all the same logic as ()
     - check that any [ is preceded by a valid function string
     - check the counts are valid,
     - check that they are not empty
-    - MOVE ALL THE BASIC FORMATTING CHECKS TO A FUNCTION THAT CAN BE CALLED FROM BUILD FACTOR AND MATHOBJECT
+- MOVE ALL THE BASIC FORMATTING CHECKS TO A FUNCTION THAT CAN BE CALLED FROM PARSING FUNCTIONS, BUILD FACTOR, AND MATHOBJECT BASE CLASS
 - Start writing constructor tests and function tests!!!
     - go through each type and function
     - term
