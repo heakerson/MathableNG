@@ -100,6 +100,7 @@ describe('StringFormatter', () => {
     describe('parseRationalExpressions', () => {
         const inputs: { input: string, expectedNum: string, expectedDenom: string }[] = [
             { input: '((a)/(b))', expectedNum: '(a)', expectedDenom: '(b)'},
+            { input: '((a)/(sin[b/c]))', expectedNum: '(a)', expectedDenom: '(sin[b/c])'},
             { input: '((-a)/(b))', expectedNum: '(-a)', expectedDenom: '(b)'},
             { input: '((a)/(-b))', expectedNum: '(a)', expectedDenom: '(-b)'},
             { input: '(-(a)/(b))', expectedNum: '-(a)', expectedDenom: '(b)'},
@@ -124,14 +125,25 @@ describe('StringFormatter', () => {
             { input: '-a/b/(c)', expectedNum: '-a', expectedDenom: 'b/(c)'},
             { input: 'a/(b/c)', expectedNum: 'a', expectedDenom: '(b/c)'},
             { input: 'a/-(b/c)', expectedNum: 'a', expectedDenom: '-(b/c)'},
+            { input: '-a/b/(c)', expectedNum: '-a', expectedDenom: 'b/(c)'},
+            { input: 'a/(b/c)', expectedNum: 'a', expectedDenom: '(b/c)'},
+            { input: 'a/-(b/c)', expectedNum: 'a', expectedDenom: '-(b/c)'},
             { input: '-(a/b)/c', expectedNum: '-(a/b)', expectedDenom: 'c'},
             { input: '(a/b)/c', expectedNum: '(a/b)', expectedDenom: 'c'},
             { input: '(a/-b)/(c)', expectedNum: '(a/-b)', expectedDenom: '(c)'},
             { input: 'a/-(b/d)/c', expectedNum: 'a', expectedDenom: '-(b/d)/c'},
+            { input: 'a', expectedNum: '', expectedDenom: ''},
+            { input: '(a+b/c)', expectedNum: '', expectedDenom: ''},
+            { input: '(a/b+c)', expectedNum: '', expectedDenom: ''},
+            { input: 'a^(b/c)', expectedNum: '', expectedDenom: ''},
+            { input: 'sin[a/b]', expectedNum: '', expectedDenom: ''},
+            { input: 'cot[a/b/c]', expectedNum: '', expectedDenom: ''},
+            { input: '(a*b/c)', expectedNum: '', expectedDenom: ''},
+            { input: 'a/b*x/c', expectedNum: '', expectedDenom: ''},
         ];
 
         inputs.forEach((test) => {
-            it(`Should parse ${test.input} in to ${test.expectedNum} and ${test.expectedDenom}`, () => {
+            it(`Should parse ${test.input} in to '${test.expectedNum}' and '${test.expectedDenom}'`, () => {
                 const result = StringFormatter.parseRationalExpressions(test.input);
                 expect(result.numerator).toEqual(test.expectedNum);
                 expect(result.denominator).toEqual(test.expectedDenom);
