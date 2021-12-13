@@ -264,10 +264,31 @@ describe('StringFormatter', () => {
     });
 
     describe('getMatchingBracketIndex', () => {
-        const inputs: {}[] = [];
+        const inputs: { input: string, start: number; expectedResult: number }[] = [
+            { input: 'sin[a]', start: 3, expectedResult: 5 },
+            { input: 'sin[a]', start: 5, expectedResult: 3 },
+            { input: 'sin[a]', start: 1, expectedResult: -1 },
+            { input: 'cos[a]*3', start: 3, expectedResult: 5 },
+            { input: 'cos[a]*3', start: 3, expectedResult: 5 },
+            { input: 'x*tan[a]', start: 5, expectedResult: 7 },
+            { input: 'x*tan[a]', start: 5, expectedResult: 7 },
+            { input: 'csc[a ]* 3', start: 3, expectedResult: 6 },
+            { input: 'csc[a ]* 3', start: 6, expectedResult: 3 },
+            { input: 'cos[a]*3', start: 0, expectedResult: -1 },
+            { input: 'cos[a]*3', start: 0, expectedResult: -1 },
+            { input: 'cos[a]*3', start: 0, expectedResult: -1 },
+            { input: 'cos[(b+sin[a^tan[x]])]*3', start: 10, expectedResult: 19 },
+            { input: 'cos[(b+sin[a^tan[x]])]*3', start: 19, expectedResult: 10 },
+            { input: 'cos[(b+sin[a^tan[x]])]*3', start: 16, expectedResult: 18 },
+            { input: 'cos[(b+sin[a^tan[x]])]*3', start: 18, expectedResult: 16 },
+            { input: 'cos[(b+sin[a^tan[x]])]*3', start: 1, expectedResult: -1 },
+        ];
 
         inputs.forEach((test) => {
-            it(``, () => {});
+            it(`Should return index ${test.expectedResult}, start: ${test.start} in '${test.input}'`, () => {
+                const result = StringFormatter.getMatchingBracketIndex(test.input, test.start);
+                expect(result).toEqual(test.expectedResult);
+            });
         });
     });
 
