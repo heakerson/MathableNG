@@ -341,11 +341,22 @@ describe('StringFormatter', () => {
         });
     });
 
-    describe('stripSurroundingBrackets', () => {
-        const inputs: {}[] = [];
-        // change this to getFunctionContents? and return an array of strings?
+    describe('getFunctionContents', () => {
+        const inputs: { input: string, expectedResult: string[] }[] = [
+            { input: 'sin[x]', expectedResult: ['x']},
+            { input: '-sin[x]', expectedResult: ['x']},
+            { input: 'sin[(x)]', expectedResult: ['(x)']},
+            { input: '-ln[x]', expectedResult: ['x']},
+            { input: '-log[x,3]', expectedResult: ['x', '3']},
+            { input: '-log[log[a],3]', expectedResult: ['log[a]', '3']},
+            { input: '-log[log[sin[b]],3]', expectedResult: ['log[sin[b]]', '3']},
+        ];
+
         inputs.forEach((test) => {
-            it(``, () => {});
+            it(`Should remove () appropriately: '${test.input}' => '${test.expectedResult}'`, () => {
+                const result = StringFormatter.getFunctionContents(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
         });
     });
 

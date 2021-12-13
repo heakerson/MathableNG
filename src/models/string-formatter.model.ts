@@ -50,8 +50,7 @@ export class StringFormatter {
 
         const fnString = this.getStartingFnString(input);
         if (fnString) {
-            const strippedFn = this.stripSurroundingBrackets(input.substring(fnString.length));
-            const parameters = strippedFn.split(',');
+            const parameters = this.getFunctionContents(input);
 
             switch (fnString) {
                 case TrigTypes.sin:
@@ -411,19 +410,28 @@ export class StringFormatter {
         return input;
     }
 
-    public static stripSurroundingBrackets(input: string): string {
-        if (input[0] === '[') {
-            const matchingIndex = this.getMatchingBracketIndex(input, 0);
-            if (matchingIndex === input.length - 1) {
-                return input.substring(1, input.length - 1);
+    public static getFunctionContents(functionFactor: string): string[] {
+        if (functionFactor[0] === '-') {
+            functionFactor = functionFactor.substring(1);
+        }
+
+        const fnString = this.getStartingFnString(functionFactor);
+        functionFactor = functionFactor.substring(fnString.length);
+
+        if (functionFactor[0] === '[') {
+            const matchingIndex = this.getMatchingBracketIndex(functionFactor, 0);
+            if (matchingIndex === functionFactor.length - 1) {
+                const content = functionFactor.substring(1, functionFactor.length - 1);
+                return content.split(',');
             }
-        } else if (input[0] === '-' && input[1] === '[') {
-            const matchingIndex = this.getMatchingBracketIndex(input, 1);
-            if (matchingIndex === input.length - 1) {
-                return input.substring(2, input.length - 1);
+        } else if (functionFactor[0] === '-' && functionFactor[1] === '[') {
+            const matchingIndex = this.getMatchingBracketIndex(functionFactor, 1);
+            if (matchingIndex === functionFactor.length - 1) {
+                const content = functionFactor.substring(2, functionFactor.length - 1);
+                return content.split(',');
             }
         }
-        return input;
+        return [];
     }
 
     public static removeEmptySpace(input: string): string {
