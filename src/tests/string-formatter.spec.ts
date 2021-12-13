@@ -138,6 +138,8 @@ describe('StringFormatter', () => {
             { input: 'a^(b/c)', expectedNum: '', expectedDenom: ''},
             { input: 'sin[a/b]', expectedNum: '', expectedDenom: ''},
             { input: 'cot[a/b/c]', expectedNum: '', expectedDenom: ''},
+            { input: 'a*cot[a/b/c]', expectedNum: '', expectedDenom: ''},
+            { input: 'a/cot[a/b/c]', expectedNum: 'a', expectedDenom: 'cot[a/b/c]'},
             { input: '(a*b/c)', expectedNum: '', expectedDenom: ''},
             { input: 'a/b*x/c', expectedNum: '', expectedDenom: ''},
         ];
@@ -152,10 +154,27 @@ describe('StringFormatter', () => {
     });
 
     describe('parsePowerFactor', () => {
-        const inputs: {}[] = [];
+        const inputs: { input: string, expectedBase: string, expectedExponent: string }[] = [
+            { input: 'a^b', expectedBase: 'a', expectedExponent: 'b' },
+            { input: '-a^b', expectedBase: '-a', expectedExponent: 'b' },
+            { input: 'a^-b', expectedBase: 'a', expectedExponent: '-b' },
+            { input: 'a^(-b)', expectedBase: 'a', expectedExponent: '(-b)' },
+            { input: 'a^-(-b)', expectedBase: 'a', expectedExponent: '-(-b)' },
+            { input: '-(a+b)^b/c', expectedBase: '-(a+b)', expectedExponent: 'b/c' },
+            { input: '-(a+b)^b/sin[x^y]', expectedBase: '-(a+b)', expectedExponent: 'b/sin[x^y]' },
+            { input: '-(a+b)^b/c*x', expectedBase: '', expectedExponent: '' },
+            { input: '-a^b^-c', expectedBase: '-a', expectedExponent: 'b^-c' },
+            { input: '-(a^b)^-c', expectedBase: '-(a^b)', expectedExponent: '-c' },
+            { input: 'cos[a^b]', expectedBase: '', expectedExponent: '' },
+            { input: 'cos[a^b]^c', expectedBase: 'cos[a^b]', expectedExponent: 'c' },
+        ];
 
         inputs.forEach((test) => {
-            it(``, () => {});
+            it(`Should parse '${test.input}' => base: '${test.expectedBase}' and expression: '${test.expectedExponent}'`, () => {
+                const result = StringFormatter.parsePowerFactor(test.input);
+                expect(result.base).toEqual(test.expectedBase);
+                expect(result.exponent).toEqual(test.expectedExponent);
+            });
         });
     });
 
@@ -443,3 +462,4 @@ describe('StringFormatter', () => {
         });
     });
 });
+

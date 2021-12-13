@@ -220,10 +220,46 @@ export class StringFormatter {
         };
     }
 
-    public static parsePowerFactor(input: string): { base: string, exponent: string } {
+    public static parsePowerFactor(factorString: string): { base: string, exponent: string } {
+        const isSingleFactor = this.parseFactorStrings(factorString).length === 1;
+        let base = '';
+        let exponent = '';
+
+        if (isSingleFactor) {
+            let bracketCt = 0;
+            let parenthCt = 0;
+            let found = false;
+    
+            [...factorString].forEach((c, i) => {
+                if (!found) {
+                    switch(c) {
+                        case '[':
+                            bracketCt++;
+                            break;
+                        case ']':
+                            bracketCt--;
+                            break;
+                        case '(':
+                            parenthCt++;
+                            break;
+                        case ')':
+                            parenthCt--;
+                            break;
+                        case '^':
+                            if (bracketCt === 0 && parenthCt === 0) {
+                                base = factorString.substring(0, i);
+                                exponent = factorString.substring(i+1);
+                                found = true;
+                            }
+                            break;
+                    }
+                }
+            })
+        }
+
         return {
-            base: '',
-            exponent: ''
+            base,
+            exponent
         };
     }
 
