@@ -35,17 +35,17 @@ export class StringFormatter {
             return new Rational(`${sign}${input}`);
         }
 
-        const isExpression = input[0] === '(' && this.getMatchingParenthesisIndex(input, 0);
-
-        if (isExpression) {
-            return new Expression(`${sign}${input}`);
-        }
-
         const powerParsed = this.parsePowerFactor(input);
         const isPower = !!powerParsed.base && !!powerParsed.exponent;
 
         if (isPower) {
             return new Power(`${sign}${input}`);
+        }
+
+        const isExpression = input[0] === '(' && this.getMatchingParenthesisIndex(input, 0);
+
+        if (isExpression) {
+            return new Expression(`${sign}${input}`);
         }
 
         const fnString = this.getStartingFnString(input);
@@ -83,14 +83,15 @@ export class StringFormatter {
             }
         }
 
-        const isInt = !!parseInt(`${sign}${input}`);
-        if (isInt) {
-            return new Integer(`${sign}${input}`);
-        }
-
-        const isFloat = !!parseFloat(`${sign}${input}`);
+        const isFloat = input.includes('.') && !!parseFloat(`${sign}${input}`);
         if (isFloat) {
             return new Double(`${sign}${input}`);
+        }
+
+        const tryInt = parseInt(`${sign}${input}`);
+        const isInt = !isNaN(tryInt);
+        if (isInt) {
+            return new Integer(`${sign}${input}`);
         }
         
         return new Variable(`${sign}${input}`);
@@ -98,7 +99,7 @@ export class StringFormatter {
 
     private static getStartingFnString(input: string): string {
         const fns: string[] = [...Object.keys(TrigTypes), ...Object.keys(LogTypes)];
-        const found = fns.find(fn => input.startsWith(fn));
+        const found = fns.find(fn => input.toLocaleLowerCase().startsWith(fn));
 
         if (found) {
             return found;
