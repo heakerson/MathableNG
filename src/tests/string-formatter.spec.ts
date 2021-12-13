@@ -315,17 +315,35 @@ describe('StringFormatter', () => {
         });
     });
 
-    describe('stripSurroundParenthesis', () => {
-        const inputs: {}[] = [];
+    describe('stripSurroundingParenthesis', () => {
+        const inputs: { input: string, expectedResult: string }[] = [
+            { input: '(a)', expectedResult: 'a' },
+            { input: '-(a)', expectedResult: 'a' },
+            { input: '-(-a)', expectedResult: '-a' },
+            { input: '(a)*a', expectedResult: '(a)*a' },
+            { input: '(ln[(a+b)])', expectedResult: 'ln[(a+b)]' },
+            { input: 'ln[(a+b)]', expectedResult: 'ln[(a+b)]' },
+            { input: '(a*sin[(a+b)])', expectedResult: 'a*sin[(a+b)]' },
+            { input: '-(a*sin[(a+b)])', expectedResult: 'a*sin[(a+b)]' },
+            { input: '-(a)(b)', expectedResult: '-(a)(b)' },
+            { input: '-(a)*(b)', expectedResult: '-(a)*(b)' },
+            { input: '(a)^(b)', expectedResult: '(a)^(b)' },
+            { input: '(a)/(b)', expectedResult: '(a)/(b)' },
+            { input: '((a)/(b))', expectedResult: '(a)/(b)' },
+            { input: '-((a)/(b))', expectedResult: '(a)/(b)' },
+        ];
 
         inputs.forEach((test) => {
-            it(``, () => {});
+            it(`Should remove () appropriately: '${test.input}' => '${test.expectedResult}'`, () => {
+                const result = StringFormatter.stripSurroundingParenthesis(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
         });
     });
 
-    describe('stripSurroundBrackets', () => {
+    describe('stripSurroundingBrackets', () => {
         const inputs: {}[] = [];
-
+        // change this to getFunctionContents? and return an array of strings?
         inputs.forEach((test) => {
             it(``, () => {});
         });
