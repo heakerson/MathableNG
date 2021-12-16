@@ -1,6 +1,6 @@
 import { Expression } from "src/models/math-object/factor/expression.model";
 
-describe('Expression', () => {
+xdescribe('Expression', () => {
 
     describe('Individual Methods', () => {
 
