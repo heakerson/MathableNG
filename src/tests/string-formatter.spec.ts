@@ -40,6 +40,11 @@ describe('StringFormatter', () => {
             { input: '(sin[x])', type: Expression },
             { input: '-(a)', type: Expression },
             { input: '-(a^b)', type: Expression },
+            { input: 'a*b', type: Expression },
+            { input: 'a*sin[log[x]]', type: Expression },
+            { input: 'a-sin[log[x]]', type: Expression },
+            { input: 'a+b', type: Expression },
+            { input: 'a+b^tan[x]', type: Expression },
             { input: 'a^b^c', type: Power },
             { input: '(a)^(x)', type: Power },
             { input: '-(a)^(x)', type: Power },
@@ -304,6 +309,9 @@ describe('StringFormatter', () => {
             { input: '(a)*b', expectedResult: ['(a)','b'] },
             { input: '(a)*(b)', expectedResult: ['(a)','(b)'] },
             { input: '-(a)*-(b)', expectedResult: ['-(a)','-(b)'] },
+            { input: '-tan[x*log[y]]',expectedResult: ['-tan[x*log[y]]']},
+            { input: '-sec[ln[x]*log[y]]',expectedResult: ['-sec[ln[x]*log[y]]']},
+            { input: '-sec[ln[x]]*log[y]',expectedResult: ['-sec[ln[x]]','log[y]']}
         ];
 
         inputs.forEach((test) => {

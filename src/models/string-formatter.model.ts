@@ -22,6 +22,18 @@ export class StringFormatter {
     private static nonSignOperators = ['/', '*', '^'];
 
     public static buildFactor(input: string): Factor {
+        const multipleTerms = this.parseTermStrings(input).length > 1;
+        console.log(`${input} multiple terms?`, multipleTerms);
+        if (multipleTerms) {
+            return new Expression(input)
+        }
+
+        const multipleFactors = this.parseFactorStrings(input).length > 1;
+        console.log(`${input} multiple factors?`, multipleFactors);
+        if (multipleFactors) {
+            return new Expression(input);
+        }
+
         const sign = input[0] === '-' ? Sign.Negative : Sign.Positive;
 
         if (sign == Sign.Negative) {
@@ -267,6 +279,7 @@ export class StringFormatter {
         input = this.removeEmptySpace(input);
         const factors: string[] = [];
         let parenthCount = 0;
+        let bracketCount = 0;
         let lastFactorBreakIndex = -1;
         let lastSign = '+';
 
@@ -281,9 +294,18 @@ export class StringFormatter {
                         factors.push(input.substring(lastFactorBreakIndex+1));
                     }
                     break;
+                case '[':
+                    bracketCount++;
+                    break;
+                case ']':
+                    bracketCount--;
+                    if (i === input.length - 1) {
+                        factors.push(input.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
                 case '*':
                     const previousCharIsOperator = this.operators.includes(input[i-1]);
-                    if (parenthCount === 0 && !previousCharIsOperator) {
+                    if (parenthCount === 0 && bracketCount === 0 && !previousCharIsOperator) {
                         if (i !== 0) {
                             factors.push(input.substring(lastFactorBreakIndex+1, i));
                         }
