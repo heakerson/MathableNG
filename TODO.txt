@@ -1,7 +1,6 @@
 LEFT OFF:
-- TEST ALL UNTESTED FUNCTIONS IN STRING FORMATTER
+- In build factor, test for inputs that have multiple terms and factors - they should get turned in to an expression
 - Go through tests and add tests for:
-    - fns with []
     - situations where the input should ONLY be a single factor or term etc
 - add validations and tests for []s. Probably need all the same logic as ()
     - check that any [ is preceded by a valid function string

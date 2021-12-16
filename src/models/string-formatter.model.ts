@@ -509,14 +509,15 @@ export class StringFormatter {
     public static hasMisplacedOperators(input: string): string | null {
         let operatorError: string = '';
         let foundError = false;
-        const leftErrors = this.nonSignOperators.map(o => `(${o}`);
-        const rightErrors = this.operators.map(o => `${o})`);
+        const leftErrors = [...this.nonSignOperators.map(o => `(${o}`), ...this.nonSignOperators.map(o => `[${o}`)];
+        const rightErrors = [...this.operators.map(o => `${o})`), ...this.operators.map(o => `${o}]`)];
         const inputArray = [...input];
 
         inputArray.forEach((c, i) => {
             if (!foundError) {
                 switch (c) {
                     case '(':
+                    case '[':
                         if (input.length - 1 > i) {
                             const subStr = input.substring(i, i+2);
                             if (leftErrors.includes(subStr)) {
@@ -526,6 +527,7 @@ export class StringFormatter {
                         }
                         break;
                     case ')':
+                    case ']':
                         const subStr = input.substring(i-1, i+1);
                         if (rightErrors.includes(subStr)) {
                             operatorError = subStr;
