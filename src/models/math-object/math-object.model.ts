@@ -103,6 +103,12 @@ export abstract class MathObject {
         if (parenthesisError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
         }
+
+        const bracketCountError = StringFormatter.hasBracketCountMismatch(this.inputWhitespaceRemoved);
+
+        if (bracketCountError) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Bracket Count Mismatch`);
+        }
     }
 
     protected setChildren(): MathObject[] {

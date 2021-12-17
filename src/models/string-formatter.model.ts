@@ -482,6 +482,23 @@ export class StringFormatter {
         return count !== 0;
     }
 
+    public static hasBracketCountMismatch(input: string): boolean {
+        let count = 0;
+
+        [...input].forEach((c) => {
+            switch (c) {
+                case '[':
+                    count++;
+                    break;
+                case ']':
+                    count--;
+                    break;
+            }
+        });
+
+        return count !== 0;
+    }
+
     public static hasMisorderedClosingParenthesis(input: string): boolean {
         let openCount = 0;
         let closeCount = 0;

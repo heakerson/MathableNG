@@ -1,10 +1,18 @@
 LEFT OFF:
 - add validations and tests for []s. Probably need all the same logic as ()
+    - hasMisorderedClosingParenthesis
+    - hasEmptyParenthesis
     - check that any [ is preceded by a valid function string
-    - check the counts are valid,
-    - check that they are not empty
-    - IMPORTANT add more tests for situations with [] to previously written functions
+- ToString()
+    - create a protected static class called formatToStringFromChildren
+    - this will be used by
+        - tostring
+        - fromChildren static functions
 - MOVE ALL THE BASIC FORMATTING CHECKS TO A FUNCTION THAT CAN BE CALLED FROM PARSING FUNCTIONS, BUILD FACTOR, AND MATHOBJECT BASE CLASS
+- organize the functions in string formatter in to different static classes
+    - StringFormatter
+    - Factory
+    - ErrorService
 - Should the power exponent be a factor as well? I don't think it NEEDS to be an expression
 - Start writing constructor tests and function tests!!!
     - go through each type and function

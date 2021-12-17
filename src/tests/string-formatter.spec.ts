@@ -400,6 +400,7 @@ describe('StringFormatter', () => {
             { input: '(   a', expectedResult: '((   a)' },
             { input: 'a', expectedResult: '(a)' },
             { input: '(a)', expectedResult: '(a)' },
+            { input: '-(a)', expectedResult: '(-(a))' },
             { input: '((((a))))', expectedResult: '((((a))))' },
             { input: '(a+b)*(x-y)^(t)', expectedResult: '((a+b)*(x-y)^(t))' },
             { input: '-(a+b)*(x-y)^(t)', expectedResult: '(-(a+b)*(x-y)^(t))' },
@@ -491,6 +492,26 @@ describe('StringFormatter', () => {
         inputs.forEach((test) => {
             it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
                 const result = StringFormatter.hasParenthesisCountMismatch(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
+    describe('hasBracketCountMismatch', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: ' a +b=c', expectedResult: false },
+            { input: '1+sin[2]=3   ', expectedResult: false },
+            { input: '( 1  +2)   =3  =ln[x*   4*csc[y] ]', expectedResult: false },
+            { input: 'a+b^cos[x]<=c', expectedResult: false },
+            { input: ' a +tan[b=c', expectedResult: true },
+            { input: '1+2]=3   ', expectedResult: true },
+            { input: '1  +2]   =3  =(x*   4 )', expectedResult: true },
+            { input: 'a+b^log[x<=c', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasBracketCountMismatch(test.input);
                 expect(result).toEqual(test.expectedResult);
             });
         });
