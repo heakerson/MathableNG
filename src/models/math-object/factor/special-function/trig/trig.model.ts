@@ -1,9 +1,9 @@
 import { Sign, TrigTypes } from "src/models/math-object/enums.model";
 import { StringFormatter } from "src/models/string-formatter.model";
 import { Expression } from "../../expression.model";
-import { SpecialFunction } from "../special-function.model";
+import { Function } from "../function.model";
 
-export abstract class Trig extends SpecialFunction {
+export abstract class Trig extends Function {
 
     get functionString(): string {
         return this.trigType;

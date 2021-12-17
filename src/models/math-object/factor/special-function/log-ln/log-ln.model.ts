@@ -1,8 +1,8 @@
 import { LogTypes, Sign } from "src/models/math-object/enums.model";
 import { Expression } from "../../expression.model";
-import { SpecialFunction } from "../special-function.model";
+import { Function } from "../function.model";
 
-export abstract class LogLn extends SpecialFunction {
+export abstract class LogLn extends Function {
 
     get functionString(): string {
         return this.logType;
