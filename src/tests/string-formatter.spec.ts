@@ -600,6 +600,34 @@ describe('StringFormatter', () => {
         });
     });
 
+    describe('hasEmptyBrackets', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: '', expectedResult: false },
+            { input: ' ', expectedResult: false },
+            { input: 'tan[a]+b', expectedResult: false },
+            { input: 'sin[sin[sin[a]+b]]', expectedResult: false },
+            { input: 'ln[ln[ln[ln[x]]]]', expectedResult: false },
+            { input: '1+log[2]=-scs[(3)]   ', expectedResult: false },
+            { input: '( 1  +2)   =3  =cot[x*   4 ]', expectedResult: false },
+            { input: 'a+b^cos[(x)]<=c', expectedResult: false },
+            { input: '[]', expectedResult: true },
+            { input: '[   ]   ', expectedResult: true },
+            { input: '[]+b', expectedResult: true },
+            { input: '([[]+b])', expectedResult: true },
+            { input: '[[[[]]]]', expectedResult: true },
+            { input: '1+cos[2]=[]   ', expectedResult: true },
+            { input: '( 1  +2)   =3  =[  ]*(x*   4 )', expectedResult: true },
+            { input: 'a+b^log[]<=c', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasEmptyBrackets(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
     describe('tooManyOperators', () => {
         const inputs: { input: string, expectedResult: string | null }[] = [
             { input: ' a +-b=c--d', expectedResult: null },

@@ -121,6 +121,18 @@ export abstract class MathObject {
         if (misorderedBrackets) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
         }
+
+        const hasEmptyParenthesis = StringFormatter.hasEmptyParenthesis(this.inputWhitespaceRemoved);
+
+        if (hasEmptyParenthesis) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Parenthesis '()'`);
+        }
+
+        const hasEmptyBrackets = StringFormatter.hasEmptyBrackets(this.inputWhitespaceRemoved);
+
+        if (hasEmptyBrackets) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Brackets '[]'`);
+        }
     }
 
     protected setChildren(): MathObject[] {

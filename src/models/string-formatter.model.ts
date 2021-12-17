@@ -551,6 +551,10 @@ export class StringFormatter {
         return this.removeEmptySpace(input).indexOf('()') > -1;
     }
 
+    public static hasEmptyBrackets(input: string): boolean {
+        return this.removeEmptySpace(input).indexOf('[]') > -1;
+    }
+
     public static tooManyOperators(input: string): string | null {
         let operatorString: string = '';
         let foundError = false;
