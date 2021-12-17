@@ -523,6 +523,30 @@ export class StringFormatter {
         return errorFound;
     }
 
+    public static hasMisorderedClosingBrackets(input: string): boolean {
+        let openCount = 0;
+        let closeCount = 0;
+        let errorFound = false;
+
+        [...input].forEach((c) => {
+            if (!errorFound) {
+                switch (c) {
+                    case '[':
+                        openCount++;
+                        break;
+                    case ']':
+                        closeCount++;
+                        if (closeCount > openCount) {
+                            errorFound = true;
+                        }
+                        break;
+                }
+            }
+        });
+
+        return errorFound;
+    }
+
     public static hasEmptyParenthesis(input: string): boolean {
         return this.removeEmptySpace(input).indexOf('()') > -1;
     }

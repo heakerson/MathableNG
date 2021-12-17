@@ -109,6 +109,18 @@ export abstract class MathObject {
         if (bracketCountError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Bracket Count Mismatch`);
         }
+
+        const misorderedParenth = StringFormatter.hasMisorderedClosingParenthesis(this.inputWhitespaceRemoved);
+
+        if (misorderedParenth) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
+        }
+
+        const misorderedBrackets = StringFormatter.hasMisorderedClosingBrackets(this.inputWhitespaceRemoved);
+
+        if (misorderedBrackets) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
+        }
     }
 
     protected setChildren(): MathObject[] {

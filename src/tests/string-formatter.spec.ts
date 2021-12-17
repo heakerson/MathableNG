@@ -543,6 +543,35 @@ describe('StringFormatter', () => {
         });
     });
 
+    describe('hasMisorderedClosingBrackets', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: '', expectedResult: false },
+            { input: ' ', expectedResult: false },
+            { input: 'a', expectedResult: false },
+            { input: '(a)', expectedResult: false },
+            { input: 'tan[a]+b', expectedResult: false },
+            { input: 'tan[a+ ln[y]]+b', expectedResult: false },
+            { input: 'sin[sin[sin[a]+b]]', expectedResult: false },
+            { input: 'csc[csc[csc[csc[x]]]]', expectedResult: false },
+            { input: '[[[[]]]]', expectedResult: false },
+            { input: '[][][][]', expectedResult: false },
+            { input: '1+tan[2]=-log[3, 5]   ', expectedResult: false },
+            { input: '1+]2]=(3)   ', expectedResult: true },
+            { input: ']tan[a]', expectedResult: true },
+            { input: '][', expectedResult: true },
+            { input: '[]]', expectedResult: true },
+            { input: 'sec[sec[sec[a]+b+]]]', expectedResult: true },
+            { input: '[][]]()()', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasMisorderedClosingBrackets(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
     describe('hasEmptyParenthesis', () => {
         const inputs: { input: string, expectedResult: boolean }[] = [
             { input: '', expectedResult: false },
