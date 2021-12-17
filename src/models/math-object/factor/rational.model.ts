@@ -1,4 +1,4 @@
-import { StringFormatter } from 'src/models/services/string-formatter.model';
+import { StringFormatter } from 'src/models/services/string-formatter.service';
 import { Expression } from './expression.model';
 import { Factor } from './factor.model';
 

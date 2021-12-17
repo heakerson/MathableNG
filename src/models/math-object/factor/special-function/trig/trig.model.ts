@@ -1,5 +1,5 @@
 import { Sign, TrigTypes } from "src/models/math-object/enums.model";
-import { StringFormatter } from "src/models/services/string-formatter.model";
+import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Expression } from "../../expression.model";
 import { Function } from "../function.model";
 

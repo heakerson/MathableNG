@@ -1,4 +1,4 @@
-import { StringFormatter } from "src/models/services/string-formatter.model";
+import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Sign } from "../enums.model";
 import { MathObject } from "../math-object.model";
 

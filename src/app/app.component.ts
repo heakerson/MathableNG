@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Expression } from 'src/models/math-object/factor/expression.model';
 import { Term } from 'src/models/math-object/term.model';
-import { StringFormatter } from 'src/models/services/string-formatter.model';
+import { StringFormatter } from 'src/models/services/string-formatter.service';
 
 @Component({
   selector: 'app-root',

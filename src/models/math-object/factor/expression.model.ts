@@ -1,4 +1,4 @@
-import { StringFormatter } from "src/models/services/string-formatter.model";
+import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Operators } from "../enums.model";
 import { Term } from "../term.model";
 import { Factor } from "./factor.model";

@@ -1,4 +1,4 @@
-import { StringFormatter } from "../services/string-formatter.model";
+import { StringFormatter } from "../services/string-formatter.service";
 import * as uuid from 'uuid';
 import { Type } from "@angular/core";
 
