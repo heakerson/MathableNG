@@ -183,10 +183,11 @@ export class StringFormatter {
     public static parseRationalExpressions(factorString: string): { numerator: string, denominator: string } {
         factorString = this.stripSurroundingParenthesis(factorString);
         const isSingleFactor = this.parseFactorStrings(factorString).length === 1;
+        const isSingleTerm = this.parseTermStrings(factorString).length === 1;
         let num = '';
         let denom = '';
 
-        if (isSingleFactor) {
+        if (isSingleFactor && isSingleTerm) {
             let bracketCt = 0;
             let parenthCt = 0;
             let found = false;
