@@ -1,5 +1,5 @@
 import { LogTypes, Sign } from "src/models/math-object/enums.model";
-import { StringFormatter } from "src/models/string-formatter.model";
+import { StringFormatter } from "src/models/services/string-formatter.model";
 import { Expression } from "../../expression.model";
 import { LogLn } from "./log-ln.model";
 

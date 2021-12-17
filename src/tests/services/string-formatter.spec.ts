@@ -16,7 +16,7 @@ import { Sin } from "src/models/math-object/factor/special-function/trig/sin.mod
 import { Tan } from "src/models/math-object/factor/special-function/trig/tan.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
-import { StringFormatter } from "src/models/string-formatter.model";
+import { StringFormatter } from "src/models/services/string-formatter.model";
 
 describe('StringFormatter', () => {
 
