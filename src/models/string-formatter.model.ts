@@ -555,6 +555,30 @@ export class StringFormatter {
         return this.removeEmptySpace(input).indexOf('[]') > -1;
     }
 
+    public static hasMissingFunctionName(input: string): boolean {
+        input = this.removeEmptySpace(input);
+        const breakPoints = [...this.operators, '(', ')', '[', ']'];
+        let isMissingFunctionName = false;
+
+        [...input].forEach((c, i) => {
+            if (c === '[' && !isMissingFunctionName) {
+                const beforeChar = [...input.slice(0, i)].reverse();
+                const nextOperatorIndex = beforeChar.findIndex(ch => breakPoints.includes(ch));
+                let prefix;
+                
+                if (nextOperatorIndex === -1) {
+                    prefix = input.substring(0, i);
+                } else {
+                    prefix = input.substring(i - nextOperatorIndex, i);
+                }
+
+                isMissingFunctionName = !this.getStartingFnString(prefix);
+            }
+        });
+
+        return isMissingFunctionName;
+    }
+
     public static tooManyOperators(input: string): string | null {
         let operatorString: string = '';
         let foundError = false;

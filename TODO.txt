@@ -1,6 +1,4 @@
 LEFT OFF:
-- add validations and tests for []s. Probably need all the same logic as ()
-    - check that any [ is preceded by a valid function string
 - ToString()
     - create a protected static class called formatToStringFromChildren
     - this will be used by

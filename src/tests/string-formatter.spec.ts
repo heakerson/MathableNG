@@ -699,5 +699,33 @@ describe('StringFormatter', () => {
             });
         });
     });
+
+    describe('hasMissingFunctionName', () => {
+        const inputs: { input: string, expectedResult: boolean }[] = [
+            { input: '', expectedResult: false },
+            { input: 'a + (b-c)', expectedResult: false },
+            { input: 'tan[x]', expectedResult: false },
+            { input: 'tan[tan[x]]', expectedResult: false },
+            { input: 'ln[x + log[b-6, E]]', expectedResult: false },
+            { input: 'a-tan[x]', expectedResult: false },
+            { input: 'a+tan[tan[x]]', expectedResult: false },
+            { input: '3-ln[x + log[b-6, E]]', expectedResult: false },
+            { input: '[x]', expectedResult: true },
+            { input: 'tan[[x]]', expectedResult: true },
+            { input: 'tan[-[x]]', expectedResult: true },
+            { input: '[x + log[b-6, E]]', expectedResult: true },
+            { input: 'ln[x + [b-6, E]]', expectedResult: true },
+            { input: 'a-[x]', expectedResult: true },
+            { input: 'a+[tan[x]]', expectedResult: true },
+            { input: '3-ln[x ^ [b-6, E]]', expectedResult: true },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = StringFormatter.hasMissingFunctionName(test.input);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
 });
 

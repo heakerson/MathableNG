@@ -133,6 +133,12 @@ export abstract class MathObject {
         if (hasEmptyBrackets) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Brackets '[]'`);
         }
+
+        const hasMissingFunctionName = StringFormatter.hasMissingFunctionName(this.inputWhitespaceRemoved);
+
+        if (hasMissingFunctionName) {
+            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Missing Function Name`);
+        }
     }
 
     protected setChildren(): MathObject[] {
