@@ -9,15 +9,15 @@ export class Power extends Factor {
         return this.children[0] as Factor;
     }
     
-    get exponent(): Expression {
-        return this.children[1] as Expression;
+    get exponent(): Factor {
+        return this.children[1] as Factor;
     }
 
     constructor(input: string) {
         super(input);
     }
 
-    public static fromFactors(base: Factor, exponent: Expression): Power {
+    public static fromFactors(base: Factor, exponent: Factor): Power {
         return new Power(`${base.toString()}^${exponent.toString()}`);
     }
 
