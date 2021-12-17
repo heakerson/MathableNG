@@ -19,6 +19,7 @@ import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 
 describe('Factory', () => {
+
     describe('buildFactor', () => {
         const inputs: { input: string, type: Type<MathObject>}[] = [
             { input: 'x', type: Variable },

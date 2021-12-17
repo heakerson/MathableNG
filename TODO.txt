@@ -1,8 +1,4 @@
 LEFT OFF:
-- organize the functions in string formatter in to different static classes
-    - StringFormatter
-    - Factory
-    - ErrorService
 - MOVE ALL THE BASIC FORMATTING CHECKS TO A FUNCTION THAT CAN BE CALLED FROM PARSING FUNCTIONS, BUILD FACTOR, AND MATHOBJECT BASE CLASS
 - Should the power exponent be a factor as well? I don't think it NEEDS to be an expression
 - Start writing constructor tests and function tests!!!

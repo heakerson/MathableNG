@@ -1,6 +1,7 @@
 import { StringFormatter } from "../services/string-formatter.service";
 import * as uuid from 'uuid';
 import { Type } from "@angular/core";
+import { ErrorHandler } from "../services/error-handler.service";
 
 export abstract class MathObject {
     public readonly id: any;
@@ -92,49 +93,49 @@ export abstract class MathObject {
             throw new Error(`${this.constructor.name} Empty Input`);
         }
 
-        const operatorError = StringFormatter.tooManyOperators(this.inputWhitespaceRemoved);
+        const operatorError = ErrorHandler.tooManyOperators(this.inputWhitespaceRemoved);
 
         if (operatorError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Malformed Operators: '${operatorError}'`);
         }
 
-        const parenthesisError = StringFormatter.hasParenthesisCountMismatch(this.inputWhitespaceRemoved);
+        const parenthesisError = ErrorHandler.hasParenthesisCountMismatch(this.inputWhitespaceRemoved);
 
         if (parenthesisError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
         }
 
-        const bracketCountError = StringFormatter.hasBracketCountMismatch(this.inputWhitespaceRemoved);
+        const bracketCountError = ErrorHandler.hasBracketCountMismatch(this.inputWhitespaceRemoved);
 
         if (bracketCountError) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Bracket Count Mismatch`);
         }
 
-        const misorderedParenth = StringFormatter.hasMisorderedClosingParenthesis(this.inputWhitespaceRemoved);
+        const misorderedParenth = ErrorHandler.hasMisorderedClosingParenthesis(this.inputWhitespaceRemoved);
 
         if (misorderedParenth) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
         }
 
-        const misorderedBrackets = StringFormatter.hasMisorderedClosingBrackets(this.inputWhitespaceRemoved);
+        const misorderedBrackets = ErrorHandler.hasMisorderedClosingBrackets(this.inputWhitespaceRemoved);
 
         if (misorderedBrackets) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
         }
 
-        const hasEmptyParenthesis = StringFormatter.hasEmptyParenthesis(this.inputWhitespaceRemoved);
+        const hasEmptyParenthesis = ErrorHandler.hasEmptyParenthesis(this.inputWhitespaceRemoved);
 
         if (hasEmptyParenthesis) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Parenthesis '()'`);
         }
 
-        const hasEmptyBrackets = StringFormatter.hasEmptyBrackets(this.inputWhitespaceRemoved);
+        const hasEmptyBrackets = ErrorHandler.hasEmptyBrackets(this.inputWhitespaceRemoved);
 
         if (hasEmptyBrackets) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Brackets '[]'`);
         }
 
-        const hasMissingFunctionName = StringFormatter.hasMissingFunctionName(this.inputWhitespaceRemoved);
+        const hasMissingFunctionName = ErrorHandler.hasMissingFunctionName(this.inputWhitespaceRemoved);
 
         if (hasMissingFunctionName) {
             throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Missing Function Name`);
