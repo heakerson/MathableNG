@@ -1,3 +1,4 @@
+import { Factory } from "../services/factory.service";
 import { StringFormatter } from "../services/string-formatter.service";
 import { Factor } from "./factor/factor.model";
 import { MathObject } from "./math-object.model";
@@ -61,6 +62,6 @@ export class Term extends MathObject {
     }
 
     protected override setChildren(): Factor[] {
-        return StringFormatter.parseFactorStrings(this.formattedInput).map(f => StringFormatter.buildFactor(f));
+        return StringFormatter.parseFactorStrings(this.formattedInput).map(f => Factory.buildFactor(f));
     }
 }

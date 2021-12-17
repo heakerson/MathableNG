@@ -1,6 +1,5 @@
 import { LogTypes, Sign } from "src/models/math-object/enums.model";
-import { MathObject } from "src/models/math-object/math-object.model";
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { Factory } from "src/models/services/factory.service";
 import { Expression } from "../../expression.model";
 import { LogLn } from "./log-ln.model";
 
@@ -13,7 +12,7 @@ export class Log extends LogLn {
     }
 
     public static fromExpression(expression: Expression, sign: Sign, base: number = 10): Log {
-        return StringFormatter.buildFactor(`${sign}${LogTypes.log}[${expression},${base}]`) as Log;
+        return Factory.buildFactor(`${sign}${LogTypes.log}[${expression},${base}]`) as Log;
     }
 
     public copy(): Log {

@@ -1,5 +1,5 @@
 import { Sign, TrigTypes } from "src/models/math-object/enums.model";
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { Factory } from "src/models/services/factory.service";
 import { Expression } from "../../expression.model";
 import { Function } from "../function.model";
 
@@ -18,7 +18,7 @@ export abstract class Trig extends Function {
     public abstract override copy(): Trig;
 
     public static fromExpression<TTrig extends Trig>(expression: Expression, sign: Sign, trigType: TrigTypes): TTrig {
-        return StringFormatter.buildFactor(`${sign}${trigType}[${expression}]`) as TTrig;
+        return Factory.buildFactor(`${sign}${trigType}[${expression}]`) as TTrig;
     }
 
     public override setChildren(): Expression[] {

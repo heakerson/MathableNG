@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Expression } from 'src/models/math-object/factor/expression.model';
 import { Term } from 'src/models/math-object/term.model';
-import { StringFormatter } from 'src/models/services/string-formatter.service';
+import { Factory } from 'src/models/services/factory.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,6 @@ export class AppComponent implements OnInit {
       // console.log('FOUND TERM', term);
     });
 
-    console.log(StringFormatter.buildFactor('-sin[(x)]'));
+    console.log(Factory.buildFactor('-sin[(x)]'));
   }
 }

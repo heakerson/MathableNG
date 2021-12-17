@@ -1,3 +1,4 @@
+import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Expression } from "./expression.model";
 import { Factor } from "./factor.model";
@@ -26,6 +27,6 @@ export class Power extends Factor {
 
     protected override setChildren(): Factor[] {
         const { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
-        return [ StringFormatter.buildFactor(base) , new Expression(exponent) ];
+        return [ Factory.buildFactor(base) , new Expression(exponent) ];
     }
 }

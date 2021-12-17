@@ -1,4 +1,4 @@
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { Factory } from "src/models/services/factory.service";
 import { Sign } from "../enums.model";
 import { MathObject } from "../math-object.model";
 
@@ -8,6 +8,6 @@ export abstract class Factor extends MathObject {
     }
 
     public flipSign<TFactor extends Factor>(): TFactor {
-        return StringFormatter.buildFactor(`${this.sign === Sign.Positive ? Sign.Negative : Sign.Positive}${this.formattedInput}`) as TFactor;
+        return Factory.buildFactor(`${this.sign === Sign.Positive ? Sign.Negative : Sign.Positive}${this.formattedInput}`) as TFactor;
     }
 }
