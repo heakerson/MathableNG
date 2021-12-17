@@ -1,6 +1,4 @@
 LEFT OFF:
-- Go through tests and add tests for:
-    - situations where the input should ONLY be a single factor or term etc
 - add validations and tests for []s. Probably need all the same logic as ()
     - check that any [ is preceded by a valid function string
     - check the counts are valid,
@@ -15,11 +13,6 @@ LEFT OFF:
             exists) at the expression level
     - expression
         - make sure that the additional operators are stored
-- Add these to ALL of objects and test?
-    - id
-    - children
-        - setChildren
-- parse the base for log - I think it should EITHER look for the base in the string input OR an optional parameter?
 - Update all the copy functions with the tostring?
 - Write and test the formatting functions for child classes
 - Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
