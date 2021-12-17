@@ -23,13 +23,11 @@ export class StringFormatter {
 
     public static buildFactor(input: string): Factor {
         const multipleTerms = this.parseTermStrings(input).length > 1;
-        console.log(`${input} multiple terms?`, multipleTerms);
         if (multipleTerms) {
             return new Expression(input)
         }
 
         const multipleFactors = this.parseFactorStrings(input).length > 1;
-        console.log(`${input} multiple factors?`, multipleFactors);
         if (multipleFactors) {
             return new Expression(input);
         }
