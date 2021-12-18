@@ -28,6 +28,7 @@ describe('Term', () => {
         const constructorTests: { input: string, children: string[], toString: string }[] = [
             { input: 'a', children: ['a'], toString: 'a' },
             { input: 'a*b', children: ['a', 'b'], toString: 'a*b' },
+            { input: '+a*b', children: ['a', 'b'], toString: 'a*b' },
             { input: '-a-b', children: ['(-a-b)'], toString: '(-a-b)' },
             { input: 'a*b^c', children: ['a', 'b^c'], toString: 'a*b^c' },
             { input: 'a*-b^c', children: ['a', '-b^c'], toString: 'a*-b^c' },

@@ -147,6 +147,12 @@ export abstract class MathObject {
     }
 
     protected getFormattedInputString(): string {
-        return this.inputWhitespaceRemoved.replace(')(', ')*(');
+        let formatted = this.inputWhitespaceRemoved.replace(')(', ')*(');
+
+        if (formatted[0] === '+') {
+            formatted = formatted.substring(1);
+        }
+
+        return formatted;
     }
 }

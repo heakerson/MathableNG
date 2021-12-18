@@ -11,13 +11,4 @@ export abstract class Factor extends MathObject {
         return Factory.buildFactor(`${this.sign === Sign.Positive ? Sign.Negative : Sign.Positive}${this.formattedInput}`) as TFactor;
     }
 
-    protected override getFormattedInputString(): string {
-        let formatted = super.getFormattedInputString();
-
-        if (this.inputWhitespaceRemoved[0] === '+') {
-            formatted = formatted.substring(1);
-        }
-
-        return formatted;
-    }
 }

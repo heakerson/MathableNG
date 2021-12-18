@@ -15,7 +15,8 @@ export function expressionConstructorTests<TExpression extends Expression>(
         tests.forEach(test => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
                 const mo: TExpression = builder(test.input);
-
+                // console.log(mo);
+                // console.log(mo.toString());
                 expect(mo.terms.map(c => c.toString())).toEqual(test.children);
                 expect(mo.termCount).toEqual(test.children.length);
                 expect(mo.isSingleTerm).toEqual(test.children.length === 1);
@@ -30,8 +31,10 @@ describe('Expression', () => {
         const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
             { input: '(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Positive },
             { input: '-(a-b)', children: ['a', '-b'], toString: '-(a-b)', sign: Sign.Negative },
-            // { input: '(a+b)', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive },
-            // { input: ' a +b', toString: '(a+b)' },
+            { input: '-(a+b)', children: ['a', 'b'], toString: '-(a+b)', sign: Sign.Negative },
+            { input: '(a+b)', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive },
+            { input: ' a +b', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive },
+            { input: ' -a +b', children: ['-a', 'b'], toString: '(-a+b)', sign: Sign.Positive },
             // { input: '(a+b)', toString: '(a+b)' },
             // { input: '-(a+b)', toString: '-(a+b)' },
             // { input: '(a+  b) ^(x)', toString: '((a+b)^(x))' },
