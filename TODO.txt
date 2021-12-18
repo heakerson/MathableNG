@@ -26,20 +26,6 @@ LEFT OFF:
     - THINK ABOUT THIS AND HOW I WANT UPDATING OBJECTS TO WORK!
         - probably return an ENTIRELY clone object but a pointer to the object in the same position
             - will need a way to get an object based on positioning
-- Add getters:
-    - isRoot,
-    - root
-    - children
-- Start writing basic constructor tests for all child classes
-- FORMATTING INPUT STRINGS: 
-    - Expression 
-        - turn a+-b*c => ?
-        - turn a--b*c => a-(-b*c) OR a-(-b)*c?
-    - term
-        - turn a*b/c*d => a*((b)/(c))*d OR ((a*b)/(c*d))
-        - turn a*b/c*d/e => a*((b)/(c))*((d)/(e)) ?
-        - turn a*b/c/d => ?
-        - turn a/b/c/d => ? OR THROW ERROR??
 
 - How should I handle the following types of situations? They require editing the input slightly. I think I should do options 2 and store the
     original strings and the formatted strings AND FIX THE FAILING UNIT TEST
