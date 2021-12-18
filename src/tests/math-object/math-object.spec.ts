@@ -1,18 +1,22 @@
-import { Type } from "@angular/core";
 import { MathObject } from "src/models/math-object/math-object.model";
 import * as uuid from 'uuid';
 
 export function mathObjectConstructorTests<TMathObject extends MathObject>(
-    type: Type<TMathObject>,
-    builder: (input: string) => TMathObject,
-    tests: { input: string }[]
+    additionalLabel: string,
+    tests: { input: string, children: string[], toString: string }[],
+    builder: (input: string) => TMathObject
 ): void {
 
-    describe(`${type.constructor.name} : MathObject Base Constructor Tests`, () => {
+    describe(`MathObject Constructor Tests => ${additionalLabel}`, () => {
         tests.forEach(test => {
-            const mo: TMathObject = builder(test.input);
+            it(`'${test.input}' => should populate base properties correctly`, () => {
+                const mo: TMathObject = builder(test.input);
 
-            expect(uuid.validate(mo.id)).toBeTrue();
+                expect(uuid.validate(mo.id)).toBeTrue();
+                expect(mo.children.map(c => c.toString())).toEqual(test.children);
+                expect(mo.toString()).toEqual(test.toString);
+                expect(mo.copy().toString()).toEqual(mo.toString());
+            });
         });
     });
 }
