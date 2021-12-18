@@ -26,7 +26,13 @@ describe('Term', () => {
 
     describe('Constructor Tests', () => {
         const constructorTests: { input: string, children: string[], toString: string }[] = [
-            { input: 'a', children: ['a'], toString: 'a' }
+            { input: 'a', children: ['a'], toString: 'a' },
+            { input: 'a*b', children: ['a', 'b'], toString: 'a*b' },
+            { input: '-a-b', children: ['(-a-b)'], toString: '(-a-b)' },
+            { input: 'a*b^c', children: ['a', 'b^c'], toString: 'a*b^c' },
+            { input: 'a*-b^c', children: ['a', '-b^c'], toString: 'a*-b^c' },
+            { input: '-cot[x-b]^(c)*((e)/(f))', children: ['-cot[x-b]^(c)', '((e)/(f))'], toString: '-cot[x-b]^(c)*((e)/(f))'},
+            { input: '-cot[x-b]^(c)-log[a-b, -x]', children: ['(-cot[x-b]^(c)-log[a-b,-x])'], toString: '(-cot[x-b]^(c)-log[a-b,-x])'}
         ];
     
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Term(input));

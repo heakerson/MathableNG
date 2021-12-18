@@ -64,4 +64,13 @@ export class Term extends MathObject {
     protected override setChildren(): Factor[] {
         return StringFormatter.parseFactorStrings(this.formattedInput).map(f => Factory.buildFactor(f));
     }
+
+    protected override getFormattedInputString(): string {
+        let formatted = super.getFormattedInputString();
+
+        if (StringFormatter.parseTermStrings(formatted).length > 1) {
+            formatted = `(${formatted})`;
+        }
+        return formatted;
+    }
 }
