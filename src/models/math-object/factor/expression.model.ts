@@ -25,7 +25,10 @@ export class Expression extends Factor {
 
     public static fromTerms(...terms: Term[]): Expression {
         let innerTerms = '';
-        terms.forEach((term) => innerTerms += `${term.toString()}`);
+        terms.forEach((term, i) => {
+            const sign = !term.isNegative ? (i === 0 ? '' : '+') : '';
+            return innerTerms += `${sign}${term.toString()}`;
+        });
 
         return new Expression(innerTerms);
     }
@@ -70,7 +73,7 @@ export class Expression extends Factor {
         return new Expression(this.toString());
     }
 
-    public getAdditionalOperatorForIndex(index: number): Operators {
+    protected getAdditionalOperatorForIndex(index: number): Operators {
         const additionalOperator = this._additionalOperators.find(ao => ao.termIndex === index);
 
         if (additionalOperator) {
@@ -93,6 +96,7 @@ export class Expression extends Factor {
     protected override setChildren(): Term[] {
         const removedParenth = StringFormatter.stripSurroundingParenthesis(this.formattedInput);
         let parsedTerms = StringFormatter.parseTermStrings(removedParenth);
+        this._additionalOperators = [];
 
         parsedTerms = parsedTerms.map((termString, i) => {
             if (termString.length > 2) {
