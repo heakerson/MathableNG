@@ -1,5 +1,6 @@
 import { Factory } from "../services/factory.service";
 import { StringFormatter } from "../services/string-formatter.service";
+import { Sign } from "./enums.model";
 import { Factor } from "./factor/factor.model";
 import { MathObject } from "./math-object.model";
 
@@ -15,6 +16,14 @@ export class Term extends MathObject {
 
     get isSingleFactor(): boolean {
         return this.factorCount === 1;
+    }
+
+    get isNegative(): boolean {
+        return this.sign === Sign.Negative;
+    }
+
+    get sign(): Sign {
+        return this.factors[0].sign;
     }
 
     constructor(input: string) {
