@@ -29,6 +29,7 @@ describe('ErrorHandler', () => {
             { input: '1+sin[2]=3   ', expectedResult: false },
             { input: '( 1  +2)   =3  =ln[x*   4*csc[y] ]', expectedResult: false },
             { input: 'a+b^cos[x]<=c', expectedResult: false },
+            { input: '-cot[x-b]^(c)*((e)/(f))', expectedResult: false },
             { input: ' a +tan[b=c', expectedResult: true },
             { input: '1+2]=3   ', expectedResult: true },
             { input: '1  +2]   =3  =(x*   4 )', expectedResult: true },

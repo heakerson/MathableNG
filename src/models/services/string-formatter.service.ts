@@ -36,11 +36,21 @@ export class StringFormatter {
         input = this.removeEmptySpace(input);
         const terms: string[] = [];
         let parenthCount = 0;
+        let bracketCount = 0;
         let lastTermBreakIndex = -1;
         let lastSign = '+';
 
         [...input].forEach((c, i) => {
             switch(c) {
+                case '[':
+                    bracketCount++;
+                    break;
+                case ']':
+                    bracketCount--;
+                    if (i === input.length - 1) {
+                        terms.push(input.substring(lastTermBreakIndex));
+                    }
+                    break;
                 case '(':
                     parenthCount++;
                     break;
@@ -53,7 +63,7 @@ export class StringFormatter {
                 case '+':
                 case '-':
                     const previousCharIsOperator = this.operators.includes(input[i-1]);
-                    if (parenthCount === 0 && !previousCharIsOperator) {
+                    if (parenthCount === 0 && bracketCount === 0 && !previousCharIsOperator) {
                         if (i !== 0) {
                             terms.push(input.substring(lastTermBreakIndex, i));
                         }

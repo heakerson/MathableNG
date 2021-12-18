@@ -84,6 +84,8 @@ describe('StringFormatter', () => {
             { input: 'x^-(a)/(b)', expectedResult: ['x^-(a)/(b)'] },
             { input: 'x*-(a)/(b)-a/(b)', expectedResult: ['x*-(a)/(b)', '-a/(b)'] },
             { input: 'x*(a)/(b)/c+a/b', expectedResult: ['x*(a)/(b)/c', '+a/b'] },
+            { input: '-cot[x-b]^(c)', expectedResult: ['-cot[x-b]^(c)']},
+            { input: '-cot[x-b]^(c)-log[a-b, -x]', expectedResult: ['-cot[x-b]^(c)', '-log[a-b,-x]']}
         ];
 
         inputs.forEach((test) => {
@@ -237,7 +239,8 @@ describe('StringFormatter', () => {
             { input: '-(a)*-(b)', expectedResult: ['-(a)','-(b)'] },
             { input: '-tan[x*log[y]]',expectedResult: ['-tan[x*log[y]]']},
             { input: '-sec[ln[x]*log[y]]',expectedResult: ['-sec[ln[x]*log[y]]']},
-            { input: '-sec[ln[x]]*log[y]',expectedResult: ['-sec[ln[x]]','log[y]']}
+            { input: '-sec[ln[x]]*log[y]',expectedResult: ['-sec[ln[x]]','log[y]']},
+            { input: '-cot[x-b]^(c)*((e)/(f))', expectedResult: ['-cot[x-b]^(c)', '((e)/(f))']}
         ];
 
         inputs.forEach((test) => {
