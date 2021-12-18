@@ -1,7 +1,6 @@
 LEFT OFF:
 - FIX FAILING TEST IN TERM
-    - create factor base tests
-    - then start working on expression
+    - continue working on expression tests
         - test additional operators!
     - THEN fix failing test in term
 - Start writing constructor tests and function tests!!!

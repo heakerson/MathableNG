@@ -29,7 +29,7 @@ describe('Expression', () => {
     describe('Constructor', () => {
         const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
             { input: '(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Positive },
-            // { input: '-(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Negative },
+            { input: '-(a-b)', children: ['a', '-b'], toString: '-(a-b)', sign: Sign.Negative },
             // { input: '(a+b)', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive },
             // { input: ' a +b', toString: '(a+b)' },
             // { input: '(a+b)', toString: '(a+b)' },
