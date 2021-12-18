@@ -63,19 +63,19 @@ export class Factory {
 
             switch (fnString) {
                 case TrigTypes.sin:
-                    return new Sin(`${sign}${parameters[0]}`, sign);
+                    return new Sin(`${parameters[0]}`, sign);
                 case TrigTypes.cos:
-                    return new Cos(`${sign}${parameters[0]}`, sign);
+                    return new Cos(`${parameters[0]}`, sign);
                 case TrigTypes.tan:
-                    return new Tan(`${sign}${parameters[0]}`, sign);
+                    return new Tan(`${parameters[0]}`, sign);
                 case TrigTypes.sec:
-                    return new Sec(`${sign}${parameters[0]}`, sign);
+                    return new Sec(`${parameters[0]}`, sign);
                 case TrigTypes.csc:
-                    return new Csc(`${sign}${parameters[0]}`, sign);
+                    return new Csc(`${parameters[0]}`, sign);
                 case TrigTypes.cot:
-                    return new Cot(`${sign}${parameters[0]}`, sign);
+                    return new Cot(`${parameters[0]}`, sign);
                 case LogTypes.ln:
-                    return new Ln(`${sign}${parameters[0]}`, sign);
+                    return new Ln(`${parameters[0]}`, sign);
                 case LogTypes.log:
                     const base = !!parameters[1] ? Number.parseFloat(parameters[1]) : 10;
                     return new Log(`${sign}${parameters[0]}`, sign, base);
