@@ -70,6 +70,16 @@ export class Term extends MathObject {
         return new Term(this.toString());
     }
 
+    public override toString(): string {
+        let factorString = '';
+        this.factors.forEach((f, i) => {
+            const operator = i === 0 ? '' : '*';
+            factorString += `${operator}${f}`;
+        })
+
+        return factorString;
+    }
+
     protected override setChildren(): Factor[] {
         return StringFormatter.parseFactorStrings(this.formattedInput).map(f => Factory.buildFactor(f));
     }
