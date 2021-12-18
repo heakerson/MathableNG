@@ -57,7 +57,7 @@ export class Term extends MathObject {
         return Term.fromFactors(...newChildren);
     }
 
-    public copy(): Term {
+    public override copy(): Term {
         return new Term(this.toString());
     }
 

@@ -32,7 +32,8 @@ describe('Term', () => {
             { input: 'a*b^c', children: ['a', 'b^c'], toString: 'a*b^c' },
             { input: 'a*-b^c', children: ['a', '-b^c'], toString: 'a*-b^c' },
             { input: '-cot[x-b]^(c)*((e)/(f))', children: ['-cot[x-b]^(c)', '((e)/(f))'], toString: '-cot[x-b]^(c)*((e)/(f))'},
-            { input: '-cot[x-b]^(c)-log[a-b, -x]', children: ['(-cot[x-b]^(c)-log[a-b,-x])'], toString: '(-cot[x-b]^(c)-log[a-b,-x])'}
+            { input: '-cot[x-b]^(c)-log[a-b, -x]', children: ['(-cot[x-b]^(c)-log[a-b,-x])'], toString: '(-cot[x-b]^(c)-log[a-b,-x])'},
+            { input: 'a+-b', children: ['(a+-b)'], toString: '(a+-b)' }
         ];
     
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Term(input));

@@ -13,14 +13,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const expression = new Expression('(a+b+c*(e+f))');
-    console.log(expression);
-    const type = Term;
+    // console.log(expression);
+    // const type = Term;
     // console.log('traverse for', type);
   
     expression.travsere(Term, (term: Term) => {
       // console.log('FOUND TERM', term);
     });
 
-    console.log(Factory.buildFactor('-sin[(x)]'));
+    // console.log(Factory.buildFactor('-sin[(x)]'));
   }
 }
