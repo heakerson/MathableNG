@@ -138,16 +138,15 @@ export class StringFormatter {
     }
 
     public static parsePowerFactor(factorString: string): { base: string, exponent: string } {
-        const isSingleFactor = this.parseFactorStrings(factorString).length === 1;
         const isSingleTerm = this.parseTermStrings(factorString).length === 1;
-        const isRational = isSingleFactor && isSingleTerm
+        const isRational = isSingleTerm
             && this.parseRationalExpressions(factorString).denominator !== '' 
             && this.parseRationalExpressions(factorString).numerator !== '';
 
         let base = '';
         let exponent = '';
 
-        if (isSingleFactor && isSingleTerm && !isRational) {
+        if (isSingleTerm && !isRational) {
             let bracketCt = 0;
             let parenthCt = 0;
             let found = false;

@@ -170,7 +170,7 @@ describe('StringFormatter', () => {
             { input: '-(a+b)^b/c', expectedBase: '', expectedExponent: '' },
             { input: '-(a+b)^b/sin[x^y]', expectedBase: '', expectedExponent: '' },
             { input: '-(a+b)^(b/sin[x^y])', expectedBase: '-(a+b)', expectedExponent: '(b/sin[x^y])' },
-            { input: '-(a+b)^b/c*x', expectedBase: '', expectedExponent: '' },
+            { input: '-(a+b)^b/c*x', expectedBase: '-(a+b)', expectedExponent: 'b/c*x' },
             { input: '-a^b^-c', expectedBase: '-a', expectedExponent: 'b^-c' },
             { input: '-(a^b)^-c', expectedBase: '-(a^b)', expectedExponent: '-c' },
             { input: 'cos[a^b]', expectedBase: '', expectedExponent: '' },
@@ -178,7 +178,7 @@ describe('StringFormatter', () => {
             { input: 'a', expectedBase: '', expectedExponent: '' },
             { input: 'a/b^x', expectedBase: '', expectedExponent: '' },
             { input: 'x^b/c', expectedBase: '', expectedExponent: '' },
-            { input: 'a*b^c', expectedBase: '', expectedExponent: '' },
+            { input: 'a*b^c', expectedBase: 'a*b', expectedExponent: 'c' },
             { input: 'b^c+a', expectedBase: '', expectedExponent: '' },
         ];
 
