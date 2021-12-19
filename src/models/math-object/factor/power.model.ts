@@ -30,8 +30,7 @@ export class Power extends Factor {
     }
 
     public override toString(): string {
-        const exp = this.exponent instanceof Power ? `(${this.exponent.toString()})` : this.exponent.toString();
-        return `${this.base.toString()}^${exp}`;
+        return `${this.base.toString()}^${this.exponent.toString()}`;
     }
 
     protected override setChildren(): Factor[] {
@@ -39,6 +38,11 @@ export class Power extends Factor {
 
         if (StringFormatter.parseFactorStrings(base).length > 1) {
             base = `(${base})`;
+        }
+
+        const parsedExponent = StringFormatter.parsePowerFactor(exponent);
+        if (!!parsedExponent.exponent) {
+            exponent = `(${exponent})`;
         }
 
         return [ Factory.buildFactor(base) , Factory.buildFactor(exponent) ];

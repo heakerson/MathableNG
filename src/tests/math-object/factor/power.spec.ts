@@ -37,8 +37,8 @@ describe('Power', () => {
             { input: '-csc[b]^b', children: ['-csc[b]', 'b'], toString: '-csc[b]^b', sign: Sign.Negative },
             { input: 'x*a^b', children: ['(x*a)', 'b'], toString: '(x*a)^b', sign: Sign.Positive },
             { input: '-x*a^b', children: ['(-x*a)', 'b'], toString: '(-x*a)^b', sign: Sign.Positive },
-            // { input: 'x^a^b', children: ['x', '(a^b)'], toString: 'x^(a^b)', sign: Sign.Positive },
-            // { input: '-x^-a^b', children: ['x', '(-a^b)'], toString: '-x^(-a^b)', sign: Sign.Negative },
+            { input: 'x^a^b', children: ['x', '(a^b)'], toString: 'x^(a^b)', sign: Sign.Positive },
+            { input: '-x^-a^b', children: ['-x', '(-a^b)'], toString: '-x^(-a^b)', sign: Sign.Negative },
         ];
 
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Power(input));
