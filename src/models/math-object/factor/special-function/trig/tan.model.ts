@@ -5,6 +5,6 @@ export class Tan extends Trig {
     public readonly trigType: TrigTypes = TrigTypes.tan;
 
     public copy(): Tan {
-        return Trig.fromExpression<Tan>(this.expression, this.sign, this.trigType);
+        return Trig.fromFactor<Tan>(this.contents, this.sign, this.trigType);
     }
 }

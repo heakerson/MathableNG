@@ -6,6 +6,6 @@ export class Csc extends Trig {
     public readonly trigType: TrigTypes = TrigTypes.csc;
 
     public copy(): Csc {
-        return Trig.fromExpression<Csc>(this.expression, this.sign, this.trigType);
+        return Trig.fromFactor<Csc>(this.contents, this.sign, this.trigType);
     }
 }

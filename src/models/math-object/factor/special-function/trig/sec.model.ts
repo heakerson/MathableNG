@@ -6,6 +6,6 @@ export class Sec extends Trig {
     public readonly trigType: TrigTypes = TrigTypes.sec;
     
     public copy(): Sec {
-        return Trig.fromExpression<Sec>(this.expression, this.sign, this.trigType);
+        return Trig.fromFactor<Sec>(this.contents, this.sign, this.trigType);
     }
 }

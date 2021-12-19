@@ -1,20 +1,20 @@
 import { LogTypes, Sign } from "src/models/math-object/enums.model";
 import { Factory } from "src/models/services/factory.service";
-import { Expression } from "../../expression.model";
+import { Factor } from "../../factor.model";
 import { LogLn } from "./log-ln.model";
 
 export class Ln extends LogLn {
     public readonly logType: LogTypes = LogTypes.log;
 
-    constructor(expressionString: string, sign: Sign) {
-        super(expressionString, sign, Math.E);
+    constructor(contentStr: string, sign: Sign) {
+        super(contentStr, sign, 'E');
     }
 
-    public static fromExpression(expression: Expression, sign: Sign): Ln {
-        return Factory.buildFactor(`${sign}${LogTypes.ln}[${expression}]`) as Ln;
+    public static fromFactor(factor: Factor, sign: Sign): Ln {
+        return Factory.buildFactor(`${sign}${LogTypes.ln}[${factor}]`) as Ln;
     }
     
     public copy(): Ln {
-        return Ln.fromExpression(this.expression, this.sign);
+        return Ln.fromFactor(this.contents, this.sign);
     }
 }

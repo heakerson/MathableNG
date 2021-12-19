@@ -77,8 +77,8 @@ export class Factory {
                 case LogTypes.ln:
                     return new Ln(`${parameters[0]}`, sign);
                 case LogTypes.log:
-                    const base = !!parameters[1] ? Number.parseFloat(parameters[1]) : 10;
-                    return new Log(`${sign}${parameters[0]}`, sign, base);
+                    const base = !!parameters[1] ? parameters[1] : '10';
+                    return new Log(`${parameters[0]}`, sign, base);
             }
         }
 
