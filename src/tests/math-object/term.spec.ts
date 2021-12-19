@@ -39,7 +39,7 @@ describe('Term', () => {
             { input: 'a*-b^c', children: ['a', '-b^c'], toString: 'a*-b^c', sign: Sign.Positive },
             { input: '-cot[x-b]^(c)*((e)/(f))', children: ['-cot[(x-b)]^(c)', '((e)/(f))'], toString: '-cot[(x-b)]^(c)*((e)/(f))', sign: Sign.Negative },
             { input: '-cot[x-b]^(c)-log[a-b, -x]', children: ['(-cot[(x-b)]^(c)-log[(a-b),-x])'], toString: '(-cot[(x-b)]^(c)-log[(a-b),-x])', sign: Sign.Positive },
-            // { input: 'a+-b', children: ['(a+-b)'], toString: '(a+-b)' }
+            { input: 'a+-b', children: ['(a+-b)'], toString: '(a+-b)', sign: Sign.Positive }
         ];
     
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Term(input));
