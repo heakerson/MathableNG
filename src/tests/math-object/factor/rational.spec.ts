@@ -27,9 +27,16 @@ export function rationalConstructorTests<TRational extends Rational>(
 
 describe('Rational', () => {
 
-    describe('Constructor', () => {
+    fdescribe('Constructor', () => {
         const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
             { input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive },
+            { input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive },
+            // { input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative },
+            // { input: '-a/b/c', children: ['-a', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
+            // { input: '-a/-b/c', children: ['-a', '(-b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
+            // { input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
+            // { input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '(-a/(b/c))', sign: Sign.Positive },
+            // { input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative },
         ];
 
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Rational(input));

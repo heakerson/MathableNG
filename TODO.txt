@@ -1,4 +1,5 @@
 LEFT OFF:
+- ADD SIGN TO TEST OBJECTS AND PASS IN FULL TEST TO BUILDERS IN SPEC FILES
 - fix failing tests in Power
     - will probably need to write tests for rational first
 - Start writing constructor tests and function tests!!!
