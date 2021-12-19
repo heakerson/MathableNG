@@ -1,6 +1,5 @@
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { Expression } from "./expression.model";
 import { Factor } from "./factor.model";
 
 export class Power extends Factor {
@@ -21,12 +20,22 @@ export class Power extends Factor {
         return new Power(`${base.toString()}^${exponent.toString()}`);
     }
 
-    public copy(): Power {
+    public override copy(): Power {
         return new Power(this.toString());
     }
 
+    public override toString(): string {
+        const exp = this.exponent instanceof Power ? `(${this.exponent.toString()})` : this.exponent.toString();
+        return `${this.sign}${this.base.toString()}^${exp}`;
+    }
+
     protected override setChildren(): Factor[] {
-        const { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
-        return [ Factory.buildFactor(base) , new Expression(exponent) ];
+        let { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
+
+        if (base[0] === '-') {
+            base = base.substring(1);
+        }
+
+        return [ Factory.buildFactor(base) , Factory.buildFactor(exponent) ];
     }
 }

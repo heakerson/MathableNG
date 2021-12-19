@@ -17,10 +17,11 @@ export class Expression extends Factor {
         return this.termCount === 1;
     }
 
-    private _additionalOperators: { termIndex: number, addtionalOperator: Operators }[] = [];
+    protected additionalOperators: { termIndex: number, addtionalOperator: Operators }[] = [];
 
     constructor(input: string) {
         super(input);
+        this.additionalOperators = this.setAdditionalOperators();
     }
 
     public static fromTerms(...terms: Term[]): Expression {
@@ -63,10 +64,22 @@ export class Expression extends Factor {
     }
 
     public override toString(): string {
-        // let innerTerms = '';
-        // this.terms.forEach((term, i) => innerTerms += `${this.getAdditionalOperatorForIndex(i)}${term.toString()}`);
-        // return `${this.sign}(${innerTerms})`;
-        return this.formattedInput;
+        let innerTerms = '';
+        this.terms.forEach((term, i) => {
+            let termSign = '';
+
+            if (term.isNegative) {
+                if (i !== 0 && term.toString()[0] !== '-') {
+                    termSign = '-';
+                }
+            } else if(i !== 0) {
+                termSign = '+';
+            }
+
+            innerTerms += `${this.getAdditionalOperatorForIndex(i)}${termSign}${term.toString()}`;
+        });
+
+        return `${this.sign}(${innerTerms})`;
     }
 
     public copy(): Expression {
@@ -74,7 +87,7 @@ export class Expression extends Factor {
     }
 
     protected getAdditionalOperatorForIndex(index: number): Operators {
-        const additionalOperator = this._additionalOperators.find(ao => ao.termIndex === index);
+        const additionalOperator = this.additionalOperators.find(ao => ao.termIndex === index);
 
         if (additionalOperator) {
             return additionalOperator.addtionalOperator;
@@ -96,17 +109,13 @@ export class Expression extends Factor {
     protected override setChildren(): Term[] {
         const removedParenth = StringFormatter.stripSurroundingParenthesis(this.formattedInput);
         let parsedTerms = StringFormatter.parseTermStrings(removedParenth);
-        this._additionalOperators = [];
+        this.additionalOperators = [];
 
         parsedTerms = parsedTerms.map((termString, i) => {
             if (termString.length > 2) {
                 const prefix = termString.substring(0, 2);
 
-                if (prefix === '--') {
-                    this._additionalOperators.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
-                    termString = termString.substring(1);
-                } else if (prefix === '+-') {
-                    this._additionalOperators.push({ termIndex: i, addtionalOperator: Operators.Addition});
+                if (prefix === '--' || prefix === '+-') {
                     termString = termString.substring(1);
                 }
             }
@@ -115,5 +124,25 @@ export class Expression extends Factor {
         });
 
         return parsedTerms.map(t => new Term(t));
+    }
+
+    protected setAdditionalOperators(): { termIndex: number, addtionalOperator: Operators }[] {
+        const removedParenth = StringFormatter.stripSurroundingParenthesis(this.formattedInput);
+        let parsedTerms = StringFormatter.parseTermStrings(removedParenth);
+        let additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
+
+        parsedTerms.forEach((termString, i) => {
+            if (termString.length > 2) {
+                const prefix = termString.substring(0, 2);
+
+                if (prefix === '--') {
+                    additionalOps.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
+                } else if (prefix === '+-') {
+                    additionalOps.push({ termIndex: i, addtionalOperator: Operators.Addition});
+                }
+            }
+        });
+
+        return additionalOps;
     }
 }
