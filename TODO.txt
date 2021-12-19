@@ -8,6 +8,7 @@ LEFT OFF:
             exists) at the expression level
     - expression
         - make sure that the additional operators are stored
+- write tests/logic to test for errors
 - Update all the copy functions with the tostring?
 - ToString()
     - create a protected static class called formatToStringFromChildren

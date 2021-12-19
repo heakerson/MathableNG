@@ -11,7 +11,7 @@ export function factorConstructorTests<TFactor extends Factor>(
         tests.forEach(test => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
                 const mo: TFactor = builder(test.input);
-
+                // console.log(mo);
                 expect(mo.sign).toEqual(test.sign);
             });
         });
