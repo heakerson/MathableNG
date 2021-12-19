@@ -1,31 +1,35 @@
+import { Factory } from 'src/models/services/factory.service';
 import { StringFormatter } from 'src/models/services/string-formatter.service';
-import { Expression } from './expression.model';
 import { Factor } from './factor.model';
 
 export class Rational extends Factor {
 
-    get numerator(): Expression {
-        return this.children[0] as Expression;
+    get numerator(): Factor {
+        return this.children[0] as Factor;
     }
 
-    get denominator(): Expression {
-        return this.children[1] as Expression;
+    get denominator(): Factor {
+        return this.children[1] as Factor;
     }
 
     constructor(input: string) {
         super(input);
     }
 
-    public static fromExpressions(numerator: Expression, denominator: Expression): Rational {
+    public static fromFactors(numerator: Factor, denominator: Factor): Rational {
         return new Rational(`(${numerator.toString()}/${denominator.toString()})`);
     }
 
-    protected override setChildren(): Expression[] {
-        const { numerator, denominator } = StringFormatter.parseRationalExpressions(this.formattedInput);
-        return [ new Expression(numerator), new Expression(denominator) ];
+    public override toString(): string {
+        return `(${this.numerator.toString()}/${this.denominator.toString()})`;
     }
 
-    copy(): Rational {
+    protected override setChildren(): Factor[] {
+        const { numerator, denominator } = StringFormatter.parseRationalExpressions(this.formattedInput);
+        return [ Factory.buildFactor(numerator) , Factory.buildFactor(denominator) ];
+    }
+
+    public override copy(): Rational {
         return new Rational(this.toString());
     }
 }
