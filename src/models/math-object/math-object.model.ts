@@ -12,6 +12,10 @@ export abstract class MathObject {
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;
 
+    public get toStringGet(): string {
+        return this.toString();
+    }
+
     constructor(protected input: string) {
         this.id = uuid.v1();
         this.inputWhitespaceRemoved = StringFormatter.removeEmptySpace(input);

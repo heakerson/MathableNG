@@ -1,4 +1,5 @@
 LEFT OFF:
+- FIX LOG ISSUE - I think I need to allow non numbers to be the base of log functions?
 - FIX FAILING TEST IN TERM
     - continue working on expression tests
         - test additional operators!
