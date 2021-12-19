@@ -30,13 +30,13 @@ describe('Power', () => {
     describe('Constructor', () => {
         const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
             { input: 'a^b', children: ['a', 'b'], toString: 'a^b', sign: Sign.Positive },
-            { input: '-a^b', children: ['a', 'b'], toString: '-a^b', sign: Sign.Negative },
-            { input: '-(a*x)^-b', children: ['(a*x)', '-b'], toString: '-(a*x)^-b', sign: Sign.Negative },
+            { input: '-a^b', children: ['-a', 'b'], toString: '-a^b', sign: Sign.Negative },
+            { input: '-(a*x)^-b', children: ['-(a*x)', '-b'], toString: '-(a*x)^-b', sign: Sign.Negative },
             { input: '(-a)^b', children: ['(-a)', 'b'], toString: '(-a)^b', sign: Sign.Positive },
             { input: 'csc[b]^b', children: ['csc[b]', 'b'], toString: 'csc[b]^b', sign: Sign.Positive },
-            { input: '-csc[b]^b', children: ['csc[b]', 'b'], toString: '-csc[b]^b', sign: Sign.Negative },
-            // { input: 'x*a^b', children: ['(x*a)', 'b'], toString: '(x*a)^b', sign: Sign.Positive },
-            // { input: '-x*a^b', children: ['(-x*a)', 'b'], toString: '(-x*a)^b', sign: Sign.Positive },
+            { input: '-csc[b]^b', children: ['-csc[b]', 'b'], toString: '-csc[b]^b', sign: Sign.Negative },
+            { input: 'x*a^b', children: ['(x*a)', 'b'], toString: '(x*a)^b', sign: Sign.Positive },
+            { input: '-x*a^b', children: ['(-x*a)', 'b'], toString: '(-x*a)^b', sign: Sign.Positive },
             // { input: 'x^a^b', children: ['x', '(a^b)'], toString: 'x^(a^b)', sign: Sign.Positive },
             // { input: '-x^-a^b', children: ['x', '(-a^b)'], toString: '-x^(-a^b)', sign: Sign.Negative },
         ];
