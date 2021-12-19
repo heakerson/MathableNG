@@ -7,6 +7,10 @@ export class Integer extends RealNumber {
         return this.value % 2 === 0;
     }
 
+    constructor(input: string) {
+        super(input, Number.parseFloat(input));
+    }
+
     copy(): MathObject {
         throw new Error("Method not implemented.");
     }

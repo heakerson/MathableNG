@@ -2,7 +2,10 @@ import { Factor } from "../factor.model";
 
 export abstract class RealNumber extends Factor {
 
-    get value(): number {
-        return Number.parseFloat(this.formattedInput);
+    public readonly value: number;
+
+    constructor(input: string, value: number) {
+        super(input);
+        this.value = value;
     }
 }

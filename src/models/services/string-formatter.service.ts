@@ -16,7 +16,7 @@ export class StringFormatter {
 
     public static getConstantString(input: string): string {
         const constants: string[] = [...Object.keys(Constants)];
-        const found = constants.find(constant => input.toUpperCase() === constant);
+        const found = constants.find(constant => input === constant);
 
         if (found) {
             return found;

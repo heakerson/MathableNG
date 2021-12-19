@@ -1,14 +1,10 @@
+import { Constants } from "src/models/math-object/enums.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Constant } from "./constant.model";
 
 export class PI extends Constant {
-
-    override get value(): number {
-        return Math.PI;
-    }
-
     constructor() {
-        super(Math.PI.toString());
+        super(Constants.PI, Math.PI);
     }
 
     override copy(): MathObject {
