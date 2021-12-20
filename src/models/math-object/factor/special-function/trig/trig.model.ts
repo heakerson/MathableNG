@@ -5,12 +5,8 @@ import { Function } from "../function.model";
 
 export abstract class Trig extends Function {
 
-    get functionString(): string {
-        return this.trigType;
-    }
-
     get contents(): Factor {
-        return this.getChild<Factor>(0)
+        return this.getChild<Factor>(0);
     }
 
     abstract readonly trigType: TrigTypes;
