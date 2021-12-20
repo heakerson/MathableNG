@@ -1,7 +1,6 @@
 LEFT OFF:
+- start working on function tests
 - Do I need the abstract RealNumber class?
-- fix failing tests in Power
-    - will probably need to write tests for rational first
 - Start writing constructor tests and function tests!!!
     - go through each type and function
     - term
