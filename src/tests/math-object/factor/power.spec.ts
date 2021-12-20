@@ -46,23 +46,20 @@ describe('Power', () => {
             // { input: '-x^-a/b', children: ['-x', '(-a/b)'], toString: '-x^(-a/b)', sign: Sign.Negative },
         ];
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Power(test.input));
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+        const standardBuilder = (test: FactorConstTest) => new Power(test.input);
+        const staticBuilder = (test: FactorConstTest) => {
             const parsed = StringFormatter.parsePowerFactor(test.input);
             return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
-        });
+        };
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Power(test.input));
-        factorConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const parsed = StringFormatter.parsePowerFactor(test.input);
-            return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
-        });
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
-        powerConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Power(test.input));
-        powerConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const parsed = StringFormatter.parsePowerFactor(test.input);
-            return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
-        });
+        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+
+        powerConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        powerConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
     });
 

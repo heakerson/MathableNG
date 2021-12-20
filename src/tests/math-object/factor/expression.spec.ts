@@ -53,23 +53,20 @@ describe('Expression', () => {
             // { input: '-a^b', toString: '(-a^b)' },
         ];
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Expression(test.input));
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+        const standardBuilder = (test: FactorConstTest) => new Expression(test.input);
+        const staticBuilder = (test: FactorConstTest) => {
             const terms = StringFormatter.parseTermStrings(test.input).map(t => new Term(t));
             return Expression.fromTerms(...terms);
-        });
+        };
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Expression(test.input));
-        factorConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const terms = StringFormatter.parseTermStrings(test.input).map(t => new Term(t));
-            return Expression.fromTerms(...terms);
-        });
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
-        expressionConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Expression(test.input));
-        expressionConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const terms = StringFormatter.parseTermStrings(test.input).map(t => new Term(t));
-            return Expression.fromTerms(...terms);
-        });
+        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+
+        expressionConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        expressionConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
     });
 

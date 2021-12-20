@@ -42,23 +42,20 @@ describe('Rational', () => {
             new FactorConstTest({ input: '-(-(a+x)/-(b+c))', children: ['-(a+x)', '-(b+c)'], toString: '-(-(a+x)/-(b+c))', sign: Sign.Negative }),
         ];
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+        const standardBuilder = (test: FactorConstTest) => new Rational(test.input);
+        const staticBuilder = (test: FactorConstTest) => {
             const parsed = StringFormatter.parseRationalExpressions(test.input);
             return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
-        });
+        };
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
-        factorConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const parsed = StringFormatter.parseRationalExpressions(test.input);
-            return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
-        });
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
-        rationalConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
-        rationalConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
-            const parsed = StringFormatter.parseRationalExpressions(test.input);
-            return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
-        });
+        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+
+        rationalConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        rationalConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
 
     });
 

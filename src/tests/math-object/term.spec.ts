@@ -50,18 +50,18 @@ describe('Term', () => {
             new TermConstTest({ input: '-cot[x-b]^(c)-log[a-b, -x]', children: ['(-cot[(x-b)]^(c)-log[(a-b),-x])'], toString: '(-cot[(x-b)]^(c)-log[(a-b),-x])', sign: Sign.Positive }),
             new TermConstTest({ input: 'a+-b', children: ['(a+-b)'], toString: '(a+-b)', sign: Sign.Positive })
         ];
-    
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: TermConstTest) => new Term(test.input));
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, (test: TermConstTest) => {
-            const factors = StringFormatter.parseFactorStrings(test.input).map(f => Factory.buildFactor(f));
-            return Term.fromFactors(...factors)
-        });
 
-        termConstructorTests('STANDARD CONSTRUCTOR', constructorTests, (test: TermConstTest) => new Term(test.input))
-        termConstructorTests('STATIC Constructor', constructorTests, (test: TermConstTest) => {
+        const standardBuilder = (test: TermConstTest) => new Term(test.input);
+        const staticBuilder = (test: TermConstTest) => {
             const factors = StringFormatter.parseFactorStrings(test.input).map(f => Factory.buildFactor(f));
             return Term.fromFactors(...factors)
-        });
+        };
+    
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+
+        termConstructorTests('STANDARD CONSTRUCTOR', constructorTests, standardBuilder);
+        termConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
     });
 
     describe('Individual Methods', () => {

@@ -40,9 +40,11 @@ describe('Variable', () => {
             new VariableConstTest({ input: '-bob', children: [], toString: '-bob', sign: Sign.Negative, name: 'bob' }),
         ];
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: VariableConstTest) => new Variable(test.input));
-        factorConstructorTests('STANDARD Constructor', constructorTests, (test: VariableConstTest) => new Variable(test.input));
-        variableConstructorTests('STANDARD Constructor', constructorTests, (test: VariableConstTest) => new Variable(test.input));
+        const standaredBuilder = (test: VariableConstTest) => new Variable(test.input);
+
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+        factorConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+        variableConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
 
     });
 
