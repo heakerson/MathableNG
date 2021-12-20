@@ -21,7 +21,7 @@ export abstract class Function extends Factor {
         return `${this.sign}${this.functionString}[${parameters}]`;
     }
 
-    public override setChildren(): Factor[] {
+    protected override setChildren(): Factor[] {
         const parameters = this.formattedInput.split(',');
         return parameters.map(p => Factory.buildFactor(p));
     }
