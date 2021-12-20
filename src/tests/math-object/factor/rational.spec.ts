@@ -37,6 +37,9 @@ describe('Rational', () => {
             new FactorConstTest({ input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '((-a)/(b/c))', sign: Sign.Positive }),
             new FactorConstTest({ input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '((-a/b)/c)', sign: Sign.Positive }),
             new FactorConstTest({ input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative }),
+            new FactorConstTest({ input: '-(-(a+x)/b/c)', children: ['-(a+x)', '(b/c)'], toString: '-(-(a+x)/(b/c))', sign: Sign.Negative }),
+            new FactorConstTest({ input: '((a+x)/(b+c))', children: ['(a+x)', '(b+c)'], toString: '((a+x)/(b+c))', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(-(a+x)/-(b+c))', children: ['-(a+x)', '-(b+c)'], toString: '-(-(a+x)/-(b+c))', sign: Sign.Negative }),
         ];
 
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
