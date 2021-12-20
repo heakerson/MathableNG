@@ -17,16 +17,12 @@ export class Rational extends Factor {
         super(input);
     }
 
-    public static fromFactors(numerator: Factor, denominator: Factor): Rational {
-        return new Rational(`(${numerator.toString()}/${denominator.toString()})`);
+    public static fromFactors(numerator: Factor, denominator: Factor, sign: Sign): Rational {
+        return new Rational(`${sign}(${numerator.toString()}/${denominator.toString()})`);
     }
 
-    // public static fromFactors(numerator: Factor, denominator: Factor, sign: Sign): Rational {
-    //     return new Rational(`${sign}(${numerator.toString()}/${denominator.toString()})`);
-    // }
-
     public override toString(): string {
-        return `(${this.numerator.toString()}/${this.denominator.toString()})`;
+        return `${this.sign}(${this.numerator.toString()}/${this.denominator.toString()})`;
     }
 
     protected override setChildren(): Factor[] {

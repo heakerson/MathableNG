@@ -11,6 +11,7 @@ export function mathObjectConstructorTests<TMathObject extends MathObject, TTest
         tests.forEach((test: TTest) => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
                 const mo: TMathObject = builder(test);
+                // console.log(test);
                 // console.log(mo);
                 expect(uuid.validate(mo.id)).toBeTrue();
                 expect(mo.children.map(c => c.toString())).toEqual(test.children);
