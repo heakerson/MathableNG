@@ -29,14 +29,14 @@ describe('Rational', () => {
 
     describe('Constructor', () => {
         const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
-            { input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive },
-            { input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive },
-            { input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative },
-            // { input: '-a/b/c', children: ['-a', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
-            // { input: '-a/-b/c', children: ['-a', '(-b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
-            // { input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive },
-            // { input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '(-a/(b/c))', sign: Sign.Positive },
-            // { input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative },
+            new FactorConstTest({ input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative }),
+            new FactorConstTest({ input: '-a/b/c', children: ['-a', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-a/-b/c', children: ['-a', '(-b/c)'], toString: '(-a/(-b/c))', sign: Sign.Positive }),
+            new FactorConstTest({ input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '((-a)/(b/c))', sign: Sign.Positive }),
+            new FactorConstTest({ input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '((-a/b)/c)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative }),
         ];
 
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
