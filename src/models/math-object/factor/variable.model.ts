@@ -2,12 +2,18 @@ import { Factor } from './factor.model';
 
 export class Variable extends Factor {
 
-    get name(): string {
-        return this.formattedInput;
-    }
+    public readonly name: string;
 
     constructor(input: string) {
         super(input);
+        this.name = this.setName();
+    }
+
+    protected setName(): string {
+        if (this.formattedInput[0] === '-') {
+            return this.formattedInput.substring(1);
+        }
+        return this.formattedInput;
     }
 
     copy(): Variable {

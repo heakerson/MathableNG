@@ -28,7 +28,7 @@ export function rationalConstructorTests<TRational extends Rational, TTest exten
 describe('Rational', () => {
 
     describe('Constructor', () => {
-        const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
+        const constructorTests: FactorConstTest[] = [
             new FactorConstTest({ input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive }),
             new FactorConstTest({ input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive }),
             new FactorConstTest({ input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative }),

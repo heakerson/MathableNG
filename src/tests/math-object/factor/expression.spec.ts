@@ -28,7 +28,7 @@ export function expressionConstructorTests<TExpression extends Expression, TTest
 describe('Expression', () => {
 
     describe('Constructor', () => {
-        const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
+        const constructorTests: FactorConstTest[] = [
             new FactorConstTest({ input: '(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Positive }),
             new FactorConstTest({ input: '-(a-b)', children: ['a', '-b'], toString: '-(a-b)', sign: Sign.Negative }),
             new FactorConstTest({ input: '-(a+b)', children: ['a', 'b'], toString: '-(a+b)', sign: Sign.Negative }),

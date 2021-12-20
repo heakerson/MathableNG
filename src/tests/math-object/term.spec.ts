@@ -38,7 +38,7 @@ export function termConstructorTests<TTerm extends Term, TTest extends TermConst
 describe('Term', () => {
 
     describe('Constructor Tests', () => {
-        const constructorTests: { input: string, children: string[], toString: string, sign: Sign }[] = [
+        const constructorTests: TermConstTest[] = [
             new TermConstTest({ input: 'a', children: ['a'], toString: 'a', sign: Sign.Positive }),
             new TermConstTest({ input: 'a*b', children: ['a', 'b'], toString: 'a*b', sign: Sign.Positive }),
             new TermConstTest({ input: '-a*b', children: ['-a', 'b'], toString: '-a*b', sign: Sign.Negative }),
