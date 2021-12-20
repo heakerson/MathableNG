@@ -1,8 +1,4 @@
 LEFT OFF:
-- refactor the log/ln classes
-    - ln can probably just extend log
-    - Do I need the abstract logln class? probably NOT
-    - !!!!! I think the base object should be added to the child list
 - Do I need the abstract RealNumber class?
 - fix failing tests in Power
     - will probably need to write tests for rational first
