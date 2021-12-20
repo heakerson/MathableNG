@@ -3,7 +3,7 @@ import { Sign } from "../../enums.model";
 import { Factor } from "../factor.model";
 
 export abstract class Function extends Factor {
-    readonly functionString: string;
+    public readonly functionString: string;
     protected readonly fnSign: Sign;
 
     public override get sign(): Sign {

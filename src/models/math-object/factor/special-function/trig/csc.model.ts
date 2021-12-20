@@ -1,14 +1,19 @@
-import { Sign, TrigTypes } from "src/models/math-object/enums.model";
+import { Sign } from "src/models/math-object/enums.model";
+import { Factory } from "src/models/services/factory.service";
+import { Factor } from "../../factor.model";
 import { Trig } from "./trig.model";
 
 export class Csc extends Trig {
-    public readonly trigType: TrigTypes = TrigTypes.csc;
 
     constructor(contentStr: string, sign: Sign) {
         super(contentStr, sign, 'csc');
     }
 
-    public copy(): Csc {
-        return Trig.fromFactor<Csc>(this.contents, this.sign, this.trigType);
+    public static fromFactor(contents: Factor, sign: Sign): Csc {
+        return Factory.buildFactor(`${sign}csc[${contents}]`) as Csc;
+    }
+
+    public override copy(): Csc {
+        return Factory.buildFactor(`${this.sign}csc[${this.contents}]`) as Csc;
     }
 }
