@@ -15,7 +15,7 @@ export function powerConstructorTests<TPower extends Power, TTest extends Factor
         tests.forEach(test => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
                 const mo: TPower = builder(test);
-                // console.log(mo);
+                console.log(mo);
                 // console.log(mo.toString());
                 expect(mo.children.length).toEqual(2);
                 expect(mo.base.toString()).toEqual(test.children[0]);
@@ -41,9 +41,13 @@ describe('Power', () => {
             new FactorConstTest({ input: '-x^-a^b', children: ['-x', '(-a^b)'], toString: '-x^(-a^b)', sign: Sign.Negative }),
             new FactorConstTest({ input: 'x^a^b^c', children: ['x', '(a^(b^c))'], toString: 'x^(a^(b^c))', sign: Sign.Positive }),
             new FactorConstTest({ input: '-x^a^b^c', children: ['-x', '(a^(b^c))'], toString: '-x^(a^(b^c))', sign: Sign.Negative }),
-            // { input: 'x+a^b', children: ['(x+a)', 'b'], toString: '(x+a)^b', sign: Sign.Positive },
-            // { input: '-x-a^b', children: ['(-x-a)', 'b'], toString: '(-x-a)^b', sign: Sign.Positive },
-            // { input: '-x^-a/b', children: ['-x', '(-a/b)'], toString: '-x^(-a/b)', sign: Sign.Negative },
+            new FactorConstTest({ input: 'x+a^b', children: ['(x+a)', 'b'], toString: '(x+a)^b', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-b^x+y', children: ['-b', '(x+y)'], toString: '-b^(x+y)', sign: Sign.Negative }),
+            new FactorConstTest({ input: '-x-a^b', children: ['(-x-a)', 'b'], toString: '(-x-a)^b', sign: Sign.Positive }),
+            new FactorConstTest({ input: 'x+a^b^y', children: ['(x+a)', '(b^y)'], toString: '(x+a)^(b^y)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-x-a^b^y', children: ['(-x-a)', '(b^y)'], toString: '(-x-a)^(b^y)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-x-a^b^y+z', children: ['(-x-a)', '(b^y+z)'], toString: '(-x-a)^(b^y+z)', sign: Sign.Positive }),
+            new FactorConstTest({ input: '-x^-a/b', children: ['-x', '(-a/b)'], toString: '-x^(-a/b)', sign: Sign.Negative }),
         ];
 
         const standardBuilder = (test: FactorConstTest) => new Power(test.input);

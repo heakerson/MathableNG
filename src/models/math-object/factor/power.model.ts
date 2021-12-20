@@ -36,7 +36,7 @@ export class Power extends Factor {
     protected override setChildren(): Factor[] {
         let { base, exponent } = StringFormatter.parsePowerFactor(this.formattedInput);
 
-        if (StringFormatter.parseFactorStrings(base).length > 1) {
+        if (StringFormatter.parseFactorStrings(base).length > 1 || StringFormatter.parseTermStrings(base).length > 1) {
             base = `(${base})`;
         }
 

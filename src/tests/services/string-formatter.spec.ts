@@ -167,8 +167,8 @@ describe('StringFormatter', () => {
             { input: 'a^(-b)', expectedBase: 'a', expectedExponent: '(-b)' },
             { input: 'a^-(-b)', expectedBase: 'a', expectedExponent: '-(-b)' },
             { input: '-(a+b)^(b/c)', expectedBase: '-(a+b)', expectedExponent: '(b/c)' },
-            { input: '-(a+b)^b/c', expectedBase: '', expectedExponent: '' },
-            { input: '-(a+b)^b/sin[x^y]', expectedBase: '', expectedExponent: '' },
+            { input: '-(a+b)^b/c', expectedBase: '-(a+b)', expectedExponent: 'b/c' },
+            { input: '-(a+b)^b/sin[x^y]', expectedBase: '-(a+b)', expectedExponent: 'b/sin[x^y]' },
             { input: '-(a+b)^(b/sin[x^y])', expectedBase: '-(a+b)', expectedExponent: '(b/sin[x^y])' },
             { input: '-(a+b)^b/c*x', expectedBase: '-(a+b)', expectedExponent: 'b/c*x' },
             { input: '-a^b^-c', expectedBase: '-a', expectedExponent: 'b^-c' },
@@ -176,10 +176,10 @@ describe('StringFormatter', () => {
             { input: 'cos[a^b]', expectedBase: '', expectedExponent: '' },
             { input: 'cos[a^b]^c', expectedBase: 'cos[a^b]', expectedExponent: 'c' },
             { input: 'a', expectedBase: '', expectedExponent: '' },
-            { input: 'a/b^x', expectedBase: '', expectedExponent: '' },
-            { input: 'x^b/c', expectedBase: '', expectedExponent: '' },
+            { input: 'a/b^x', expectedBase: 'a/b', expectedExponent: 'x' },
+            { input: 'x^b/c', expectedBase: 'x', expectedExponent: 'b/c' },
             { input: 'a*b^c', expectedBase: 'a*b', expectedExponent: 'c' },
-            { input: 'b^c+a', expectedBase: '', expectedExponent: '' },
+            { input: 'b^c+a', expectedBase: 'b', expectedExponent: 'c+a' },
         ];
 
         inputs.forEach((test) => {

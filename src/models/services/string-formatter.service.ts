@@ -138,45 +138,37 @@ export class StringFormatter {
     }
 
     public static parsePowerFactor(factorString: string): { base: string, exponent: string } {
-        const isSingleTerm = this.parseTermStrings(factorString).length === 1;
-        const isRational = isSingleTerm
-            && this.parseRationalExpressions(factorString).denominator !== '' 
-            && this.parseRationalExpressions(factorString).numerator !== '';
-
         let base = '';
         let exponent = '';
+        let bracketCt = 0;
+        let parenthCt = 0;
+        let found = false;
 
-        if (isSingleTerm && !isRational) {
-            let bracketCt = 0;
-            let parenthCt = 0;
-            let found = false;
-    
-            [...factorString].forEach((c, i) => {
-                if (!found) {
-                    switch(c) {
-                        case '[':
-                            bracketCt++;
-                            break;
-                        case ']':
-                            bracketCt--;
-                            break;
-                        case '(':
-                            parenthCt++;
-                            break;
-                        case ')':
-                            parenthCt--;
-                            break;
-                        case '^':
-                            if (bracketCt === 0 && parenthCt === 0) {
-                                base = factorString.substring(0, i);
-                                exponent = factorString.substring(i+1);
-                                found = true;
-                            }
-                            break;
-                    }
+        [...factorString].forEach((c, i) => {
+            if (!found) {
+                switch(c) {
+                    case '[':
+                        bracketCt++;
+                        break;
+                    case ']':
+                        bracketCt--;
+                        break;
+                    case '(':
+                        parenthCt++;
+                        break;
+                    case ')':
+                        parenthCt--;
+                        break;
+                    case '^':
+                        if (bracketCt === 0 && parenthCt === 0) {
+                            base = factorString.substring(0, i);
+                            exponent = factorString.substring(i+1);
+                            found = true;
+                        }
+                        break;
                 }
-            })
-        }
+            }
+        })
 
         return {
             base,
