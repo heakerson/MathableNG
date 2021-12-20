@@ -43,14 +43,15 @@ describe('Expression', () => {
             new FactorConstTest({ input: 'a--b', children: ['a', '-b'], toString: '(a--b)', sign: Sign.Positive }),
             new FactorConstTest({ input: '(a+b)(x+y)', children: ['(a+b)*(x+y)'], toString: '((a+b)*(x+y))', sign: Sign.Positive }),
             new FactorConstTest({ input: '(a+b)(x+y)-sin[a^b]', children: ['(a+b)*(x+y)', '-sin[a^b]'], toString: '((a+b)*(x+y)-sin[a^b])', sign: Sign.Positive }),
-            // { input: '-(a+b)^(x)', toString: '(-(a+b)^(x))' },
-            // { input: '-(a+b)^-(x)', toString: '(-(a+b)^-(x))' },
-            // { input: '(a+b)  -(x+y)', toString: '((a+b)-(x+y))' },
-            // { input: '-(a+b)(x+y)', toString: '(-(a+b)*(x+y))' },
-            // { input: '-(a+b)/(x+y)', toString: '(-(a+b)/(x+y))' },
-            // { input: 'a/b', toString: '(a/b)' },
-            // { input: '-a/b', toString: '(-a/b)' },
-            // { input: '-a^b', toString: '(-a^b)' },
+            new FactorConstTest({ input: '-(a+b)^(x)', toString: '(-(a+b)^(x))', children: ['-(a+b)^(x)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(a+b)^-(x)', toString: '(-(a+b)^-(x))', children: ['-(a+b)^-(x)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '(a+b)  -(x+y)', toString: '((a+b)-(x+y))', children: ['(a+b)', '-(x+y)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(a+b)(x+y)', toString: '(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '-(-(a+b)(x+y))', toString: '-(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Negative }),
+            new FactorConstTest({ input: '-(a+b)/(x+y)', toString: '((-(a+b)/(x+y)))', children: ['(-(a+b)/(x+y))'], sign: Sign.Positive }),
+            new FactorConstTest({ input: 'a/b', toString: '((a/b))', children: ['(a/b)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '-a/b', toString: '((-a/b))', children: ['(-a/b)'], sign: Sign.Positive }),
+            new FactorConstTest({ input: '-a^b', toString: '(-a^b)', children: ['-a^b'], sign: Sign.Positive }),
         ];
 
         const standardBuilder = (test: FactorConstTest) => new Expression(test.input);
