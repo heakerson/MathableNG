@@ -3,18 +3,18 @@ import { Rational } from "src/models/math-object/factor/rational.model";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { mathObjectConstructorTests } from "../math-object.spec";
-import { factorConstructorTests } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest } from "./factor.spec";
 
-export function rationalConstructorTests<TRational extends Rational>(
+export function rationalConstructorTests<TRational extends Rational, TTest extends FactorConstTest>(
     additionalLabel: string,
-    tests: { input: string, children: string[], toString: string, sign: Sign }[],
-    builder: (input: string) => TRational
+    tests: TTest[],
+    builder: (test: TTest) => TRational
 ): void {
 
     describe(`Rational Constructor Tests => ${additionalLabel}`, () => {
         tests.forEach(test => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
-                const mo: TRational = builder(test.input);
+                const mo: TRational = builder(test);
                 // console.log(mo);
                 // console.log(mo.toString());
                 expect(mo.children.length).toEqual(2);
@@ -39,21 +39,21 @@ describe('Rational', () => {
             // { input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative },
         ];
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Rational(input));
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, (input: string) => {
-            const parsed = StringFormatter.parseRationalExpressions(input);
+        mathObjectConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
+        mathObjectConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+            const parsed = StringFormatter.parseRationalExpressions(test.input);
             return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator));
         });
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Rational(input));
-        factorConstructorTests('STATIC Constructor', constructorTests, (input: string) => {
-            const parsed = StringFormatter.parseRationalExpressions(input);
+        factorConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
+        factorConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+            const parsed = StringFormatter.parseRationalExpressions(test.input);
             return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator));
         });
 
-        rationalConstructorTests('STANDARD Constructor', constructorTests, (input: string) => new Rational(input));
-        rationalConstructorTests('STATIC Constructor', constructorTests, (input: string) => {
-            const parsed = StringFormatter.parseRationalExpressions(input);
+        rationalConstructorTests('STANDARD Constructor', constructorTests, (test: FactorConstTest) => new Rational(test.input));
+        rationalConstructorTests('STATIC Constructor', constructorTests, (test: FactorConstTest) => {
+            const parsed = StringFormatter.parseRationalExpressions(test.input);
             return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator));
         });
 
