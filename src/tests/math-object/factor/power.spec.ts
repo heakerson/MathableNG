@@ -15,7 +15,7 @@ export function powerConstructorTests<TPower extends Power, TTest extends Factor
         tests.forEach(test => {
             it(`'${test.input}' => should populate base properties correctly`, () => {
                 const mo: TPower = builder(test);
-                console.log(mo);
+                // console.log(mo);
                 // console.log(mo.toString());
                 expect(mo.children.length).toEqual(2);
                 expect(mo.base.toString()).toEqual(test.children[0]);
