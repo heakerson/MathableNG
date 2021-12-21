@@ -3,6 +3,7 @@ import { FactorConstTest } from "../factor.spec";
 
 export class FuncConstrTest extends FactorConstTest {
     fnString: string = '';
+    inputParameters: any[] = [];
 
     constructor(props: Partial<FuncConstrTest>) {
         super(props);
@@ -10,7 +11,7 @@ export class FuncConstrTest extends FactorConstTest {
     }
 }
 
-export function variableConstructorTests<TFunction extends Function, TTest extends FuncConstrTest>(
+export function functionConstructorTests<TFunction extends Function, TTest extends FuncConstrTest>(
     additionalLabel: string,
     tests: TTest[],
     builder: (test: TTest) => TFunction
@@ -22,7 +23,7 @@ export function variableConstructorTests<TFunction extends Function, TTest exten
                 const mo: TFunction = builder(test);
                 // console.log(mo);
                 // console.log(mo.toString());
-                expect(mo.functionString.toString()).toEqual(test.fnString);
+                expect(mo.functionString).toEqual(test.fnString);
             });
         });
     });
