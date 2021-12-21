@@ -11,6 +11,11 @@ describe('Sin', () => {
     describe('Constructor', () => {
         const constructorTests: TrigConstrTest[] = [
             new TrigConstrTest({ input: 'a', children: ['a'], fnString: 'sin', toString: 'sin[a]', sign: Sign.Positive }),
+            new TrigConstrTest({ input: '-a', children: ['-a'], fnString: 'sin', toString: 'sin[-a]', sign: Sign.Positive }),
+            new TrigConstrTest({ input: '-a+ c ', children: ['(-a+c)'], fnString: 'sin', toString: '-sin[(-a+c)]', sign: Sign.Negative }),
+            new TrigConstrTest({ input: '(-a+ c) ', children: ['(-a+c)'], fnString: 'sin', toString: '-sin[(-a+c)]', sign: Sign.Negative }),
+            new TrigConstrTest({ input: 'a/b', children: ['(a/b)'], fnString: 'sin', toString: 'sin[(a/b)]', sign: Sign.Positive }),
+            new TrigConstrTest({ input: 'tan[x+t/-v]', children: ['tan[(x+(t/-v))]'], fnString: 'sin', toString: '-sin[tan[(x+(t/-v))]]', sign: Sign.Negative }),
         ];
 
         const standardBuilder = (test: TrigConstrTest) => new Sin(test.input, test.sign);
