@@ -1,5 +1,5 @@
 LEFT OFF:
-- start working on function tests
+- Continue tests for Sin
 - Do I need the abstract RealNumber class?
 - Start writing constructor tests and function tests!!!
     - go through each type and function
