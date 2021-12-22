@@ -1,5 +1,4 @@
 import { Sign } from "src/models/math-object/enums.model";
-import { Double } from "src/models/math-object/factor/number/double.model";
 import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests } from "../factor.spec";
@@ -23,7 +22,7 @@ export function integerConstructorTests<TInteger extends Integer, TTest extends 
     });
 }
 
-describe('Double', () => {
+describe('Integer', () => {
 
     describe('Constructor', () => {
         const constructorTests: RealNumberConstrTest[] = [

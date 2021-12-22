@@ -11,6 +11,6 @@ export class Integer extends Double {
     }
 
     public static override fromNumber(number: number): Integer {
-        return Double.fromNumber(number) as Integer;
+        return new Integer(number.toString());
     }
 }

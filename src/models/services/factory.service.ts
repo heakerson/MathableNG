@@ -86,9 +86,9 @@ export class Factory {
         if (constant) {
             switch (constant) {
                 case Constants.E:
-                    return new E();
+                    return new E(sign);
                 case Constants.PI:
-                    return new PI();
+                    return new PI(sign);
             }
         }
 

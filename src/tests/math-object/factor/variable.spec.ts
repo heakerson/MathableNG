@@ -25,6 +25,7 @@ export function variableConstructorTests<TVariable extends Variable, TTest exten
                 // console.log(mo);
                 // console.log(mo.toString());
                 expect(mo.name.toString()).toEqual(test.name);
+                expect(mo.children).toEqual([]);
             });
         });
     });
