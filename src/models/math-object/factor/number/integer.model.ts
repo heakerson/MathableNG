@@ -9,4 +9,8 @@ export class Integer extends Double {
     constructor(input: string) {
         super(input);
     }
+
+    public static override fromNumber(number: number): Integer {
+        return Double.fromNumber(number) as Integer;
+    }
 }
