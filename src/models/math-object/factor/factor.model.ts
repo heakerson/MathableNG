@@ -11,4 +11,7 @@ export abstract class Factor extends MathObject {
         return Factory.buildFactor(`${this.sign === Sign.Positive ? Sign.Negative : Sign.Positive}${this.formattedInput}`) as TFactor;
     }
 
+    public override copy(): Factor {
+        return Factory.buildFactor(this.toString());
+    }
 }

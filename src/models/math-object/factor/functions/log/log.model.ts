@@ -21,7 +21,7 @@ export class Log extends Function {
         return new Log(factor.toString(), sign, base.toString());
     }
 
-    public copy(): Log {
+    public override copy(): Log {
         return Log.fromFactors(this.contents, this.sign, this.base);
     }
 }

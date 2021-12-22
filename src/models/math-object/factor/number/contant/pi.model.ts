@@ -7,7 +7,7 @@ export class PI extends Constant {
         super(Constants.PI, Math.PI);
     }
 
-    override copy(): MathObject {
-        throw new Error("Method not implemented.");
+    public override copy(): PI {
+        return new PI();
     }
 }

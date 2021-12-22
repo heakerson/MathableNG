@@ -82,7 +82,7 @@ export class Expression extends Factor {
         return `${this.sign}(${innerTerms})`;
     }
 
-    public copy(): Expression {
+    public override copy(): Expression {
         return new Expression(this.toString());
     }
 

@@ -16,7 +16,7 @@ export class Variable extends Factor {
         return this.formattedInput;
     }
 
-    copy(): Variable {
+    override copy(): Variable {
         return new Variable(this.toString());
     }
 }
