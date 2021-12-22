@@ -13,7 +13,7 @@ export abstract class Function extends Factor {
     constructor(parameters: string, sign: Sign, fnString: string) {
         super(parameters);
         this.fnSign = sign;
-        this.functionString = fnString;
+        this.functionString = this.setFnString(fnString);
     }
 
     public override toString(): string {
@@ -24,5 +24,9 @@ export abstract class Function extends Factor {
     protected override setChildren(): Factor[] {
         const parameters = this.formattedInput.split(',');
         return parameters.map(p => Factory.buildFactor(p));
+    }
+
+    protected setFnString(defaultSt: string): string {
+        return defaultSt;
     }
 }

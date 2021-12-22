@@ -13,6 +13,7 @@ export function mathObjectConstructorTests<TMathObject extends MathObject, TTest
                 const mo: TMathObject = builder(test);
                 // console.log(test);
                 // console.log(mo);
+                // console.log('toString', mo.toString());
                 expect(uuid.validate(mo.id)).toBeTrue();
                 expect(mo.children.map(c => c.toString())).toEqual(test.children);
                 expect(mo.toString()).toEqual(test.toString);
