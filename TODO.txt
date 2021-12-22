@@ -1,6 +1,6 @@
 LEFT OFF:
-- Finish Ln Tests
 - Do I need the abstract RealNumber class?
+- write construct tests for number types
 - Start writing constructor tests and function tests!!!
     - go through each type and function
     - term
