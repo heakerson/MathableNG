@@ -8,4 +8,8 @@ export abstract class Constant extends Double {
         super(value.toString());
         this.symbol = symbol;
     }
+
+    public override toString(): string {
+        return this.symbol;
+    }
 }
