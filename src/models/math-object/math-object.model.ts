@@ -1,7 +1,6 @@
 import { StringFormatter } from "../services/string-formatter.service";
 import * as uuid from 'uuid';
 import { Type } from "@angular/core";
-import { ErrorHandler } from "../services/error-handler.service";
 
 export abstract class MathObject {
     public readonly id: any;
@@ -97,54 +96,10 @@ export abstract class MathObject {
             throw new Error(`${this.constructor.name} Empty Input`);
         }
 
-        const operatorError = ErrorHandler.tooManyOperators(this.inputWhitespaceRemoved);
-
-        if (operatorError) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Malformed Operators: '${operatorError}'`);
-        }
-
-        const parenthesisError = ErrorHandler.hasParenthesisCountMismatch(this.inputWhitespaceRemoved);
-
-        if (parenthesisError) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
-        }
-
-        const bracketCountError = ErrorHandler.hasBracketCountMismatch(this.inputWhitespaceRemoved);
-
-        if (bracketCountError) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Bracket Count Mismatch`);
-        }
-
-        const misorderedParenth = ErrorHandler.hasMisorderedClosingParenthesis(this.inputWhitespaceRemoved);
-
-        if (misorderedParenth) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
-        }
-
-        const misorderedBrackets = ErrorHandler.hasMisorderedClosingBrackets(this.inputWhitespaceRemoved);
-
-        if (misorderedBrackets) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Parenthesis Misordered`);
-        }
-
-        const hasEmptyParenthesis = ErrorHandler.hasEmptyParenthesis(this.inputWhitespaceRemoved);
-
-        if (hasEmptyParenthesis) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Parenthesis '()'`);
-        }
-
-        const hasEmptyBrackets = ErrorHandler.hasEmptyBrackets(this.inputWhitespaceRemoved);
-
-        if (hasEmptyBrackets) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Empty Brackets '[]'`);
-        }
-
-        const hasMissingFunctionName = ErrorHandler.hasMissingFunctionName(this.inputWhitespaceRemoved);
-
-        if (hasMissingFunctionName) {
-            throw new Error(`${this.constructor.name} Input: ${this.inputWhitespaceRemoved} => Missing Function Name`);
-        }
+        this.checkCustomFormattingErrors();
     }
+
+    protected checkCustomFormattingErrors(): void { }
 
     protected setChildren(): MathObject[] {
         return [];

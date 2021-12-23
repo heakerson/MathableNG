@@ -1,6 +1,56 @@
 import { StringFormatter } from "./string-formatter.service";
 
 export class ErrorHandler {
+
+    public static checkBaseChildErrors(inputWhitespaceRemoved: string, objectName: string): void {
+        const operatorError = this.tooManyOperators(inputWhitespaceRemoved);
+
+        if (operatorError) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Malformed Operators: '${operatorError}'`);
+        }
+
+        const parenthesisError = this.hasParenthesisCountMismatch(inputWhitespaceRemoved);
+
+        if (parenthesisError) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
+        }
+
+        const bracketCountError = this.hasBracketCountMismatch(inputWhitespaceRemoved);
+
+        if (bracketCountError) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Bracket Count Mismatch`);
+        }
+
+        const misorderedParenth = this.hasMisorderedClosingParenthesis(inputWhitespaceRemoved);
+
+        if (misorderedParenth) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Misordered`);
+        }
+
+        const misorderedBrackets = this.hasMisorderedClosingBrackets(inputWhitespaceRemoved);
+
+        if (misorderedBrackets) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Misordered`);
+        }
+
+        const hasEmptyParenthesis = this.hasEmptyParenthesis(inputWhitespaceRemoved);
+
+        if (hasEmptyParenthesis) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Empty Parenthesis '()'`);
+        }
+
+        const hasEmptyBrackets = this.hasEmptyBrackets(inputWhitespaceRemoved);
+
+        if (hasEmptyBrackets) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Empty Brackets '[]'`);
+        }
+
+        const hasMissingFunctionName = this.hasMissingFunctionName(inputWhitespaceRemoved);
+
+        if (hasMissingFunctionName) {
+            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Missing Function Name`);
+        }
+    }
     
     public static hasParenthesisCountMismatch(input: string): boolean {
         let count = 0;
