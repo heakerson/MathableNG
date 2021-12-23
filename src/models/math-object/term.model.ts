@@ -1,3 +1,4 @@
+import { ErrorHandler } from "../services/error-handler.service";
 import { Factory } from "../services/factory.service";
 import { StringFormatter } from "../services/string-formatter.service";
 import { Sign } from "./enums.model";
@@ -91,5 +92,9 @@ export class Term extends MathObject {
             formatted = `(${formatted})`;
         }
         return formatted;
+    }
+
+    protected override checkCustomFormattingErrors(): void {
+        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
     }
 }
