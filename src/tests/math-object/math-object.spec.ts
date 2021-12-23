@@ -32,10 +32,13 @@ export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
     { input: 'a^*', errorCode: ErrorCodes.MALFORMED_OPERATORS },
     { input: '-*b', errorCode: ErrorCodes.MALFORMED_OPERATORS },
     { input: '(a**b)', errorCode: ErrorCodes.MALFORMED_OPERATORS },
+    { input: '(a/*b)(', errorCode: ErrorCodes.MALFORMED_OPERATORS },
     { input: '((a*b)', errorCode: ErrorCodes.PARENTH_COUNT_MISMATCH },
     { input: '(a*b)(', errorCode: ErrorCodes.PARENTH_COUNT_MISMATCH },
+    { input: '(]a*b)(', errorCode: ErrorCodes.PARENTH_COUNT_MISMATCH },
     { input: '(tan[x+(a^((t-y))]*b)', errorCode: ErrorCodes.PARENTH_COUNT_MISMATCH },
-    // { input: '(tan[x+(a^((t-y)]]*b)', errorCode: ErrorCodes.BRACKET_COUNT_MISMATCH },
+    { input: '(tan[x+(a^(t-y))]]*b)', errorCode: ErrorCodes.BRACKET_COUNT_MISMATCH },
+    { input: '(tan[x+(a^(t-y))]*b)[', errorCode: ErrorCodes.BRACKET_COUNT_MISMATCH },
 ];
 
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(
