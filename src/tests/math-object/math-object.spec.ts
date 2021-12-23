@@ -1,4 +1,5 @@
 import { MathObject } from "src/models/math-object/math-object.model";
+import { ErrorCodes } from "src/models/services/error-handler.service";
 import * as uuid from 'uuid';
 
 export function mathObjectConstructorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(
@@ -23,18 +24,32 @@ export function mathObjectConstructorTests<TMathObject extends MathObject, TTest
     });
 }
 
+export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
+    { input: '', errorCode: ErrorCodes.EMPTY },
+    { input: 'a**b', errorCode: ErrorCodes.MALFORMED_OPERATORS },
+    { input: '(a**b)', errorCode: ErrorCodes.MALFORMED_OPERATORS },
+];
+
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(
     additionalLabel: string,
     tests: TTest[],
     builder: (test: TTest) => TMathObject
 ): void {
 
-    describe(`MathObject Constructor Tests => ${additionalLabel}`, () => {
+    describe(`MathObject Failure Constructor Tests => ${additionalLabel}`, () => {
         tests.forEach((test: TTest) => {
             it(`'${test.input}' => should throw error`, () => {
-                // console.log(mo);
-                // console.log(mo.toString());
-                expect(() => builder(test)).toThrowError();
+                expect(() => builder(test)).toThrowMatching((error: Error) => {
+                    // console.log('ERROR', error);
+                    // console.log('ERROR message', error.message);
+                    // console.log('ERROR name', error.name);
+
+                    if (test.errorCode) {
+                        return error.message.startsWith(`ERR${test.errorCode}`)
+                    }
+
+                    return true;
+                });
             });
         });
     });
@@ -44,6 +59,7 @@ export class MathObjectConstTest {
     input: string = '';
     children: string[] = [];
     toString: string = '';
+    errorCode?: number;
 
     constructor(props: Partial<MathObjectConstTest>) {
         Object.assign(this, props);

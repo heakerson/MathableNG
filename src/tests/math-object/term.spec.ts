@@ -2,7 +2,7 @@ import { Sign } from "src/models/math-object/enums.model";
 import { Term } from "src/models/math-object/term.model";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest } from "./math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest } from "./math-object.spec";
 
 export class TermConstTest extends MathObjectConstTest {
     sign: Sign = Sign.Positive;
@@ -37,7 +37,7 @@ export function termConstructorTests<TTerm extends Term, TTest extends TermConst
 
 describe('Term', () => {
 
-    fdescribe('Constructors Tests', () => {
+    describe('Constructors Tests', () => {
 
         describe('Success', () => {
             const constructorTests: TermConstTest[] = [
@@ -67,9 +67,9 @@ describe('Term', () => {
         });
 
         describe('Errors', () => {
-            const constructorTests: TermConstTest[] = [
-                new TermConstTest({ input: '', children: [], toString: '' }),
-            ];
+            const constructorTests: TermConstTest[] = baseMathObjectErrorTests.map(ex => {
+                return new TermConstTest({ input: ex.input, errorCode: ex.errorCode, children: [], toString: '' });
+            })
     
             const standardBuilder = (test: TermConstTest) => new Term(test.input);
     
