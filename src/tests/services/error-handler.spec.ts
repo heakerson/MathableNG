@@ -169,7 +169,9 @@ describe('ErrorHandler', () => {
             { input: '1+-2=3**b', expectedResult: '**' },
             { input: '1/-2=3//b', expectedResult: '//' },
             { input: 'x^*b', expectedResult: '^*' },
+            { input: 'x^*', expectedResult: '^*' },
             { input: 'x^/b', expectedResult: '^/' },
+            { input: 'x^/', expectedResult: '^/' },
         ];
 
         inputs.forEach((test) => {

@@ -189,6 +189,10 @@ export class ErrorHandler {
             }
         });
 
+        if (operatorString && !exceptions.includes(operatorString) && operatorString.length > 1) {
+            foundError = true;
+        }
+
         return foundError ? operatorString : null;
     }
 
