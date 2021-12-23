@@ -6,50 +6,54 @@ export class ErrorHandler {
         const operatorError = this.tooManyOperators(inputWhitespaceRemoved);
 
         if (operatorError) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Malformed Operators: '${operatorError}'`);
+            this.throwError(ErrorCodes.MALFORMED_OPERATORS, objectName, inputWhitespaceRemoved, `Malformed Operators: '${operatorError}'`);
         }
 
         const parenthesisError = this.hasParenthesisCountMismatch(inputWhitespaceRemoved);
 
         if (parenthesisError) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Count Mismatch`);
+            this.throwError(ErrorCodes.PARENTH_COUNT_MISMATCH, objectName, inputWhitespaceRemoved, `Parenthesis Count Mismatch`);
         }
 
         const bracketCountError = this.hasBracketCountMismatch(inputWhitespaceRemoved);
 
         if (bracketCountError) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Bracket Count Mismatch`);
+            this.throwError(ErrorCodes.BRACKET_COUNT_MISMATCH, objectName, inputWhitespaceRemoved, `Bracket Count Mismatch`);
         }
 
         const misorderedParenth = this.hasMisorderedClosingParenthesis(inputWhitespaceRemoved);
 
         if (misorderedParenth) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Misordered`);
+            this.throwError(ErrorCodes.MISORDERED_PARENTH, objectName, inputWhitespaceRemoved, `Misordered Parenthesis`);
         }
 
         const misorderedBrackets = this.hasMisorderedClosingBrackets(inputWhitespaceRemoved);
 
         if (misorderedBrackets) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Parenthesis Misordered`);
+            this.throwError(ErrorCodes.MISORDERED_BRACKETS, objectName, inputWhitespaceRemoved, `Misordered Brackets`);
         }
 
         const hasEmptyParenthesis = this.hasEmptyParenthesis(inputWhitespaceRemoved);
 
         if (hasEmptyParenthesis) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Empty Parenthesis '()'`);
+            this.throwError(ErrorCodes.EMPTY_PARENTH, objectName, inputWhitespaceRemoved, `Empty Parenthesis '()'`);
         }
 
         const hasEmptyBrackets = this.hasEmptyBrackets(inputWhitespaceRemoved);
 
         if (hasEmptyBrackets) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Empty Brackets '[]'`);
+            this.throwError(ErrorCodes.EMPTY_BRACKETS, objectName, inputWhitespaceRemoved, `Empty Brackets '[]'`);
         }
 
         const hasMissingFunctionName = this.hasMissingFunctionName(inputWhitespaceRemoved);
 
         if (hasMissingFunctionName) {
-            throw new Error(`${objectName} Input: ${inputWhitespaceRemoved} => Missing Function Name`);
+            this.throwError(ErrorCodes.MISSING_FN_NAME, objectName, inputWhitespaceRemoved, `Missing Function Name`);
         }
+    }
+
+    public static throwError(errorCode: number, objectName: string, input: string, message: string): void {
+        throw new Error(`ERR${errorCode} ${objectName} Input: ${input} => ${message}`);
     }
     
     public static hasParenthesisCountMismatch(input: string): boolean {
@@ -221,5 +225,21 @@ export class ErrorHandler {
         });
 
         return foundError ? operatorError : null;
+    }
+}
+
+export class ErrorCodes {
+    public static readonly EMPTY = 0;
+    public static readonly MALFORMED_OPERATORS = 1;
+    public static readonly PARENTH_COUNT_MISMATCH = 2;
+    public static readonly BRACKET_COUNT_MISMATCH = 3;
+    public static readonly MISORDERED_PARENTH = 4;
+    public static readonly MISORDERED_BRACKETS = 5;
+    public static readonly EMPTY_PARENTH = 6;
+    public static readonly EMPTY_BRACKETS = 7;
+    public static readonly MISSING_FN_NAME = 8;
+
+    public static readonly Variable = {
+        NON_ALPHA_NUMERIC_INPUT: 9
     }
 }
