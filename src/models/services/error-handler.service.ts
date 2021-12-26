@@ -39,16 +39,16 @@ export class ErrorHandler {
             this.throwError(ErrorCodes.EMPTY_PARENTH, objectName, inputWhitespaceRemoved, `Empty Parenthesis '()'`);
         }
 
-        const hasEmptyBrackets = this.hasEmptyBrackets(inputWhitespaceRemoved);
-
-        if (hasEmptyBrackets) {
-            this.throwError(ErrorCodes.EMPTY_BRACKETS, objectName, inputWhitespaceRemoved, `Empty Brackets '[]'`);
-        }
-
         const hasMissingFunctionName = this.hasMissingFunctionName(inputWhitespaceRemoved);
 
         if (hasMissingFunctionName) {
             this.throwError(ErrorCodes.MISSING_FN_NAME, objectName, inputWhitespaceRemoved, `Missing Function Name`);
+        }
+
+        const hasEmptyBrackets = this.hasEmptyBrackets(inputWhitespaceRemoved);
+
+        if (hasEmptyBrackets) {
+            this.throwError(ErrorCodes.EMPTY_BRACKETS, objectName, inputWhitespaceRemoved, `Empty Brackets '[]'`);
         }
     }
 

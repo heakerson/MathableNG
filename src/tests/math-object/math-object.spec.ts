@@ -39,6 +39,16 @@ export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
     { input: '(tan[x+(a^((t-y))]*b)', errorCode: ErrorCodes.PARENTH_COUNT_MISMATCH },
     { input: '(tan[x+(a^(t-y))]]*b)', errorCode: ErrorCodes.BRACKET_COUNT_MISMATCH },
     { input: '(tan[x+(a^(t-y))]*b)[', errorCode: ErrorCodes.BRACKET_COUNT_MISMATCH },
+    { input: '(a*b))(', errorCode: ErrorCodes.MISORDERED_PARENTH },
+    { input: ')(a*b', errorCode: ErrorCodes.MISORDERED_PARENTH },
+    { input: ')(', errorCode: ErrorCodes.MISORDERED_PARENTH },
+    { input: 'sin[x]]*cos[', errorCode: ErrorCodes.MISORDERED_BRACKETS },
+    { input: '()', errorCode: ErrorCodes.EMPTY_PARENTH },
+    { input: 'a*()', errorCode: ErrorCodes.EMPTY_PARENTH },
+    { input: '((()))', errorCode: ErrorCodes.EMPTY_PARENTH },
+    { input: 'ln[]', errorCode: ErrorCodes.EMPTY_BRACKETS },
+    { input: '[]', errorCode: ErrorCodes.MISSING_FN_NAME },
+    { input: 'a*[]', errorCode: ErrorCodes.MISSING_FN_NAME },
 ];
 
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(
