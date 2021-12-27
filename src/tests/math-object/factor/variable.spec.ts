@@ -53,7 +53,10 @@ describe('Variable', () => {
 
         describe('Errors', () => {
             const errorTests: { input: string, errorCode: ErrorCodes }[] = [
+                { input: '', errorCode: ErrorCodes.EMPTY },
+                { input: '  ', errorCode: ErrorCodes.EMPTY },
                 { input: '--b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: '-', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: '-/b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: '+-b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: '--PI', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },

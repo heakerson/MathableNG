@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Expression } from 'src/models/math-object/factor/expression.model';
+import { Variable } from 'src/models/math-object/factor/variable.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/factory.service';
 
@@ -13,8 +14,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const expression = new Expression('(a+b+c*(e+f))');
-    const term = new Term('a^*');
-    console.log(term);
+    const thing = new Variable('-');
+    console.log(thing);
     // const type = Term;
     // console.log('traverse for', type);
   

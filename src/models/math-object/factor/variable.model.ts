@@ -15,7 +15,7 @@ export class Variable extends Factor {
         return new Variable(this.toString());
     }
 
-    protected override checkFormattingErrors(): void {
+    protected override checkCustomFormattingErrors(): void {
         let removedSign = this.inputWhitespaceRemoved;
 
         if (removedSign[0] === '-' || removedSign[0] === '+') {
