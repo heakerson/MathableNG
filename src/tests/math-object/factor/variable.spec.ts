@@ -33,19 +33,27 @@ export function variableConstructorTests<TVariable extends Variable, TTest exten
 
 describe('Variable', () => {
 
-    describe('Constructor', () => {
-        const constructorTests: VariableConstTest[] = [
-            new VariableConstTest({ input: 'a', children: [], toString: 'a', sign: Sign.Positive, name: 'a' }),
-            new VariableConstTest({ input: '-a', children: [], toString: '-a', sign: Sign.Negative, name: 'a' }),
-            new VariableConstTest({ input: 'bob', children: [], toString: 'bob', sign: Sign.Positive, name: 'bob' }),
-            new VariableConstTest({ input: '-bob', children: [], toString: '-bob', sign: Sign.Negative, name: 'bob' }),
-        ];
+    describe('Constructor Tests', () => {
 
-        const standaredBuilder = (test: VariableConstTest) => new Variable(test.input);
+        describe('Success', () => {
+            const constructorTests: VariableConstTest[] = [
+                new VariableConstTest({ input: 'a', children: [], toString: 'a', sign: Sign.Positive, name: 'a' }),
+                new VariableConstTest({ input: '-a', children: [], toString: '-a', sign: Sign.Negative, name: 'a' }),
+                new VariableConstTest({ input: '+a', children: [], toString: 'a', sign: Sign.Positive, name: 'a' }),
+                new VariableConstTest({ input: 'bob', children: [], toString: 'bob', sign: Sign.Positive, name: 'bob' }),
+                new VariableConstTest({ input: '-bob', children: [], toString: '-bob', sign: Sign.Negative, name: 'bob' }),
+            ];
+    
+            const standaredBuilder = (test: VariableConstTest) => new Variable(test.input);
+    
+            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+            factorConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+            variableConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+        });
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
-        factorConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
-        variableConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+        describe('Errors', () => {
+
+        });
 
     });
 

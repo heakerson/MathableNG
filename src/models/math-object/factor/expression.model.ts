@@ -24,11 +24,13 @@ export class Expression extends Factor {
         this.additionalOperators = this.setAdditionalOperators();
     }
 
-    public static fromTerms(...terms: Term[]): Expression {
+    public static fromTerms(terms: Term[], additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]): Expression {
         let innerTerms = '';
         terms.forEach((term, i) => {
             const sign = !term.isNegative ? (i === 0 ? '' : '+') : '';
-            return innerTerms += `${sign}${term.toString()}`;
+            const additionalOpObject = additionalOperators?.find(op => op.termIndex === i);
+            const op = additionalOpObject ? additionalOpObject.addtionalOperator : '';
+            return innerTerms += `${op}${sign}${term.toString()}`;
         });
 
         return new Expression(innerTerms);
@@ -40,27 +42,27 @@ export class Expression extends Factor {
 
     public appendTerms(...terms: Term[]): Expression {
         const newChildren = this.appendChildren<Term>(...terms);
-        return Expression.fromTerms(...newChildren);
+        return Expression.fromTerms(newChildren);
     }
 
     public prependTerms(...terms: Term[]): Expression {
         const newChildren = this.prependChildren<Term>(...terms);
-        return Expression.fromTerms(...newChildren);
+        return Expression.fromTerms(newChildren);
     }
 
     public insertTerms(index: number, ...terms: Term[]): Expression {
         const newChildren = this.insertChildren<Term>(index, ...terms);
-        return Expression.fromTerms(...newChildren);
+        return Expression.fromTerms(newChildren);
     }
 
     public removeTerms(...terms: Term[]): Expression {
         const newChildren = this.removeChildrenById<Term>(...terms.map(f => f.id));
-        return Expression.fromTerms(...newChildren);
+        return Expression.fromTerms(newChildren);
     }
 
     public removeTermsAtIndices(...indices: number[]): Expression {
         const newChildren = this.removeChildrenByIndex<Term>(...indices);
-        return Expression.fromTerms(...newChildren);
+        return Expression.fromTerms(newChildren);
     }
 
     public override toString(): string {

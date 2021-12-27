@@ -1,4 +1,4 @@
-import { Sign } from "src/models/math-object/enums.model";
+import { Operators, Sign } from "src/models/math-object/enums.model";
 import { Expression } from "src/models/math-object/factor/expression.model";
 import { Term } from "src/models/math-object/term.model";
 import { StringFormatter } from "src/models/services/string-formatter.service";
@@ -56,8 +56,28 @@ describe('Expression', () => {
 
         const standardBuilder = (test: FactorConstTest) => new Expression(test.input);
         const staticBuilder = (test: FactorConstTest) => {
-            const terms = StringFormatter.parseTermStrings(test.input).map(t => new Term(t));
-            return Expression.fromTerms(...terms);
+            let termStrings = StringFormatter.parseTermStrings(test.input);
+
+            const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
+            termStrings = termStrings.map((termString, i) => {
+                if (termString.length > 2) {
+                    const prefix = termString.substring(0, 2);
+    
+                    if (prefix === '--') {
+                        additionalOps.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
+                        return termString.substring(1);
+                    } else if (prefix === '+-') {
+                        additionalOps.push({ termIndex: i, addtionalOperator: Operators.Addition});
+                        return termString.substring(1);
+                    }
+                }
+
+                return termString;
+            });
+
+            const terms = termStrings.map(t => new Term(t));
+
+            return Expression.fromTerms(terms, additionalOps);
         };
 
         mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
