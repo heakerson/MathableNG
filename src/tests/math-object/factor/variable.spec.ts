@@ -1,6 +1,7 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
-import { mathObjectConstructorTests } from "../math-object.spec";
+import { ErrorCodes } from "src/models/services/error-handler.service";
+import { mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
 import { factorConstructorTests, FactorConstTest } from "./factor.spec";
 
 export class VariableConstTest extends FactorConstTest {
@@ -34,6 +35,7 @@ export function variableConstructorTests<TVariable extends Variable, TTest exten
 describe('Variable', () => {
 
     describe('Constructor Tests', () => {
+        const standardBuilder = (test: VariableConstTest) => new Variable(test.input);
 
         describe('Success', () => {
             const constructorTests: VariableConstTest[] = [
@@ -44,15 +46,26 @@ describe('Variable', () => {
                 new VariableConstTest({ input: '-bob', children: [], toString: '-bob', sign: Sign.Negative, name: 'bob' }),
             ];
     
-            const standaredBuilder = (test: VariableConstTest) => new Variable(test.input);
-    
-            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
-            factorConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
-            variableConstructorTests('STANDARD Constructor', constructorTests, standaredBuilder);
+            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            variableConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
         });
 
         describe('Errors', () => {
+            const errorTests: { input: string, errorCode: ErrorCodes }[] = [
+                { input: '--b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: '-/b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: '+-b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: '--PI', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: 'PI', errorCode: ErrorCodes.Variable.RESERVED_NAME },
+                { input: '+PI', errorCode: ErrorCodes.Variable.RESERVED_NAME },
+                { input: 'E', errorCode: ErrorCodes.Variable.RESERVED_NAME },
+                { input: '-E', errorCode: ErrorCodes.Variable.RESERVED_NAME },
+            ]
 
+            const tests = errorTests.map(e => new VariableConstTest({ input: e.input, children: [], toString: '' }));
+
+            mathObjectConstructorErrorTests('STANDARD Constructor', tests, standardBuilder);
         });
 
     });

@@ -1,4 +1,5 @@
 import { ErrorCodes, ErrorHandler } from 'src/models/services/error-handler.service';
+import { Constants } from '../enums.model';
 import { Factor } from './factor.model';
 
 export class Variable extends Factor {
@@ -22,8 +23,14 @@ export class Variable extends Factor {
         }
 
         if (!removedSign.match(/^[0-9a-z]+$/)) {
-            ErrorHandler.throwError(ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT, this.constructor.name, this.inputWhitespaceRemoved, `Variable names are only alphanumeric`);
+            ErrorHandler.throwError(ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT, this.constructor.name, this.inputWhitespaceRemoved, `Variable names are only alphanumeric and a single +/- sign`);
         }
+
+        Object.keys(Constants).forEach(c => {
+            if (removedSign === c) {
+                ErrorHandler.throwError(ErrorCodes.Variable.RESERVED_NAME, this.constructor.name, this.inputWhitespaceRemoved, `'${c}' is a reserved type. Use a different name`);
+            }
+        });
     }
 
     protected setName(): string {

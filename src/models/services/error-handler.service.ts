@@ -244,6 +244,7 @@ export class ErrorCodes {
     public static readonly MISSING_FN_NAME = 8;
 
     public static readonly Variable = {
-        NON_ALPHA_NUMERIC_INPUT: 9
+        NON_ALPHA_NUMERIC_INPUT: 9,
+        RESERVED_NAME: 10
     }
 }
