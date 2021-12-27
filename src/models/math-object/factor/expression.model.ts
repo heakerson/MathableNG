@@ -1,3 +1,4 @@
+import { ErrorHandler } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Operators } from "../enums.model";
 import { Term } from "../term.model";
@@ -146,5 +147,9 @@ export class Expression extends Factor {
         });
 
         return additionalOps;
+    }
+
+    protected override checkCustomFormattingErrors(): void {
+        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
     }
 }

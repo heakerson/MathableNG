@@ -2,7 +2,7 @@ import { Operators, Sign } from "src/models/math-object/enums.model";
 import { Expression } from "src/models/math-object/factor/expression.model";
 import { Term } from "src/models/math-object/term.model";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { mathObjectConstructorTests } from "../math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
 import { factorConstructorTests, FactorConstTest } from "./factor.spec";
 
 export function expressionConstructorTests<TExpression extends Expression, TTest extends FactorConstTest>(
@@ -27,33 +27,7 @@ export function expressionConstructorTests<TExpression extends Expression, TTest
 
 describe('Expression', () => {
 
-    describe('Constructor', () => {
-        const constructorTests: FactorConstTest[] = [
-            new FactorConstTest({ input: '(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a-b)', children: ['a', '-b'], toString: '-(a-b)', sign: Sign.Negative }),
-            new FactorConstTest({ input: '-(a+b)', children: ['a', 'b'], toString: '-(a+b)', sign: Sign.Negative }),
-            new FactorConstTest({ input: '(a+b)', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: ' a +b', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: ' -a +b', children: ['-a', 'b'], toString: '(-a+b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '(a+  b) ^(x)', children: ['(a+b)^(x)'], toString: '((a+b)^(x))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+  b) ^(x)', children: ['-(a+b)^(x)'], toString: '(-(a+b)^(x))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+b)^-(x)', children: ['-(a+b)^-(x)'], toString: '(-(a+b)^-(x))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+-b)', children: ['a', '-b'], toString: '-(a+-b)', sign: Sign.Negative }),
-            new FactorConstTest({ input: '-(a--b)', children: ['a', '-b'], toString: '-(a--b)', sign: Sign.Negative }),
-            new FactorConstTest({ input: 'a--b', children: ['a', '-b'], toString: '(a--b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '(a+b)(x+y)', children: ['(a+b)*(x+y)'], toString: '((a+b)*(x+y))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '(a+b)(x+y)-sin[a^b]', children: ['(a+b)*(x+y)', '-sin[a^b]'], toString: '((a+b)*(x+y)-sin[a^b])', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+b)^(x)', toString: '(-(a+b)^(x))', children: ['-(a+b)^(x)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+b)^-(x)', toString: '(-(a+b)^-(x))', children: ['-(a+b)^-(x)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '(a+b)  -(x+y)', toString: '((a+b)-(x+y))', children: ['(a+b)', '-(x+y)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a+b)(x+y)', toString: '(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(-(a+b)(x+y))', toString: '-(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Negative }),
-            new FactorConstTest({ input: '-(a+b)/(x+y)', toString: '((-(a+b)/(x+y)))', children: ['(-(a+b)/(x+y))'], sign: Sign.Positive }),
-            new FactorConstTest({ input: 'a/b', toString: '((a/b))', children: ['(a/b)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '-a/b', toString: '((-a/b))', children: ['(-a/b)'], sign: Sign.Positive }),
-            new FactorConstTest({ input: '-a^b', toString: '(-a^b)', children: ['-a^b'], sign: Sign.Positive }),
-        ];
-
+    describe('Constructor Tests', () => {
         const standardBuilder = (test: FactorConstTest) => new Expression(test.input);
         const staticBuilder = (test: FactorConstTest) => {
             let termStrings = StringFormatter.parseTermStrings(test.input);
@@ -80,15 +54,50 @@ describe('Expression', () => {
             return Expression.fromTerms(terms, additionalOps);
         };
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        describe('Success', () => {
+            const constructorTests: FactorConstTest[] = [
+                new FactorConstTest({ input: '(a-b)', children: ['a', '-b'], toString: '(a-b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a-b)', children: ['a', '-b'], toString: '-(a-b)', sign: Sign.Negative }),
+                new FactorConstTest({ input: '-(a+b)', children: ['a', 'b'], toString: '-(a+b)', sign: Sign.Negative }),
+                new FactorConstTest({ input: '(a+b)', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: ' a +b', children: ['a', 'b'], toString: '(a+b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: ' -a +b', children: ['-a', 'b'], toString: '(-a+b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '(a+  b) ^(x)', children: ['(a+b)^(x)'], toString: '((a+b)^(x))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+  b) ^(x)', children: ['-(a+b)^(x)'], toString: '(-(a+b)^(x))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+b)^-(x)', children: ['-(a+b)^-(x)'], toString: '(-(a+b)^-(x))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+-b)', children: ['a', '-b'], toString: '-(a+-b)', sign: Sign.Negative }),
+                new FactorConstTest({ input: '-(a--b)', children: ['a', '-b'], toString: '-(a--b)', sign: Sign.Negative }),
+                new FactorConstTest({ input: 'a--b', children: ['a', '-b'], toString: '(a--b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '(a+b)(x+y)', children: ['(a+b)*(x+y)'], toString: '((a+b)*(x+y))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '(a+b)(x+y)-sin[a^b]', children: ['(a+b)*(x+y)', '-sin[a^b]'], toString: '((a+b)*(x+y)-sin[a^b])', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+b)^(x)', toString: '(-(a+b)^(x))', children: ['-(a+b)^(x)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+b)^-(x)', toString: '(-(a+b)^-(x))', children: ['-(a+b)^-(x)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '(a+b)  -(x+y)', toString: '((a+b)-(x+y))', children: ['(a+b)', '-(x+y)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a+b)(x+y)', toString: '(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(-(a+b)(x+y))', toString: '-(-(a+b)*(x+y))', children: ['-(a+b)*(x+y)'], sign: Sign.Negative }),
+                new FactorConstTest({ input: '-(a+b)/(x+y)', toString: '((-(a+b)/(x+y)))', children: ['(-(a+b)/(x+y))'], sign: Sign.Positive }),
+                new FactorConstTest({ input: 'a/b', toString: '((a/b))', children: ['(a/b)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '-a/b', toString: '((-a/b))', children: ['(-a/b)'], sign: Sign.Positive }),
+                new FactorConstTest({ input: '-a^b', toString: '(-a^b)', children: ['-a^b'], sign: Sign.Positive }),
+            ];
+    
+            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            expressionConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            expressionConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        });
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
-
-        expressionConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        expressionConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
-
+        describe('Errors', () => {
+            const constructorTests: FactorConstTest[] = baseMathObjectErrorTests.map(ex => {
+                return new FactorConstTest({ input: ex.input, errorCode: ex.errorCode, children: [], toString: '' });
+            })
+    
+            mathObjectConstructorErrorTests('STANDARD Constructor', constructorTests, standardBuilder);
+        });
     });
 
     describe('Individual Methods', () => {

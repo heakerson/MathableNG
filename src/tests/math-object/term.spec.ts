@@ -74,7 +74,7 @@ describe('Term', () => {
             const standardBuilder = (test: TermConstTest) => new Term(test.input);
     
             mathObjectConstructorErrorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        })
+        });
     });
 
     describe('Individual Methods', () => {
