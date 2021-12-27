@@ -1,6 +1,4 @@
 LEFT OFF:
-- add error tests for static expression constructor just to make sure the additional operators passed in make sense
-    - for the static constructor, do I actually need to specify the additional operator?
 - add a test to make sure children are the correct type?
 - for travers, use a const type to return the types? Like UserGroup?? OR A CLASS WITH STATIC READONLY TYPES?
 - I should automatically call the parent classes test functions inside of the child class function rather than having to write

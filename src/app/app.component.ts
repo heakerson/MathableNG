@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Operators, Sign } from 'src/models/math-object/enums.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
+import { Double } from 'src/models/math-object/factor/number/double.model';
+import { Integer } from 'src/models/math-object/factor/number/integer.model';
 import { Rational } from 'src/models/math-object/factor/rational.model';
 import { Variable } from 'src/models/math-object/factor/variable.model';
 import { Term } from 'src/models/math-object/term.model';
@@ -20,7 +22,9 @@ export class AppComponent implements OnInit {
     // const thing = Term.fromFactors(...[]);
     // const thing = new Rational('a');
     // const thing = Rational.fromFactors(null, null, Sign.Negative);
-    const thing = Expression.fromTerms([new Term('a'), new Term('b')], [{ termIndex: 1, addtionalOperator: Operators.Addition }])
+    // const thing = Expression.fromTerms([new Term('a'), new Term('b')], [{ termIndex: 1, addtionalOperator: Operators.Addition }])
+    // const thing = new Double('x');
+    const thing = new Integer('2.3');
     console.log(thing);
     // const type = Term;
     // console.log('traverse for', type);

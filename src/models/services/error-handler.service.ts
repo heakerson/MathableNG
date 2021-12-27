@@ -260,4 +260,11 @@ export class ErrorCodes {
         INVALID_ADDITIONAL_OPERATOR: 13,
         INVALID_ADDITIONAL_OPERATOR_INDEX: 14,
     }
+
+    public static readonly Number = {
+        NOT_A_NUMBER: 15,
+        Integer: {
+            NOT_AN_INTEGER: 16
+        }
+    }
 }
