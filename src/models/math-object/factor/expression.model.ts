@@ -1,4 +1,4 @@
-import { ErrorHandler } from "src/models/services/error-handler.service";
+import { ErrorCodes, ErrorHandler } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Operators } from "../enums.model";
 import { Term } from "../term.model";
@@ -27,9 +27,23 @@ export class Expression extends Factor {
 
     public static fromTerms(terms: Term[], additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]): Expression {
         let innerTerms = '';
+
+        if (additionalOperators?.length) {
+            additionalOperators.forEach(ao => {
+                if (ao.termIndex < 0 || ao.termIndex >= terms.length) {
+                    ErrorHandler.throwError(ErrorCodes.Expression.INVALID_ADDITIONAL_OPERATOR_INDEX, this.constructor.name, `additional operator termIndex: ${ao.termIndex}`, `Must be a valid term index`);
+                }
+            });
+        }
+
         terms.forEach((term, i) => {
             const sign = !term.isNegative ? (i === 0 ? '' : '+') : '';
             const additionalOpObject = additionalOperators?.find(op => op.termIndex === i);
+
+            if (!!additionalOpObject && additionalOpObject?.addtionalOperator !== '-' && additionalOpObject?.addtionalOperator !== '+') {
+                ErrorHandler.throwError(ErrorCodes.Expression.INVALID_ADDITIONAL_OPERATOR, this.constructor.name, `additional operator: ${additionalOpObject?.addtionalOperator}`, `Valid Additional Operators are '+' or '-'`);
+            }
+
             const op = additionalOpObject ? additionalOpObject.addtionalOperator : '';
             return innerTerms += `${op}${sign}${term.toString()}`;
         });

@@ -255,4 +255,9 @@ export class ErrorCodes {
     public static readonly Power = {
         MISSING_BASE_OR_EXPONENT: 12
     }
+
+    public static readonly Expression = {
+        INVALID_ADDITIONAL_OPERATOR: 13,
+        INVALID_ADDITIONAL_OPERATOR_INDEX: 14,
+    }
 }
