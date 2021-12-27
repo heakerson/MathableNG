@@ -1,3 +1,4 @@
+import { ErrorCodes, ErrorHandler } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Sign } from "../enums.model";
@@ -46,5 +47,15 @@ export class Power extends Factor {
         }
 
         return [ Factory.buildFactor(base) , Factory.buildFactor(exponent) ];
+    }
+
+    protected override checkCustomFormattingErrors(): void {
+        let { base, exponent } = StringFormatter.parsePowerFactor(this.inputWhitespaceRemoved);
+
+        if (!base || !exponent) {
+            ErrorHandler.throwError(ErrorCodes.Power.MISSING_BASE_OR_EXPONENT, this.constructor.name, this.inputWhitespaceRemoved, 'Missing base or exponent');
+        }
+
+        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
     }
 }

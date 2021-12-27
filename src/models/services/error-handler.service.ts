@@ -251,4 +251,8 @@ export class ErrorCodes {
     public static readonly Rational = {
         MISSING_NUM_OR_DENOM: 11
     }
+
+    public static readonly Power = {
+        MISSING_BASE_OR_EXPONENT: 12
+    }
 }
