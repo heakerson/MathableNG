@@ -1,8 +1,9 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
+import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { mathObjectConstructorTests } from "../math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
 import { factorConstructorTests, FactorConstTest } from "./factor.spec";
 
 export function rationalConstructorTests<TRational extends Rational, TTest extends FactorConstTest>(
@@ -27,35 +28,55 @@ export function rationalConstructorTests<TRational extends Rational, TTest exten
 
 describe('Rational', () => {
 
-    describe('Constructor', () => {
-        const constructorTests: FactorConstTest[] = [
-            new FactorConstTest({ input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative }),
-            new FactorConstTest({ input: '-a/b/c', children: ['-a', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-a/-b/c', children: ['-a', '(-b/c)'], toString: '(-a/(-b/c))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '((-a)/(b/c))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '((-a/b)/c)', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative }),
-            new FactorConstTest({ input: '-(-(a+x)/b/c)', children: ['-(a+x)', '(b/c)'], toString: '-(-(a+x)/(b/c))', sign: Sign.Negative }),
-            new FactorConstTest({ input: '((a+x)/(b+c))', children: ['(a+x)', '(b+c)'], toString: '((a+x)/(b+c))', sign: Sign.Positive }),
-            new FactorConstTest({ input: '-(-(a+x)/-(b+c))', children: ['-(a+x)', '-(b+c)'], toString: '-(-(a+x)/-(b+c))', sign: Sign.Negative }),
-        ];
-
+    describe('Constructor Tests', () => {
         const standardBuilder = (test: FactorConstTest) => new Rational(test.input);
         const staticBuilder = (test: FactorConstTest) => {
             const parsed = StringFormatter.parseRationalExpressions(test.input);
             return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
         };
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        describe('Success', () => {
+            const constructorTests: FactorConstTest[] = [
+                new FactorConstTest({ input: 'a/b', children: ['a', 'b'], toString: '(a/b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-a/b', children: ['-a', 'b'], toString: '(-a/b)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a/b)', children: ['a', 'b'], toString: '-(a/b)', sign: Sign.Negative }),
+                new FactorConstTest({ input: '-a/b/c', children: ['-a', '(b/c)'], toString: '(-a/(b/c))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-a/-b/c', children: ['-a', '(-b/c)'], toString: '(-a/(-b/c))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '(-a)/b/c', children: ['(-a)', '(b/c)'], toString: '((-a)/(b/c))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '(-a/b)/c', children: ['(-a/b)', 'c'], toString: '((-a/b)/c)', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(a/b/c)', children: ['a', '(b/c)'], toString: '-(a/(b/c))', sign: Sign.Negative }),
+                new FactorConstTest({ input: '-(-(a+x)/b/c)', children: ['-(a+x)', '(b/c)'], toString: '-(-(a+x)/(b/c))', sign: Sign.Negative }),
+                new FactorConstTest({ input: '((a+x)/(b+c))', children: ['(a+x)', '(b+c)'], toString: '((a+x)/(b+c))', sign: Sign.Positive }),
+                new FactorConstTest({ input: '-(-(a+x)/-(b+c))', children: ['-(a+x)', '-(b+c)'], toString: '-(-(a+x)/-(b+c))', sign: Sign.Negative }),
+            ];
+    
+            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            rationalConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            rationalConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        });
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        describe('Errors', () => {
+            const errorTests: { input: string, errorCode: ErrorCodes }[] = [
+                { input: '', errorCode: ErrorCodes.EMPTY },
+                { input: '  ', errorCode: ErrorCodes.EMPTY },
+                { input: 'a', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
+                { input: 'a/', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
+                { input: '-a/', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
+                { input: '/b', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
+                { input: '/-b', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
+            ]
 
-        rationalConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        rationalConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+            const tests = errorTests.map(e => new FactorConstTest({ input: e.input, children: [], toString: '' }));
+            const baseTestsNum = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `${e.input}/x`, children: [], toString: '' }));
+            const baseTestsDemom = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `x/${e.input}`, children: [], toString: '' }));
+
+            mathObjectConstructorErrorTests('STANDARD Constructor', [...tests, ...baseTestsNum, ...baseTestsDemom], standardBuilder);
+        })
 
     });
 

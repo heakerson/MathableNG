@@ -1,3 +1,4 @@
+import { ErrorCodes, ErrorHandler } from 'src/models/services/error-handler.service';
 import { Factory } from 'src/models/services/factory.service';
 import { StringFormatter } from 'src/models/services/string-formatter.service';
 import { Sign } from '../enums.model';
@@ -42,5 +43,15 @@ export class Rational extends Factor {
         }
 
         return StringFormatter.ensureSurroundingParenthesis(parentFormatted);
+    }
+
+    protected override checkCustomFormattingErrors(): void {
+        const { numerator, denominator } = StringFormatter.parseRationalExpressions(this.inputWhitespaceRemoved);
+
+        if (!numerator || !denominator) {
+            ErrorHandler.throwError(ErrorCodes.Rational.MISSING_NUM_OR_DENOM, this.constructor.name, this.inputWhitespaceRemoved, 'Missing numerator or denominator');
+        }
+
+        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
     }
 }

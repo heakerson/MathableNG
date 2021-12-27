@@ -247,4 +247,8 @@ export class ErrorCodes {
         NON_ALPHA_NUMERIC_INPUT: 9,
         RESERVED_NAME: 10
     }
+
+    public static readonly Rational = {
+        MISSING_NUM_OR_DENOM: 11
+    }
 }
