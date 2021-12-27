@@ -37,7 +37,7 @@ export function termConstructorTests<TTerm extends Term, TTest extends TermConst
 
 describe('Term', () => {
 
-    describe('Constructors Tests', () => {
+    describe('Constructor Tests', () => {
 
         describe('Success', () => {
             const constructorTests: TermConstTest[] = [
