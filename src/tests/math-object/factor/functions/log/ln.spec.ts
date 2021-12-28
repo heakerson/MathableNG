@@ -1,7 +1,7 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Ln } from "src/models/math-object/factor/functions/log/ln.model";
 import { Factory } from "src/models/services/factory.service";
-import { mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { LogConstrTest, logConstructorTests } from "./log.spec";
@@ -36,7 +36,11 @@ describe('Ln', () => {
         });
 
         describe('Errors', () => {
-            
+            const constructorTests: LogConstrTest[] = baseMathObjectErrorTests.map(ex => {
+                return new LogConstrTest({ input: ex.input, errorCode: ex.errorCode, children: [], toString: '' });
+            })
+    
+            mathObjectConstructorErrorTests('STANDARD Constructor', constructorTests, standardBuilder);
         });
     });
 
