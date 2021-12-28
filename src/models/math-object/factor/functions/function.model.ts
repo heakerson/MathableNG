@@ -1,3 +1,4 @@
+import { ErrorHandler } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { Sign } from "../../enums.model";
 import { Factor } from "../factor.model";
@@ -28,5 +29,9 @@ export abstract class Function extends Factor {
 
     protected setFnString(defaultSt: string): string {
         return defaultSt;
+    }
+
+    protected override checkCustomFormattingErrors(): void {
+        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
     }
 }
