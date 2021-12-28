@@ -21,14 +21,20 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const expression = new Expression('(a+1*x+c*(3.5+f^(x+0+E)))');
+    const expression = new Expression('(a-1*(x+(b-1*b))+c*(3.5+f^(x+-1+E)))');
     console.log('EXPRESSION', expression);
 
-    expression.traverse(Double, (v, ctx) => {
-      console.log('=== DOUBLE: ', v.value);
-      console.log(v);
-      console.log(ctx);
-    })
+    // expression.traverse<Double>(Double, (v, ctx) => {
+    //   console.log('=== DOUBLE: ', v.value);
+    //   console.log(v);
+    //   console.log(ctx);
+    // }, true);
+
+    const double = expression.find<Double>(Double, (v, ctx) => {
+      return v.value < 0;
+    }, true);
+
+    console.log('FOUND!!!!', double?.position);
 
     // const thing = new Variable('-');
     // const thing = Term.fromFactors(...[]);
