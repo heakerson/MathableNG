@@ -35,16 +35,7 @@ export function logConstructorTests<TFunction extends Log, TTest extends LogCons
 
 describe('Log', () => {
 
-    describe('Constructor', () => {
-        const constructorTests: LogConstrTest[] = [
-            new LogConstrTest({ input: 'a', base: '10', children: ['a', '10'], fnString: 'log', toString: 'log[a,10]', sign: Sign.Positive }),
-            new LogConstrTest({ input: '-a', base: 'x', children: ['-a', 'x'], fnString: 'log', toString: 'log[-a,x]', sign: Sign.Positive }),
-            new LogConstrTest({ input: '-a+ c ', children: ['(-a+c)', '10'], fnString: 'log', toString: '-log[(-a+c),10]', sign: Sign.Negative }),
-            new LogConstrTest({ input: '(-a+ c) ', base: 'a+b', children: ['(-a+c)', '(a+b)'], fnString: 'log', toString: '-log[(-a+c),(a+b)]', sign: Sign.Negative }),
-            new LogConstrTest({ input: 'a/b', base: 'E', children: ['(a/b)', 'E'], fnString: 'log', toString: 'log[(a/b),E]', sign: Sign.Positive }),
-            new LogConstrTest({ input: 'sin[x+t/-v]', children: ['sin[(x+(t/-v))]', '10'], fnString: 'log', toString: '-log[sin[(x+(t/-v))],10]', sign: Sign.Negative }),
-        ];
-
+    describe('Constructor Tests', () => {
         const standardBuilder = (test: LogConstrTest) => new Log(test.input, test.sign, test.base);
         const staticBuilder = (test: LogConstrTest) => {
             const contents = Factory.buildFactor(test.input);
@@ -52,17 +43,32 @@ describe('Log', () => {
             return Log.fromFactors(contents, test.sign, base);
         };
 
-        mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        describe('Success', () => {
+            const constructorTests: LogConstrTest[] = [
+                new LogConstrTest({ input: 'a', base: '10', children: ['a', '10'], fnString: 'log', toString: 'log[a,10]', sign: Sign.Positive }),
+                new LogConstrTest({ input: '-a', base: 'x', children: ['-a', 'x'], fnString: 'log', toString: 'log[-a,x]', sign: Sign.Positive }),
+                new LogConstrTest({ input: '-a+ c ', children: ['(-a+c)', '10'], fnString: 'log', toString: '-log[(-a+c),10]', sign: Sign.Negative }),
+                new LogConstrTest({ input: '(-a+ c) ', base: 'a+b', children: ['(-a+c)', '(a+b)'], fnString: 'log', toString: '-log[(-a+c),(a+b)]', sign: Sign.Negative }),
+                new LogConstrTest({ input: 'a/b', base: 'E', children: ['(a/b)', 'E'], fnString: 'log', toString: 'log[(a/b),E]', sign: Sign.Positive }),
+                new LogConstrTest({ input: 'sin[x+t/-v]', children: ['sin[(x+(t/-v))]', '10'], fnString: 'log', toString: '-log[sin[(x+(t/-v))],10]', sign: Sign.Negative }),
+            ];
+    
+            mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            functionConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            functionConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+    
+            logConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
+            logConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        });
 
-        factorConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        factorConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
-
-        functionConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        functionConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
-
-        logConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
-        logConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
+        describe('Errors', () => {
+            
+        });
     });
 
     describe('Individual Methods', () => {
