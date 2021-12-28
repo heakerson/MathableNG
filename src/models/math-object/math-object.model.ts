@@ -1,7 +1,7 @@
 import { StringFormatter } from "../services/string-formatter.service";
 import * as uuid from 'uuid';
-import { Context } from "../context/context.model";
-import { Position } from "../context/position.model";
+import { Context } from "../search/context.model";
+import { Position } from "../search/position.model";
 
 export abstract class MathObject {
     public readonly id: any;
@@ -72,7 +72,7 @@ export abstract class MathObject {
         }
     }
 
-    public find<TMathObject extends MathObject>(type: typeof MathObject, fn: (mo: TMathObject, ctx: Context) => boolean, childFirst: boolean = false): Context | null {
+    public find<TMathObject extends MathObject>(type: typeof MathObject, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
         let found = false;
         let foundChild: Context|null = null;
         const rootContext = new Context(this, new Position(0, 0));
@@ -116,7 +116,7 @@ export abstract class MathObject {
         return null;
     }
 
-    private findInternal<TMathObject extends MathObject>(type: typeof MathObject, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => boolean, childFirst: boolean = false): Context | null {
+    private findInternal<TMathObject extends MathObject>(type: typeof MathObject, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
         let found = false;
         let foundChild: Context|null = null;
         const context = new Context(this, new Position(parentCtx.position.level + 1, index), parentCtx);

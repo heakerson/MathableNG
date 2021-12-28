@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Context } from 'src/models/search/context.model';
 import { Operators, Sign } from 'src/models/math-object/enums.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
 import { Function } from 'src/models/math-object/factor/functions/function.model';
@@ -21,20 +22,23 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const expression = new Expression('(a-1*(x+(b-1*b))+c*(3.5+f^(x+-1+E)))');
+    const expression = new Expression('(a-1*(x+(b-1*(b)))+c*(3.5+7+f^(x+-1+E)))');
     console.log('EXPRESSION', expression);
 
-    // expression.traverse<Double>(Double, (v, ctx) => {
-    //   console.log('=== DOUBLE: ', v.value);
-    //   console.log(v);
-    //   console.log(ctx);
+    // expression.traverse<Expression>(Expression, (mo, ctx) => {
+    //   console.log(mo.toString());
+    //   // console.log(ctx);
     // }, true);
 
-    const double = expression.find<Double>(Double, (v, ctx) => {
-      return v.value < 0;
-    }, true);
+    // const double = expression.find<Expression>(Expression, (v, ctx) => {
+    //   return true;
+    // }, true);
 
-    console.log('FOUND!!!!', double?.position);
+    const double = expression.find(Integer, (mo: Integer, ctx: Context) => {
+      return mo.value > 0;
+    });
+
+    console.log('FOUND!!!!', double?.target.toString());
 
     // const thing = new Variable('-');
     // const thing = Term.fromFactors(...[]);
