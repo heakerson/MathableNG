@@ -1,6 +1,8 @@
 import { StringFormatter } from "../services/string-formatter.service";
 import * as uuid from 'uuid';
 import { Type } from "@angular/core";
+import { Context } from "../context/context.model";
+import { Position } from "../context/position.model";
 
 export abstract class MathObject {
     public readonly id: any;
@@ -27,14 +29,48 @@ export abstract class MathObject {
         return this.formattedInput;
     }
 
-    public travsere<TMathObject extends MathObject>(type: Type<TMathObject>, fn: (mo: TMathObject) => void): void {
-        if (this instanceof type) {
-            fn(this as any);
-        }
+    public traverse<TMathObject extends MathObject>(type: Type<TMathObject>, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
+        const rootContext = new Context(this, new Position(0, 0));
 
-        this.children.forEach(c => {
-            c.travsere(type, fn);
-        });
+        if (childFirst) {
+            this.children.forEach((c, i) => {
+                c.traverseInternal(type, rootContext, i, fn, childFirst);
+            });
+
+            if (this instanceof type) {
+                fn(this as any, rootContext);
+            }
+        } else {
+            if (this instanceof type) {
+                fn(this as any, rootContext);
+            }
+    
+            this.children.forEach((c, i) => {
+                c.traverseInternal(type, rootContext, i, fn, childFirst);
+            });
+        }
+    }
+
+    private traverseInternal<TMathObject extends MathObject>(type: Type<TMathObject>, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
+        const context = new Context(this, new Position(parentCtx.position.level + 1, index), parentCtx);
+
+        if (childFirst) {
+            this.children.forEach((c, i) => {
+                c.traverseInternal(type, context, i, fn, childFirst);
+            });
+
+            if (this instanceof type) {
+                fn(this as any, context);
+            }
+        } else {
+            if (this instanceof type) {
+                fn(this as any, context);
+            }
+    
+            this.children.forEach((c, i) => {
+                c.traverseInternal(type, context, i, fn, childFirst);
+            });
+        }
     }
 
     public find<TMathObject extends MathObject>(type: Type<TMathObject>, fn: (mo: TMathObject) => boolean): TMathObject {
