@@ -1,36 +1,13 @@
 LEFT OFF:
-- add function tests
+- write the following functions and add context objects to them
+    - traverse
+    - traverseChildFirst
+    - find
+    - findChildFirst
+- Test the four traverse/find functions
+- Go through all the objects and start adding any other method tests needed
 - add a test to make sure children are the correct type?
-- for travers, use a const type to return the types? Like UserGroup?? OR A CLASS WITH STATIC READONLY TYPES?
-- I should automatically call the parent classes test functions inside of the child class function rather than having to write
-    the builder functions a million times. They can all use the same builder
-- Update all the copy functions with the tostring?
-- ToString()
-    - create a protected static class called formatToStringFromChildren
-    - this will be used by
-        - tostring
-        - fromChildren static functions
-- Write and test the formatting functions for child classes
-- Finish and test: WRITE TESTS ASSUMING THEY ARE PROPERLY FORMATTED AND WRITE NOTES ACCORDINGLY IN THE TESTS
-    - parseRationalExpressions
-    - parsePowerFactor
-- Add the rest of the string formatter error checkers to checkFormattingErrors
-- TEST checkFormattingErrors
-- Add Optional Parents to constructors
-    - THINK ABOUT THIS AND HOW I WANT UPDATING OBJECTS TO WORK!
-        - probably return an ENTIRELY clone object but a pointer to the object in the same position
-            - will need a way to get an object based on positioning
-
-- How should I handle the following types of situations? They require editing the input slightly. I think I should do options 2 and store the
-    original strings and the formatted strings AND FIX THE FAILING UNIT TEST
-    - a+-b
-        - Option 1 => a-b
-        - Option 2 => a+(-b)
-    - a--b
-        - Option 1 => a+b
-        - Option 2 => a--b
-- Add sign enum to factor
-- Add sign getter to term
+- for traverse, use a const type to return the types? Like UserGroup?? OR A CLASS WITH STATIC READONLY TYPES?
 
 
 GENERAL RULES:

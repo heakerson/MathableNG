@@ -6,7 +6,6 @@ import { Factor } from "../factor.model";
 export abstract class Function extends Factor {
     public readonly functionString: string;
     protected readonly fnSign: Sign;
-    public parameters: string[];
 
     public override get sign(): Sign {
         return this.fnSign;
@@ -16,7 +15,6 @@ export abstract class Function extends Factor {
         super(rawParametersString);
         this.fnSign = sign;
         this.functionString = this.setFnString(fnString);
-        this.parameters = this.formattedInput.split(',');
     }
 
     public override toString(): string {
