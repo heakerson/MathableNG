@@ -6,15 +6,17 @@ import { Factor } from "../factor.model";
 export abstract class Function extends Factor {
     public readonly functionString: string;
     protected readonly fnSign: Sign;
+    public parameters: string[];
 
     public override get sign(): Sign {
         return this.fnSign;
     }
 
-    constructor(parameters: string, sign: Sign, fnString: string) {
-        super(parameters);
+    constructor(rawParametersString: string, sign: Sign, fnString: string) {
+        super(rawParametersString);
         this.fnSign = sign;
         this.functionString = this.setFnString(fnString);
+        this.parameters = this.formattedInput.split(',');
     }
 
     public override toString(): string {
@@ -32,6 +34,7 @@ export abstract class Function extends Factor {
     }
 
     protected override checkCustomFormattingErrors(): void {
-        ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
+        const params = this.inputWhitespaceRemoved.split(',');
+        params.forEach(p => ErrorHandler.checkBaseChildErrors(p, this.constructor.name, `[${params}] => ${p}`));
     }
 }

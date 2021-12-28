@@ -13,7 +13,7 @@ export class Log extends Function {
         return this.getChild<Factor>(1);
     }
 
-    constructor(contentsStr: string, sign: Sign, logBase: string = '10') {
+    constructor(contentsStr: string, sign: Sign = Sign.Positive, logBase: string = '10') {
         super([contentsStr, logBase].join(','), sign, 'log');
     }
 

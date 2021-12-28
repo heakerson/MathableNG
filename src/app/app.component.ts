@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Operators, Sign } from 'src/models/math-object/enums.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
+import { Log } from 'src/models/math-object/factor/functions/log/log.model';
 import { Sin } from 'src/models/math-object/factor/functions/trig/sin.model';
 import { Double } from 'src/models/math-object/factor/number/double.model';
 import { Integer } from 'src/models/math-object/factor/number/integer.model';
@@ -26,7 +27,8 @@ export class AppComponent implements OnInit {
     // const thing = Expression.fromTerms([new Term('a'), new Term('b')], [{ termIndex: 1, addtionalOperator: Operators.Addition }])
     // const thing = new Double('x');
     // const thing = new Integer('2.3');
-    const thing = new Sin('x++b', Sign.Positive);
+    // const thing = new Sin('x++b', Sign.Positive);
+    const thing = new Log('x-b', Sign.Positive, 'y++t');
     console.log(thing);
     // const type = Term;
     // console.log('traverse for', type);
