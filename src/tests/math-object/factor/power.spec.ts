@@ -1,10 +1,13 @@
 import { Sign } from "src/models/math-object/enums.model";
+import { Expression } from "src/models/math-object/factor/expression.model";
+import { Ln } from "src/models/math-object/factor/functions/log/ln.model";
+import { PI } from "src/models/math-object/factor/number/contant/pi.model";
 import { Power } from "src/models/math-object/factor/power.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest } from "./factor.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "../math-object.spec";
+import { factorConstructorTests, FactorConstTest, FactorTraverseTest } from "./factor.spec";
 
 export function powerConstructorTests<TPower extends Power, TTest extends FactorConstTest>(
     additionalLabel: string,
@@ -92,8 +95,33 @@ describe('Power', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: FactorTraverseTest) => new Power(test.input);
+            const staticBuilder = (test: FactorTraverseTest) => {
+                const parsed = StringFormatter.parsePowerFactor(test.input);
+                return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
+            };
 
+            const tests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '-a^b', type: Power, count: 1, firstChild: '-a^b', lastChild: '-a^b'}), // search type is root
+                new FactorTraverseTest({ input: '-a^(b^(c+(x^y)))', type: Power, count: 3, firstChild: '-a^(b^(c+(x^y)))', lastChild: 'x^y'}), // search type is root
+                new FactorTraverseTest({ input: '-(x^(a-b))^(y)', type: Expression, count: 3, firstChild: '-(x^(a-b))', lastChild: '(y)'}),
+                new FactorTraverseTest({ input: '-PI^(b+x+PI)', type: PI, count: 2, firstChild: '-PI', lastChild: 'PI'}),
+                new FactorTraverseTest({ input: '-ln[PI]^(b+x+ln[PI])', type: Ln, count: 2, firstChild: '-ln[PI]', lastChild: 'ln[PI]'}),
+            ];
+
+            const childFirstTests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '-a^b', type: Power, count: 1, firstChild: '-a^b', lastChild: '-a^b'}), // search type is root
+                new FactorTraverseTest({ input: '-a^(b^(c+(x^y)))', type: Power, count: 3, firstChild: 'x^y', lastChild: '-a^(b^(c+(x^y)))'}), // search type is root
+                new FactorTraverseTest({ input: '-(x^(a-b))^(y)', type: Expression, count: 3, firstChild: '(a-b)', lastChild: '(y)'}),
+                new FactorTraverseTest({ input: '-PI^(b+x+PI)', type: PI, count: 2, firstChild: '-PI', lastChild: 'PI'}),
+                new FactorTraverseTest({ input: '-ln[PI]^(b+x+ln[PI])', type: Ln, count: 2, firstChild: '-ln[PI]', lastChild: 'ln[PI]'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });
