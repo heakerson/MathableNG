@@ -1,8 +1,11 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Csc } from "src/models/math-object/factor/functions/trig/csc.model";
+import { Double } from "src/models/math-object/factor/number/double.model";
+import { Integer } from "src/models/math-object/factor/number/integer.model";
+import { Rational } from "src/models/math-object/factor/rational.model";
 import { Factory } from "src/models/services/factory.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests } from "../../factor.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
+import { factorConstructorTests, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -50,8 +53,33 @@ describe('Csc', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: FactorTraverseTest) => new Csc(test.input, test.sign);
+            const staticBuilder = (test: FactorTraverseTest) => {
+                const contents = Factory.buildFactor(test.input);
+                return Csc.fromFactor(contents, test.sign);
+            };
 
+            const tests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '(-a*b)', type: Csc, count: 1, firstChild: 'csc[(-a*b)]', lastChild: 'csc[(-a*b)]'}), // search type is root
+                new FactorTraverseTest({ input: '(a*csc[(csc[(x)]+y)]*b*csc[(z-t)])', type: Csc, count: 4, firstChild: '-csc[(a*csc[(csc[(x)]+y)]*b*csc[(z-t)])]', lastChild: 'csc[(z-t)]', sign: Sign.Negative}), // search type is root
+                new FactorTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 2, firstChild: '3.7', lastChild: '-0.6'}),
+                new FactorTraverseTest({ input: 'a*b^1*b^0^y^5', type: Integer, count: 3, firstChild: '1', lastChild: '5'}),
+                new FactorTraverseTest({ input: 'a/b/c', type: Rational, count: 2, firstChild: '(a/(b/c))', lastChild: '(b/c)'}),
+            ];
+
+            const childFirstTests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '(-a*b)', type: Csc, count: 1, firstChild: 'csc[(-a*b)]', lastChild: 'csc[(-a*b)]'}), // search type is root
+                new FactorTraverseTest({ input: '(a*csc[(csc[(x)]+y)]*b*csc[(z-t)])', type: Csc, count: 4, firstChild: 'csc[(x)]', lastChild: '-csc[(a*csc[(csc[(x)]+y)]*b*csc[(z-t)])]', sign: Sign.Negative}), // search type is root
+                new FactorTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 2, firstChild: '3.7', lastChild: '-0.6'}),
+                new FactorTraverseTest({ input: 'a*b^1*b^0^y^5', type: Integer, count: 3, firstChild: '1', lastChild: '5'}),
+                new FactorTraverseTest({ input: 'a/b/c', type: Rational, count: 2, firstChild: '(b/c)', lastChild: '(a/(b/c))'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });
