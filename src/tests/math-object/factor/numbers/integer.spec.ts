@@ -39,6 +39,8 @@ describe('Integer', () => {
                 new RealNumberConstrTest({ input: '-10.0', toString: '-10', value: -10, sign: Sign.Negative }),
                 new RealNumberConstrTest({ input: '50', toString: '50', value: 50, sign: Sign.Positive }),
                 new RealNumberConstrTest({ input: '123123123123123', toString: '123123123123123', value: 123123123123123, sign: Sign.Positive }),
+                new RealNumberConstrTest({ input: '01', toString: '1', value: 1, sign: Sign.Positive }),
+                new RealNumberConstrTest({ input: '-01', toString: '-1', value: -1, sign: Sign.Negative }),
             ];
     
             mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
