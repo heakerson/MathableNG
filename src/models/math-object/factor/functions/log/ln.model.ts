@@ -1,4 +1,5 @@
 import { Sign } from "src/models/math-object/enums.model";
+import { MathObject } from "src/models/math-object/math-object.model";
 import { Factor } from "../../factor.model";
 import { E } from "../../number/contant/e.model";
 import { Log } from "./log.model";
@@ -27,5 +28,9 @@ export class Ln extends Log {
 
     protected override setFnString(): string {
         return 'ln';
+    }
+
+    protected override getTraversableChildren(): MathObject[] {
+        return [this.contents];
     }
 }

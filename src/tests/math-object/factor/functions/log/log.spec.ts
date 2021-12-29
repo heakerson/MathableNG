@@ -2,13 +2,22 @@ import { Sign } from "src/models/math-object/enums.model";
 import { Log } from "src/models/math-object/factor/functions/log/log.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests } from "../../factor.spec";
+import { factorConstructorTests, FactorTraverseTest } from "../../factor.spec";
 import { FuncConstrTest, functionConstructorTests } from "../function.spec";
 
 export class LogConstrTest extends FuncConstrTest {
     base?: string = undefined;
 
     constructor(props: Partial<LogConstrTest>) {
+        super(props);
+        Object.assign(this, props);
+    }
+}
+
+export class LogTraverseTest extends FactorTraverseTest {
+    base?: string = undefined;
+
+    constructor(props: Partial<LogTraverseTest>) {
         super(props);
         Object.assign(this, props);
     }

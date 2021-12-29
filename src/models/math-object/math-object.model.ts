@@ -30,9 +30,10 @@ export abstract class MathObject {
 
     public traverse<TMathObject extends MathObject>(type: any, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
         const rootContext = new Context(this, new Position(0, 0));
+        const traversableChildren = this.getTraversableChildren();
 
         if (childFirst) {
-            this.children.forEach((c, i) => {
+            traversableChildren.forEach((c, i) => {
                 c.traverseInternal(type, rootContext, i, fn, childFirst);
             });
 
@@ -44,10 +45,14 @@ export abstract class MathObject {
                 fn(this as any, rootContext);
             }
     
-            this.children.forEach((c, i) => {
+            traversableChildren.forEach((c, i) => {
                 c.traverseInternal(type, rootContext, i, fn, childFirst);
             });
         }
+    }
+
+    protected getTraversableChildren(): MathObject[] {
+        return this.children;
     }
 
     private traverseInternal<TMathObject extends MathObject>(type: any, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
