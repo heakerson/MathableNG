@@ -1,10 +1,12 @@
 import { Operators, Sign } from "src/models/math-object/enums.model";
 import { Expression } from "src/models/math-object/factor/expression.model";
+import { Log } from "src/models/math-object/factor/functions/log/log.model";
+import { Power } from "src/models/math-object/factor/power.model";
 import { Term } from "src/models/math-object/term.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest } from "./factor.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "../math-object.spec";
+import { factorConstructorTests, FactorConstTest, FactorTraverseTest } from "./factor.spec";
 
 export class ExpressionConstTest extends FactorConstTest {
     additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]
@@ -132,8 +134,51 @@ describe('Expression', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: FactorTraverseTest) => new Expression(test.input);
+            const staticBuilder = (test: FactorTraverseTest) => {
+                let termStrings = StringFormatter.parseTermStrings(test.input);
+    
+                const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
+                termStrings = termStrings.map((termString, i) => {
+                    if (termString.length > 2) {
+                        const prefix = termString.substring(0, 2);
+        
+                        if (prefix === '--') {
+                            additionalOps.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
+                            return termString.substring(1);
+                        } else if (prefix === '+-') {
+                            additionalOps.push({ termIndex: i, addtionalOperator: Operators.Addition});
+                            return termString.substring(1);
+                        }
+                    }
+    
+                    return termString;
+                });
+    
+                const terms = termStrings.map(t => new Term(t));
+    
+                return Expression.fromTerms(terms, additionalOps);
+            };
 
+            const tests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '(-a*b)', type: Expression, count: 1, firstChild: '(-a*b)', lastChild: '(-a*b)'}), // search type is root
+                new FactorTraverseTest({ input: '(a*((x)+y)*b*(z-t))', type: Expression, count: 4, firstChild: '(a*((x)+y)*b*(z-t))', lastChild: '(z-t)'}), // search type is root
+                new FactorTraverseTest({ input: '(a*log[x]*b*log[y])', type: Log, count: 2, firstChild: 'log[x,10]', lastChild: 'log[y,10]'}),
+                new FactorTraverseTest({ input: 'a*b^1*b^x^y*5', type: Power, count: 3, firstChild: 'b^1', lastChild: 'x^y'}),
+            ];
+
+            const childFirstTests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: '(-a*b)', type: Expression, count: 1, firstChild: '(-a*b)', lastChild: '(-a*b)'}), // search type is root
+                new FactorTraverseTest({ input: '(a*(-(x)+y)*b*(z-t))', type: Expression, count: 4, firstChild: '-(x)', lastChild: '(a*(-(x)+y)*b*(z-t))'}), // search type is root
+                new FactorTraverseTest({ input: '(a*log[x]*b*log[y])', type: Log, count: 2, firstChild: 'log[x,10]', lastChild: 'log[y,10]'}),
+                new FactorTraverseTest({ input: 'a*b^1*b^x^y*5', type: Power, count: 3, firstChild: 'b^1', lastChild: 'b^(x^y)'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });
