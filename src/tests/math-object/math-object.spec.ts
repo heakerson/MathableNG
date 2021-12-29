@@ -1,4 +1,5 @@
 import { MathObject } from "src/models/math-object/math-object.model";
+import { Context } from "src/models/search/context.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import * as uuid from 'uuid';
 
@@ -76,6 +77,94 @@ export function mathObjectConstructorErrorTests<TMathObject extends MathObject, 
     });
 }
 
+export function mathObjectTraverseTests<TMathObject extends MathObject, TTest extends MathObjectTraverseTest>(
+    additionalLabel: string,
+    tests: TTest[],
+    builder: (test: TTest) => TMathObject,
+    childFirst: boolean = false
+): void {
+
+    describe(`MathObject Traverse Tests => ${additionalLabel}`, () => {
+        tests.forEach((test: TTest) => {
+            it(`'${test.input}' => should execute function correctly`, () => {
+                const root: TMathObject = builder(test);
+                // console.log(test);
+                // console.log('================');
+                // console.log(root);
+                // console.log('toString', mo.toString());
+
+                let count = 0;
+                let firstChild: any;
+                let lastChild: any;
+                let lastContext: Context;
+
+                root.traverse(test.type, (mo, ctx) => {
+                    console.log(ctx);
+                    expect(mo).toBeInstanceOf(test.type);
+                    expect(mo.toString()).toEqual(ctx.target.toString());
+                    expect(ctx.root.toString()).toEqual(root.toString());
+
+                    if (lastContext && !childFirst) {
+                        const levelIncremented = ctx.position.level > lastContext.position.level;
+                        const indexIncremented = ctx.position.index > lastContext.position.index;
+                        expect(levelIncremented || indexIncremented).toBeTrue();
+                    }
+
+                    if (ctx.isRoot) {
+                        expect(mo.toString()).toEqual(root.toString());
+                        expect(ctx.position.level).toEqual(0);
+                        expect(ctx.position.index).toEqual(0);
+                        expect(ctx.target.toString()).toEqual(root.toString());
+                    } else {
+                        const index = ctx.position.index;
+                        const moId = mo.id;
+                        const indexID = (ctx.parentContext as any).target.children[index].id;
+
+                        expect(moId).toEqual(indexID);
+
+                        let level = ctx.position.level;
+                        let target = ctx.target;
+
+                        while (level > 0) {
+                            target = (ctx.parentContext as any).target;
+                            level --;
+                        }
+
+                        if (!childFirst) {
+                            expect(ctx.parentContext).toBeTruthy();
+                            const levelIncremented = ctx.position.level > (ctx.parentContext as any).position.level;
+                            const indexIncremented = ctx.position.level > (ctx.parentContext as any).position.level;
+                            expect(levelIncremented || indexIncremented).toBeTrue();
+                        }
+                    }
+
+                    count++;
+                    if (!firstChild) {
+                        firstChild = mo;
+                    }
+
+                    lastChild = mo;
+                    lastContext = ctx;
+                }, childFirst);
+
+                expect(count).toEqual(test.count);
+
+                if (test.firstChild) {
+                    expect((firstChild as MathObject).toString()).toEqual(test.firstChild);
+                } else {
+                    expect(firstChild).toBeFalsy()
+                }
+
+                if (test.lastChild) {
+                    expect((lastChild as MathObject).toString()).toEqual(test.lastChild);
+                } else {
+                    expect(lastChild).toBeFalsy()
+                }
+            });
+        });
+    });
+}
+
 export class MathObjectConstTest {
     input: string = '';
     children: string[] = [];
@@ -83,6 +172,18 @@ export class MathObjectConstTest {
     errorCode?: number;
 
     constructor(props: Partial<MathObjectConstTest>) {
+        Object.assign(this, props);
+    }
+}
+
+export class MathObjectTraverseTest {
+    input: string = '';
+    type: any;
+    count: number = -1;
+    firstChild: string = '';
+    lastChild: string = '';
+
+    constructor(props: Partial<MathObjectTraverseTest>) {
         Object.assign(this, props);
     }
 }

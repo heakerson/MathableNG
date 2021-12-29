@@ -22,23 +22,23 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const expression = new Expression('(a-1*(x+(b-1*(b)))+c*(3.5+7+f^(x+-1+E)))');
+    const expression = new Expression('(a-1*(x+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
     console.log('EXPRESSION', expression);
 
-    // expression.traverse<Expression>(Expression, (mo, ctx) => {
-    //   console.log(mo.toString());
-    //   // console.log(ctx);
-    // }, true);
+    expression.traverse<Sin>(Sin, (mo, ctx) => {
+      console.log(mo.toString());
+      // console.log(ctx);
+    }, true);
 
     // const double = expression.find<Expression>(Expression, (v, ctx) => {
     //   return true;
     // }, true);
 
-    const double = expression.find(Integer, (mo: Integer, ctx: Context) => {
-      return mo.value > 0;
-    });
+    // const double = expression.find<Sin>(Sin, (mo: Sin, ctx: Context) => {
+    //   return mo.value > 0;
+    // });
 
-    console.log('FOUND!!!!', double?.target.toString());
+    // console.log('FOUND!!!!', double?.target.toString());
 
     // const thing = new Variable('-');
     // const thing = Term.fromFactors(...[]);

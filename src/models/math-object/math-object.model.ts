@@ -28,7 +28,7 @@ export abstract class MathObject {
         return this.formattedInput;
     }
 
-    public traverse<TMathObject extends MathObject>(type: typeof MathObject, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
+    public traverse<TMathObject extends MathObject>(type: any, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
         const rootContext = new Context(this, new Position(0, 0));
 
         if (childFirst) {
@@ -50,7 +50,7 @@ export abstract class MathObject {
         }
     }
 
-    private traverseInternal<TMathObject extends MathObject>(type: typeof MathObject, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
+    private traverseInternal<TMathObject extends MathObject>(type: any, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
         const context = new Context(this, new Position(parentCtx.position.level + 1, index), parentCtx);
 
         if (childFirst) {

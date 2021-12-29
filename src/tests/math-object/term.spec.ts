@@ -1,8 +1,12 @@
 import { Sign } from "src/models/math-object/enums.model";
+import { Sin } from "src/models/math-object/factor/functions/trig/sin.model";
+import { Double } from "src/models/math-object/factor/number/double.model";
+import { Power } from "src/models/math-object/factor/power.model";
+import { Variable } from "src/models/math-object/factor/variable.model";
 import { Term } from "src/models/math-object/term.model";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest } from "./math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest, MathObjectTraverseTest, mathObjectTraverseTests } from "./math-object.spec";
 
 export class TermConstTest extends MathObjectConstTest {
     sign: Sign = Sign.Positive;
@@ -78,7 +82,34 @@ describe('Term', () => {
     });
 
     describe('Individual Methods', () => {
-        describe('adsf', () => {
+
+        describe('Traverse', () => {
+            const standardBuilder = (test: MathObjectTraverseTest) => new Term(test.input);
+            const staticBuilder = (test: MathObjectTraverseTest) => {
+                const factors = StringFormatter.parseFactorStrings(test.input).map(f => Factory.buildFactor(f));
+                return Term.fromFactors(...factors)
+            };
+
+            const tests: MathObjectTraverseTest[] = [
+                new MathObjectTraverseTest({ input: '-a*b', type: Term, count: 1, firstChild: '-a*b', lastChild: '-a*b'}), // search type is root
+                new MathObjectTraverseTest({ input: 'a*1*b*5', type: Double, count: 2, firstChild: '1', lastChild: '5'}),
+                new MathObjectTraverseTest({ input: 'a*b^1*b^x^y*5', type: Power, count: 3, firstChild: 'b^1', lastChild: 'x^y'}),
+                new MathObjectTraverseTest({ input: 'sin[sin[x]]', type: Sin, count: 2, firstChild: 'sin[sin[x]]', lastChild: 'sin[x]'}),
+                new MathObjectTraverseTest({ input: 'sin[sin[x]]', type: Variable, count: 1, firstChild: 'x', lastChild: 'x'}),
+            ];
+
+            const childFirstTests: MathObjectTraverseTest[] = [
+                new MathObjectTraverseTest({ input: '-a*b', type: Term, count: 1, firstChild: '-a*b', lastChild: '-a*b'}), // search type is root
+                new MathObjectTraverseTest({ input: 'a*1*b*5', type: Double, count: 2, firstChild: '1', lastChild: '5'}),
+                new MathObjectTraverseTest({ input: 'a*b^1*b^x^y*5', type: Power, count: 3, firstChild: 'b^1', lastChild: 'b^(x^y)'}),
+                new MathObjectTraverseTest({ input: 'sin[sin[x]]', type: Sin, count: 2, firstChild: 'sin[x]', lastChild: 'sin[sin[x]]'}),
+                new MathObjectTraverseTest({ input: 'sin[sin[x]]', type: Variable, count: 1, firstChild: 'x', lastChild: 'x'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });
