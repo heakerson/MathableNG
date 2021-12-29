@@ -1,8 +1,8 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
-import { mathObjectConstructorErrorTests, mathObjectConstructorTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest } from "./factor.spec";
+import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "../math-object.spec";
+import { factorConstructorTests, FactorConstTest, FactorTraverseTest } from "./factor.spec";
 
 export class VariableConstTest extends FactorConstTest {
     name: string = '';
@@ -75,8 +75,23 @@ describe('Variable', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: FactorTraverseTest) => new Variable(test.input);
 
+            const tests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: 'a', type: Variable, count: 1, firstChild: 'a', lastChild: 'a'}),
+                new FactorTraverseTest({ input: '-a', type: Variable, count: 1, firstChild: '-a', lastChild: '-a'}),
+                new FactorTraverseTest({ input: '-bob', type: Variable, count: 1, firstChild: '-bob', lastChild: '-bob'}),
+            ];
+
+            const childFirstTests: FactorTraverseTest[] = [
+                new FactorTraverseTest({ input: 'a', type: Variable, count: 1, firstChild: 'a', lastChild: 'a'}),
+                new FactorTraverseTest({ input: '-a', type: Variable, count: 1, firstChild: '-a', lastChild: '-a'}),
+                new FactorTraverseTest({ input: '-bob', type: Variable, count: 1, firstChild: '-bob', lastChild: '-bob'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
         });
     });
 });

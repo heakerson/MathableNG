@@ -104,12 +104,6 @@ export function mathObjectTraverseTests<TMathObject extends MathObject, TTest ex
                     expect(mo.toString()).toEqual(ctx.target.toString());
                     expect(ctx.root.toString()).toEqual(root.toString());
 
-                    if (lastContext && !childFirst) {
-                        const levelIncremented = ctx.position.level > lastContext.position.level;
-                        const indexIncremented = ctx.position.index > lastContext.position.index;
-                        expect(levelIncremented || indexIncremented).toBeTrue();
-                    }
-
                     if (ctx.isRoot) {
                         expect(mo.toString()).toEqual(root.toString());
                         expect(ctx.position.level).toEqual(0);
