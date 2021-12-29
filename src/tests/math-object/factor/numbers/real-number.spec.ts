@@ -1,10 +1,19 @@
 import { RealNumber } from "src/models/math-object/factor/number/real-number.model";
-import { FactorConstTest } from "../factor.spec";
+import { FactorConstTest, FactorTraverseTest } from "../factor.spec";
 
 export class RealNumberConstrTest extends FactorConstTest {
     value: number = NaN;
 
     constructor(props: Partial<RealNumberConstrTest>) {
+        super(props);
+        Object.assign(this, props);
+    }
+}
+
+export class RealNumberTraverseTest extends FactorTraverseTest {
+    value: number = NaN;
+
+    constructor(props: Partial<RealNumberTraverseTest>) {
         super(props);
         Object.assign(this, props);
     }

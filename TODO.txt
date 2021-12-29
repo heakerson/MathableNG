@@ -9,6 +9,7 @@ LEFT OFF:
 - Go through all the objects and start adding any other method tests needed
 - add a test to make sure children are the correct type?
 - for traverse, use a const type to return the types? Like UserGroup?? OR A CLASS WITH STATIC READONLY TYPES?
+- Do I want doubles to remove the leading 0 in cases like '0.5'?
 
 
 GENERAL RULES:

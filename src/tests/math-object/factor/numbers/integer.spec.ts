@@ -1,9 +1,9 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
-import { mathObjectConstructorErrorTests, mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests } from "../factor.spec";
-import { RealNumberConstrTest, realNumberConstructorTests } from "./real-number.spec";
+import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
+import { factorConstructorTests, FactorTraverseTest } from "../factor.spec";
+import { RealNumberConstrTest, realNumberConstructorTests, RealNumberTraverseTest } from "./real-number.spec";
 
 
 export function integerConstructorTests<TInteger extends Integer, TTest extends RealNumberConstrTest>(
@@ -74,8 +74,26 @@ describe('Integer', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: RealNumberTraverseTest) => new Integer(test.input);
+            const staticBuilder = (test: RealNumberTraverseTest) => Integer.fromNumber(test.value);
 
+            const tests: RealNumberTraverseTest[] = [
+                new RealNumberTraverseTest({ input: '0', type: Integer, count: 1, firstChild: '0', lastChild: '0', value: 0}),
+                new RealNumberTraverseTest({ input: '-3', type: Integer, count: 1, firstChild: '-3', lastChild: '-3', value: -3}),
+                new RealNumberTraverseTest({ input: '-1000220', type: Integer, count: 1, firstChild: '-1000220', lastChild: '-1000220', value: -1000220}),
+            ];
+
+            const childFirstTests: RealNumberTraverseTest[] = [
+                new RealNumberTraverseTest({ input: '0', type: Integer, count: 1, firstChild: '0', lastChild: '0', value: 0}),
+                new RealNumberTraverseTest({ input: '-3', type: Integer, count: 1, firstChild: '-3', lastChild: '-3', value: -3}),
+                new RealNumberTraverseTest({ input: '-1000220', type: Integer, count: 1, firstChild: '-1000220', lastChild: '-1000220', value: -1000220}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });
