@@ -99,6 +99,7 @@ export function mathObjectTraverseTests<TMathObject extends MathObject, TTest ex
                 let lastContext: Context;
 
                 root.traverse(test.type, (mo, ctx) => {
+                    // console.log('CONTEXT', ctx);
                     expect(mo).toBeInstanceOf(test.type);
                     expect(mo.toString()).toEqual(ctx.target.toString());
                     expect(ctx.root.toString()).toEqual(root.toString());

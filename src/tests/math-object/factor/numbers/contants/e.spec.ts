@@ -1,8 +1,8 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { E } from "src/models/math-object/factor/number/contant/e.model";
-import { mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
+import { mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests } from "../../factor.spec";
-import { realNumberConstructorTests } from "../real-number.spec";
+import { realNumberConstructorTests, RealNumberTraverseTest } from "../real-number.spec";
 import { ConstantConstrTest, constantConstructorTests } from "./constant.spec";
 
 describe('E', () => {
@@ -26,8 +26,21 @@ describe('E', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: RealNumberTraverseTest) => new E(test.sign);
 
+            const tests: RealNumberTraverseTest[] = [
+                new RealNumberTraverseTest({ input: 'E', type: E, count: 1, firstChild: 'E', lastChild: 'E'}),
+                new RealNumberTraverseTest({ input: '-E', type: E, count: 1, firstChild: '-E', lastChild: '-E', sign: Sign.Negative}),
+            ];
+
+            const childFirstTests: RealNumberTraverseTest[] = [
+                new RealNumberTraverseTest({ input: 'E', type: E, count: 1, firstChild: 'E', lastChild: 'E'}),
+                new RealNumberTraverseTest({ input: '-E', type: E, count: 1, firstChild: '-E', lastChild: '-E', sign: Sign.Negative}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
         });
     });
 });
