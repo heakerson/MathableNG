@@ -77,15 +77,15 @@ export abstract class MathObject {
         }
     }
 
-    public find<TMathObject extends MathObject>(type: typeof MathObject, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
+    public find<TMathObject extends MathObject>(type: typeof MathObject, predicateFn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
         let foundContext = null;
         let continueSearch = true;
 
         this.traverse<TMathObject>(type, (mo, ctx) => {
             if (continueSearch) {
-                const response = fn(mo, ctx);
+                const success = predicateFn(mo, ctx);
 
-                if (response) {
+                if (success) {
                     foundContext = ctx;
                     continueSearch = false;
                 }
@@ -93,50 +93,6 @@ export abstract class MathObject {
         }, childFirst);
 
         return foundContext;
-    }
-
-    private findInternal<TMathObject extends MathObject>(type: typeof MathObject, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
-        let found = false;
-        let foundChild: Context|null = null;
-        const context = new Context(this, new Position(parentCtx.position.level + 1, index), parentCtx);
-
-        if (childFirst) {
-            this.children.forEach((c,i) => {
-                if (!foundChild) {
-                    foundChild = c.findInternal<TMathObject>(type, context, i, fn, childFirst);
-                }
-            });
-    
-            if (foundChild) {
-                return foundChild;
-            }
-
-            if (this instanceof type) {
-                found = fn(this as any, parentCtx);
-    
-                if (found) {
-                    return context;
-                }
-            }
-        } else {
-            if (this instanceof type) {
-                found = fn(this as any, parentCtx);
-    
-                if (found) {
-                    return context;
-                }
-            }
-            
-            this.children.forEach((c,i) => {
-                if (!foundChild) {
-                    foundChild = c.findInternal<TMathObject>(type, context, i, fn, childFirst);
-                }
-            });
-    
-            return foundChild;
-        }
-
-        return null;
     }
 
     protected getChild<TChild extends MathObject>(childIndex: number): TChild {
