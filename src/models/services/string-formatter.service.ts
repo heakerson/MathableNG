@@ -227,7 +227,7 @@ export class StringFormatter {
         }
 
         return factors;
-    } 
+    }
 
     public static getMatchingParenthesisIndex(input: string, parenthIndex: number): number {
         const startParenth = input[parenthIndex];
@@ -334,28 +334,85 @@ export class StringFormatter {
         return input;
     }
 
-    public static getFunctionContents(functionFactor: string): string[] {
-        if (functionFactor[0] === '-') {
-            functionFactor = functionFactor.substring(1);
+    public static getFunctionContents(functionFactor: string, contentsOnly = false): string[] {
+        let content = '';
+        let parenthCount = 0;
+        let bracketCount = 0;
+        let lastFactorBreakIndex = -1;
+        const parameters: string[] = [];
+
+        if (!contentsOnly) {
+            if (functionFactor[0] === '-') {
+                functionFactor = functionFactor.substring(1);
+            }
+    
+            const fnString = this.getFnString(functionFactor);
+            functionFactor = functionFactor.substring(fnString.length);
+    
+            if (functionFactor[0] === '[') {
+                const matchingIndex = this.getMatchingBracketIndex(functionFactor, 0);
+                if (matchingIndex === functionFactor.length - 1) {
+                    content = functionFactor.substring(1, functionFactor.length - 1);
+                }
+            } else if (functionFactor[0] === '-' && functionFactor[1] === '[') {
+                const matchingIndex = this.getMatchingBracketIndex(functionFactor, 1);
+                if (matchingIndex === functionFactor.length - 1) {
+                    content = functionFactor.substring(2, functionFactor.length - 1);
+                }
+            }
+        } else {
+            content = functionFactor;
         }
 
-        const fnString = this.getFnString(functionFactor);
-        functionFactor = functionFactor.substring(fnString.length);
+        [...content].forEach((c, i) => {
+            switch(c) {
+                case '(':
+                    parenthCount++;
+                    if (i === content.length - 1) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+                case ')':
+                    parenthCount--;
+                    if (i === content.length - 1) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+                case '[':
+                    bracketCount++;
+                    if (i === content.length - 1) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+                case ']':
+                    bracketCount--;
+                    if (i === content.length - 1) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+                case ',':
+                    if (parenthCount === 0 && bracketCount === 0) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1, i));
+                        lastFactorBreakIndex = i;
+                    }
+                    break;
+                default:
+                    if (i === content.length - 1) {
+                        parameters.push(content.substring(lastFactorBreakIndex+1));
+                    }
+                    break;
+            }
+        });
 
-        if (functionFactor[0] === '[') {
-            const matchingIndex = this.getMatchingBracketIndex(functionFactor, 0);
-            if (matchingIndex === functionFactor.length - 1) {
-                const content = functionFactor.substring(1, functionFactor.length - 1);
-                return content.split(',');
-            }
-        } else if (functionFactor[0] === '-' && functionFactor[1] === '[') {
-            const matchingIndex = this.getMatchingBracketIndex(functionFactor, 1);
-            if (matchingIndex === functionFactor.length - 1) {
-                const content = functionFactor.substring(2, functionFactor.length - 1);
-                return content.split(',');
-            }
+        if (content.endsWith(',')) {
+            parameters.push('');
         }
-        return [];
+
+        if (!parameters.length) {
+            parameters.push(content);
+        }
+
+        return parameters;
     }
 
     public static removeEmptySpace(input: string): string {

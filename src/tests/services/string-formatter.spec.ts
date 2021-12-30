@@ -369,13 +369,24 @@ describe('StringFormatter', () => {
             { input: 'sin[(x)]', expectedResult: ['(x)']},
             { input: '-ln[x]', expectedResult: ['x']},
             { input: '-log[x,3]', expectedResult: ['x', '3']},
+            { input: '-log[-(x),3]', expectedResult: ['-(x)', '3']},
             { input: '-log[log[a],3]', expectedResult: ['log[a]', '3']},
+            { input: '-log[log[a,x],3]', expectedResult: ['log[a,x]', '3']},
+            { input: '-log[log[a^b,2]+log[a+log[x,a+b],x],3]', expectedResult: ['log[a^b,2]+log[a+log[x,a+b],x]', '3']},
             { input: '-log[log[sin[b]],3]', expectedResult: ['log[sin[b]]', '3']},
+            { input: 'log[3,]', expectedResult: ['3', '']},
+            { input: 'log[3,,]', expectedResult: ['3', '', '']},
+            { input: 'log[,3]', expectedResult: ['', '3']},
+            { input: 'log[,]', expectedResult: ['', '']},
+            { input: 'log[,3,]', expectedResult: ['', '3', '']},
+            { input: 'log[,,3]', expectedResult: ['', '', '3']},
+            { input: 'log[,,]', expectedResult: ['', '', '']},
         ];
 
         inputs.forEach((test) => {
             it(`Should remove () appropriately: '${test.input}' => '${test.expectedResult}'`, () => {
                 const result = StringFormatter.getFunctionContents(test.input);
+                // console.log('RESULT', result);
                 expect(result).toEqual(test.expectedResult);
             });
         });
