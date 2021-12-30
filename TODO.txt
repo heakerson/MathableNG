@@ -1,5 +1,7 @@
 LEFT OFF:
 - finish some tests for traverse - anything with a child?
+- Create tests for new EMPTY_PARAMETER function errors - probably only makes sense for log?
+    - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters
 - write find in terms of traverse - then don't worry about testing it
 - write the following functions and add context objects to them
     - traverse

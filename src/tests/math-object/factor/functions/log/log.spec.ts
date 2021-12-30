@@ -1,7 +1,10 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Log } from "src/models/math-object/factor/functions/log/log.model";
+import { Double } from "src/models/math-object/factor/number/double.model";
+import { Integer } from "src/models/math-object/factor/number/integer.model";
+import { Rational } from "src/models/math-object/factor/rational.model";
 import { Factory } from "src/models/services/factory.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests } from "src/tests/math-object/math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests, FactorTraverseTest } from "../../factor.spec";
 import { FuncConstrTest, functionConstructorTests } from "../function.spec";
 
@@ -60,6 +63,7 @@ describe('Log', () => {
                 new LogConstrTest({ input: '(-a+ c) ', base: 'a+b', children: ['(-a+c)', '(a+b)'], fnString: 'log', toString: '-log[(-a+c),(a+b)]', sign: Sign.Negative }),
                 new LogConstrTest({ input: 'a/b', base: 'E', children: ['(a/b)', 'E'], fnString: 'log', toString: 'log[(a/b),E]', sign: Sign.Positive }),
                 new LogConstrTest({ input: 'sin[x+t/-v]', children: ['sin[(x+(t/-v))]', '10'], fnString: 'log', toString: '-log[sin[(x+(t/-v))],10]', sign: Sign.Negative }),
+                new LogConstrTest({ input: 'log[x,10]', children: ['log[x,10]', '10'], fnString: 'log', toString: 'log[log[x,10],10]'})
             ];
     
             mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
@@ -85,8 +89,38 @@ describe('Log', () => {
 
     describe('Individual Methods', () => {
 
-        describe('', () => {
+        describe('Traverse', () => {
+            const standardBuilder = (test: LogTraverseTest) => new Log(test.input, test.sign, test.base);
+            const staticBuilder = (test: LogTraverseTest) => {
+                const contents = Factory.buildFactor(test.input);
+                const base: any = test.base ? Factory.buildFactor(test.base) : undefined;
+                return Log.fromFactors(contents, test.sign, base);
+            };
 
+            const tests: LogTraverseTest[] = [
+                new LogTraverseTest({ input: '(-a*b)', type: Log, count: 1, firstChild: '-log[(-a*b),x]', lastChild: '-log[(-a*b),x]', base: 'x', sign: Sign.Negative}), // search type is root
+                new LogTraverseTest({ input: '(-a*b)', type: Log, count: 1, firstChild: 'log[(-a*b),10]', lastChild: 'log[(-a*b),10]'}), // search type is root
+                new LogTraverseTest({ input: '(a*log[(log[(x),10]+y),10]*b*log[(z-t),10])', type: Log, count: 4, firstChild: '-log[(a*log[(log[(x),10]+y),10]*b*log[(z-t),10]),10]', lastChild: 'log[(z-t),10]', sign: Sign.Negative}), // search type is root
+                new LogTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 2, firstChild: '3.7', lastChild: '-0.6', base: 'x'}),
+                new LogTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 3, firstChild: '3.7', lastChild: '10'}),
+                new LogTraverseTest({ input: 'a*b^1*b^0^y^5', type: Integer, count: 3, firstChild: '1', lastChild: '5', base: 'y'}),
+                new LogTraverseTest({ input: 'a/b/c', type: Rational, count: 2, firstChild: '(a/(b/c))', lastChild: '(b/c)'}),
+            ];
+
+            const childFirstTests: LogTraverseTest[] = [
+                new LogTraverseTest({ input: '(-a*b)', type: Log, count: 1, firstChild: '-log[(-a*b),x]', lastChild: '-log[(-a*b),x]', base: 'x', sign: Sign.Negative}), // search type is root
+                new LogTraverseTest({ input: '(-a*b)', type: Log, count: 1, firstChild: 'log[(-a*b),10]', lastChild: 'log[(-a*b),10]'}), // search type is root
+                new LogTraverseTest({ input: '(a*log[(log[(x),10]+y),10]*b*log[(z-t),10])', type: Log, count: 4, firstChild: 'log[(x),10]', lastChild: '-log[(a*log[(log[(x),10]+y),10]*b*log[(z-t),10]),10]', sign: Sign.Negative}), // search type is root
+                new LogTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 2, firstChild: '3.7', lastChild: '-0.6', base: 'x'}),
+                new LogTraverseTest({ input: '(a*3.7*b*-.6)', type: Double, count: 3, firstChild: '3.7', lastChild: '10'}),
+                new LogTraverseTest({ input: 'a*b^1*b^0^y^5', type: Integer, count: 3, firstChild: '1', lastChild: '5', base: 'y'}),
+                new LogTraverseTest({ input: 'a/b/c', type: Rational, count: 2, firstChild: '(b/c)', lastChild: '(a/(b/c))'}),
+            ];
+
+            mathObjectTraverseTests('Parent First STANDARD', tests, standardBuilder, false);
+            mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
+            mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
+            mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
     });
 });

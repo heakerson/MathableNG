@@ -1,5 +1,6 @@
 import { ErrorHandler } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
+import { StringFormatter } from "src/models/services/string-formatter.service";
 import { Sign } from "../../enums.model";
 import { Factor } from "../factor.model";
 
@@ -23,7 +24,7 @@ export abstract class Function extends Factor {
     }
 
     protected override setChildren(): Factor[] {
-        const parameters = this.formattedInput.split(',');
+        const parameters = StringFormatter.getFunctionContents(this.formattedInput, true);
         return parameters.map(p => Factory.buildFactor(p));
     }
 
@@ -32,7 +33,7 @@ export abstract class Function extends Factor {
     }
 
     protected override checkCustomFormattingErrors(): void {
-        const params = this.inputWhitespaceRemoved.split(',');
+        const params = StringFormatter.getFunctionContents(this.inputWhitespaceRemoved, true);
         params.forEach(p => ErrorHandler.checkBaseChildErrors(p, this.constructor.name, `[${params}] => ${p}`));
     }
 }
