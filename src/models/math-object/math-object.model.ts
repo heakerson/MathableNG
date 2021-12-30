@@ -78,47 +78,21 @@ export abstract class MathObject {
     }
 
     public find<TMathObject extends MathObject>(type: typeof MathObject, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
-        let found = false;
-        let foundChild: Context|null = null;
-        const rootContext = new Context(this, new Position(0, 0));
+        let foundContext = null;
+        let continueSearch = true;
 
-        if (childFirst) {
-            this.children.forEach((c,i) => {
-                if (!foundChild) {
-                    foundChild = c.findInternal<TMathObject>(type, rootContext, i, fn, childFirst);
-                }
-            });
-    
-            if (foundChild) {
-                return foundChild;
-            }
+        this.traverse<TMathObject>(type, (mo, ctx) => {
+            if (continueSearch) {
+                const response = fn(mo, ctx);
 
-            if (this instanceof type) {
-                found = fn(this as any, rootContext);
-    
-                if (found) {
-                    return rootContext;
+                if (response) {
+                    foundContext = ctx;
+                    continueSearch = false;
                 }
             }
-        } else {
-            if (this instanceof type) {
-                found = fn(this as any, rootContext);
-    
-                if (found) {
-                    return rootContext;
-                }
-            }
-            
-            this.children.forEach((c,i) => {
-                if (!foundChild) {
-                    foundChild = c.findInternal<TMathObject>(type, rootContext, i, fn, childFirst);
-                }
-            });
-    
-            return foundChild;
-        }
+        }, childFirst);
 
-        return null;
+        return foundContext;
     }
 
     private findInternal<TMathObject extends MathObject>(type: typeof MathObject, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {

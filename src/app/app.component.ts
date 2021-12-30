@@ -23,16 +23,18 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const expression = new Expression('(a-1*(x+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
-    console.log('EXPRESSION', expression);
+    // console.log('EXPRESSION', expression);
 
-    expression.traverse<Sin>(Sin, (mo, ctx) => {
-      console.log(mo.toString());
-      // console.log(ctx);
+    // expression.traverse<Sin>(Sin, (mo, ctx) => {
+    //   console.log(mo.toString());
+    //   // console.log(ctx);
+    // }, true);
+
+    const found = expression.find<Expression>(Expression, (v, ctx) => {
+      return v.termCount > 1;
     }, true);
 
-    // const double = expression.find<Expression>(Expression, (v, ctx) => {
-    //   return true;
-    // }, true);
+    console.log('FOUND', found?.target.toString());
 
     // const double = expression.find<Sin>(Sin, (mo: Sin, ctx: Context) => {
     //   return mo.value > 0;

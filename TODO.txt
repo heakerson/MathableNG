@@ -1,16 +1,8 @@
 LEFT OFF:
-- finish some tests for traverse - anything with a child?
-- Create tests for new EMPTY_PARAMETER function errors - probably only makes sense for log?
-    - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters
-- write find in terms of traverse - then don't worry about testing it
-- write the following functions and add context objects to them
-    - traverse
-    - traverseChildFirst
-    - find
-    - findChildFirst
 - Go through all the objects and start adding any other method tests needed
-- add a test to make sure children are the correct type?
-- for traverse, use a const type to return the types? Like UserGroup?? OR A CLASS WITH STATIC READONLY TYPES?
+- Create tests for new EMPTY_PARAMETER function errors - USE STASH
+    - Maybe only check for this error in the Factory class since that's the only place it might show up? The rest will be caught through constructor inputs
+    - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters
 - Do I want doubles to remove the leading 0 in cases like '0.5'?
 
 
