@@ -13,6 +13,10 @@ export class Csc extends Trig {
         return Factory.buildFactor(`${sign}csc[${contents}]`) as Csc;
     }
 
+    public replaceChild(newContents: Factor): Csc {
+        return Csc.fromFactor(newContents, this.sign);
+    }
+
     public override copy(): Csc {
         return Factory.buildFactor(`${this.sign}csc[${this.contents}]`) as Csc;
     }

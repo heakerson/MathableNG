@@ -15,6 +15,10 @@ export class Variable extends Factor {
         return new Variable(this.toString());
     }
 
+    public replaceChild(): Variable {
+        return this.copy();
+    }
+
     protected override checkCustomFormattingErrors(): void {
         let removedSign = this.inputWhitespaceRemoved;
 

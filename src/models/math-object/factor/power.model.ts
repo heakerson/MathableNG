@@ -26,6 +26,11 @@ export class Power extends Factor {
         return new Power(`${base.toString()}^${exponent.toString()}`);
     }
 
+    public replaceChild(newFactor: Factor, previousFactor: Factor): Power {
+        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        return Power.fromFactors(newChildren[0], newChildren[1]);
+    }
+
     public override copy(): Power {
         return new Power(this.toString());
     }

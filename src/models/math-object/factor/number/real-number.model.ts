@@ -10,6 +10,10 @@ export abstract class RealNumber extends Factor {
         this.value = value;
     }
 
+    public replaceChild(): RealNumber {
+        return this.copy() as RealNumber;
+    }
+
     public override toString(): string {
         return this.value.toString();
     }

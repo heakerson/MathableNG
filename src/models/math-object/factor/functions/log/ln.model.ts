@@ -14,8 +14,12 @@ export class Ln extends Log {
         super(contentStr, sign, 'E');
     }
 
-    public static override fromFactors(factor: Factor, sign: Sign): Log {
+    public static override fromFactors(factor: Factor, sign: Sign): Ln {
         return new Ln(factor.toString(), sign);
+    }
+
+    public override replaceChild(newMathObject: Factor): Ln {
+        return Ln.fromFactors(newMathObject, this.sign);
     }
 
     public override copy(): Log {

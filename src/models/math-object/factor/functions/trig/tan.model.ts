@@ -13,6 +13,10 @@ export class Tan extends Trig {
         return Factory.buildFactor(`${sign}tan[${contents}]`) as Tan;
     }
 
+    public replaceChild(newContents: Factor): Tan {
+        return Tan.fromFactor(newContents, this.sign);
+    }
+
     public override copy(): Tan {
         return Factory.buildFactor(`${this.sign}tan[${this.contents}]`) as Tan;
     }

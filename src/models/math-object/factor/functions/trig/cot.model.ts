@@ -13,6 +13,10 @@ export class Cot extends Trig {
         return Factory.buildFactor(`${sign}cot[${contents}]`) as Cot;
     }
 
+    public replaceChild(newContents: Factor): Cot {
+        return Cot.fromFactor(newContents, this.sign);
+    }
+
     public override copy(): Cot {
         return Factory.buildFactor(`${this.sign}cot[${this.contents}]`) as Cot;
     }

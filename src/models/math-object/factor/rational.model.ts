@@ -22,6 +22,11 @@ export class Rational extends Factor {
         return new Rational(`${sign}(${numerator.toString()}/${denominator.toString()})`);
     }
 
+    public replaceChild(newFactor: Factor, previousFactor: Factor): Rational {
+        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        return Rational.fromFactors(newChildren[0], newChildren[1], this.sign);
+    }
+
     public override toString(): string {
         return `${this.sign}(${this.numerator.toString()}/${this.denominator.toString()})`;
     }

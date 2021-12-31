@@ -20,6 +20,10 @@ export class Equation extends MathObject {
         super(input);
     }
 
+    public replaceChild(newMathObject: MathObject, previousMathObject: MathObject): MathObject {
+        throw new Error("Method not implemented.");
+    }
+
     public copy(): Equation {
         return new Equation(this.toString());
     }

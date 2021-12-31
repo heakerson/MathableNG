@@ -38,6 +38,11 @@ export class Term extends MathObject {
         return new Term(factorString);
     }
 
+    public replaceChild(newFactor: Factor, previousFactor: Factor): Term {
+        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        return Term.fromFactors(...newChildren);
+    }
+
     public getFactor<TFactor extends Factor>(index: number): TFactor {
         return this.getChild<TFactor>(index);
     }

@@ -8,6 +8,7 @@ export abstract class MathObject {
     public readonly children: MathObject[];
 
     public abstract copy(): MathObject;
+    public abstract replaceChild(newMathObject: MathObject, previousMathObject: MathObject): MathObject;
 
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;

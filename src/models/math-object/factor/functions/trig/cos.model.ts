@@ -13,6 +13,10 @@ export class Cos extends Trig {
         return Factory.buildFactor(`${sign}cos[${contents}]`) as Cos;
     }
 
+    public replaceChild(newContents: Factor): Cos {
+        return Cos.fromFactor(newContents, this.sign);
+    }
+
     public override copy(): Cos {
         return Factory.buildFactor(`${this.sign}cos[${this.contents}]`) as Cos;
     }
