@@ -27,7 +27,7 @@ export class Power extends Factor {
     }
 
     public replaceChild(newFactor: Factor, previousFactor: Factor): Power {
-        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Power.fromFactors(newChildren[0], newChildren[1]);
     }
 

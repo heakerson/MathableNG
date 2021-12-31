@@ -39,7 +39,7 @@ export class Term extends MathObject {
     }
 
     public replaceChild(newFactor: Factor, previousFactor: Factor): Term {
-        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Term.fromFactors(...newChildren);
     }
 

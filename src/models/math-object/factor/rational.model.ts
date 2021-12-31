@@ -23,7 +23,7 @@ export class Rational extends Factor {
     }
 
     public replaceChild(newFactor: Factor, previousFactor: Factor): Rational {
-        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Rational.fromFactors(newChildren[0], newChildren[1], this.sign);
     }
 

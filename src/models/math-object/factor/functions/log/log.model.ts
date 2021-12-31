@@ -22,7 +22,7 @@ export class Log extends Function {
     }
 
     public replaceChild(newFactor: Factor, previousFactor: Factor): Log {
-        const newChildren = this.children.map(c => c.id === previousFactor ? newFactor : c) as Factor[];
+        const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Log.fromFactors(newChildren[0], this.sign, newChildren[1]);
     }
 

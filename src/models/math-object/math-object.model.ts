@@ -96,6 +96,27 @@ export abstract class MathObject {
         return foundContext;
     }
 
+    public replace<TMathObject extends MathObject, TReplacementType extends MathObject>(previousMathObject: TReplacementType, newMathObject: TReplacementType): TMathObject | null {
+        let childCtx = this.find(MathObject, (mo) => mo.id === previousMathObject.id);
+        let newObject = newMathObject;
+
+        if (childCtx) {
+            let parentCtx = childCtx.parentContext;
+    
+            while (parentCtx) {
+                const parent: MathObject = parentCtx.target;
+                newObject = parent.replaceChild(newObject, childCtx.target) as any;
+
+                childCtx = parentCtx;
+                parentCtx = parentCtx.parentContext;
+            }
+
+            return newObject as any;
+        }
+
+        return this as any;
+    }
+
     protected getChild<TChild extends MathObject>(childIndex: number): TChild {
         return this.children[childIndex] as TChild;
     }

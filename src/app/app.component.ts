@@ -22,7 +22,24 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const expression = new Expression('(a-1*(x+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
+    const expression = new Expression('(a-1*(z+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
+    console.log(expression.toString());
+    const z1 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z');
+    const z2 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z', true);
+    let newExpression;
+    let newExpression2;
+    // console.log('   found: ', z?.target.toString());
+    if (z1) {
+      newExpression = expression.replace(z1.target, new Variable('bob'));
+    }
+
+    if (z2) {
+      newExpression2 = expression.replace(z2.target, new Variable('bob'));
+    }
+
+    console.log('   new: ', newExpression?.toString(), 'type: ', newExpression?.constructor.name);
+    console.log('   new: ', newExpression2?.toString(), 'type: ', newExpression2?.constructor.name);
+
     // console.log('EXPRESSION', expression);
 
     // expression.traverse<Sin>(Sin, (mo, ctx) => {
@@ -30,11 +47,11 @@ export class AppComponent implements OnInit {
     //   // console.log(ctx);
     // }, true);
 
-    const found = expression.find<Expression>(Expression, (v, ctx) => {
-      return v.termCount > 1;
-    }, true);
+    // const found = expression.find<Expression>(Expression, (v, ctx) => {
+    //   return v.termCount > 1;
+    // }, true);
 
-    console.log('FOUND', found?.target.toString());
+    // console.log('FOUND', found?.target.toString());
 
     // const double = expression.find<Sin>(Sin, (mo: Sin, ctx: Context) => {
     //   return mo.value > 0;
