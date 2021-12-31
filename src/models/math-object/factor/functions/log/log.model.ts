@@ -6,11 +6,11 @@ import { Function } from "../function.model";
 export class Log extends Function {
 
     public get contents(): Factor {
-        return this.getChild<Factor>(0);
+        return this.children[0] as Factor;
     }
 
     public get base(): Factor {
-        return this.getChild<Factor>(1);
+        return this.children[1] as Factor;
     }
 
     constructor(contentsStr: string, sign: Sign = Sign.Positive, logBase: string = '10') {

@@ -24,21 +24,23 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const expression = new Expression('(a-1*(z+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
     console.log(expression.toString());
-    const z1 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z');
-    const z2 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z', true);
-    let newExpression;
-    let newExpression2;
-    // console.log('   found: ', z?.target.toString());
-    if (z1) {
-      newExpression = expression.replace(z1.target, new Variable('bob'));
-    }
+    // const z1 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z');
+    // const z2 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z', true);
+    // let newExpression;
+    // let newExpression2;
+    // // console.log('   found: ', z?.target.toString());
+    // if (z1) {
+    //   newExpression = expression.replace(z1.target, new Variable('bob'));
+    // }
 
-    if (z2) {
-      newExpression2 = expression.replace(z2.target, new Variable('bob'));
-    }
+    // if (z2) {
+    //   newExpression2 = expression.replace(z2.target, new Variable('bob'));
+    // }
 
-    console.log('   new: ', newExpression?.toString(), 'type: ', newExpression?.constructor.name);
-    console.log('   new: ', newExpression2?.toString(), 'type: ', newExpression2?.constructor.name);
+    // console.log('   new: ', newExpression?.toString(), 'type: ', newExpression?.constructor.name);
+    // console.log('   new: ', newExpression2?.toString(), 'type: ', newExpression2?.constructor.name);
+
+    console.log('REPLACE ROOT WITH 0: ', expression.replace(expression, new Expression('0')));
 
     // console.log('EXPRESSION', expression);
 

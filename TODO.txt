@@ -6,7 +6,6 @@ LEFT OFF:
 - Try creating variable 'WOW' - throws error
 - Shouldn't the static constructor for expression need a sign? Are there more like that?
     - Add the additional operator stuff in to the new replace child in expression
-- Remove all the smaller untested functions from term/expression/mathobject etc - it's way easier to just use the static constructors
 - Go through all the objects and start adding any other method tests needed
 - start building basic simplifier
 - Create tests for new EMPTY_PARAMETER function errors - USE STASH

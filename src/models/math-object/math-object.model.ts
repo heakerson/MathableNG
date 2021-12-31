@@ -117,40 +117,6 @@ export abstract class MathObject {
         return this as any;
     }
 
-    protected getChild<TChild extends MathObject>(childIndex: number): TChild {
-        return this.children[childIndex] as TChild;
-    }
-
-    protected insertChildren<TChild extends MathObject>(index: number, ...newChildren: MathObject[]): TChild[] {
-        return [
-            ...this.children.slice(0, index),
-            ...newChildren,
-            ...this.children.slice(index)
-        ] as TChild[];
-    }
-
-    protected appendChildren<TChild extends MathObject>(...newChildren: MathObject[]): TChild[] {
-        return [
-            ...this.children,
-            ...newChildren,
-        ] as TChild[];
-    }
-
-    protected prependChildren<TChild extends MathObject>(...newChildren: MathObject[]): TChild[] {
-        return [
-            ...newChildren,
-            ...this.children,
-        ] as TChild[];
-    }
-
-    protected removeChildrenById<TChild extends MathObject>(...idsToRemove: uuid.V1Options[]): TChild[] {
-        return this.children.filter(c => !idsToRemove.includes(c.id)) as TChild[];
-    }
-
-    protected removeChildrenByIndex<TChild extends MathObject>(...indicesToRemove: number[]): TChild[] {
-        return this.children.filter((c, i) => !indicesToRemove.includes(i)) as TChild[];
-    }
-
     protected checkFormattingErrors(): void {
         if (!this.inputWhitespaceRemoved) {
             throw new Error(`${this.constructor.name} Empty Input`);

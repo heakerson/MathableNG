@@ -43,35 +43,6 @@ export class Term extends MathObject {
         return Term.fromFactors(...newChildren);
     }
 
-    public getFactor<TFactor extends Factor>(index: number): TFactor {
-        return this.getChild<TFactor>(index);
-    }
-
-    public appendFactors(...factors: Factor[]): Term {
-        const newChildren = this.appendChildren<Factor>(...factors);
-        return Term.fromFactors(...newChildren);
-    }
-
-    public prependFactors(...factors: Factor[]): Term {
-        const newChildren = this.prependChildren<Factor>(...factors);
-        return Term.fromFactors(...newChildren);
-    }
-
-    public insertFactors(index: number, ...factors: Factor[]): Term {
-        const newChildren = this.insertChildren<Factor>(index, ...factors);
-        return Term.fromFactors(...newChildren);
-    }
-
-    public removeFactors(...factors: Factor[]): Term {
-        const newChildren = this.removeChildrenById<Factor>(...factors.map(f => f.id));
-        return Term.fromFactors(...newChildren);
-    }
-
-    public removeFactorsAtIndices(...indices: number[]): Term {
-        const newChildren = this.removeChildrenByIndex<Factor>(...indices);
-        return Term.fromFactors(...newChildren);
-    }
-
     public override copy(): Term {
         return new Term(this.toString());
     }
