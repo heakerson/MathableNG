@@ -180,5 +180,48 @@ describe('Expression', () => {
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
         });
+
+        // describe('Replace', () => {
+        //     const standardBuilder = (test: FactorReplaceTest) => new Expression(test.input);
+        //     const staticBuilder = (test: FactorReplaceTest) => {
+        //         let termStrings = StringFormatter.parseTermStrings(test.input);
+    
+        //         const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
+        //         termStrings = termStrings.map((termString, i) => {
+        //             if (termString.length > 2) {
+        //                 const prefix = termString.substring(0, 2);
+        
+        //                 if (prefix === '--') {
+        //                     additionalOps.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
+        //                     return termString.substring(1);
+        //                 } else if (prefix === '+-') {
+        //                     additionalOps.push({ termIndex: i, addtionalOperator: Operators.Addition});
+        //                     return termString.substring(1);
+        //                 }
+        //             }
+    
+        //             return termString;
+        //         });
+    
+        //         const terms = termStrings.map(t => new Term(t));
+    
+        //         return Expression.fromTerms(terms, test.sign, additionalOps);
+        //     };
+
+        //     const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+        //     const replacement = () => new Variable('-z');
+
+        //     const tests: FactorReplaceTest[] = [
+        //         // new FactorReplaceTest({ input: 'a^x', toStringBefore: '(a^x)', toStringAfter: '(a^-z)' }),
+        //         // new FactorReplaceTest({ input: 'x^a', toStringBefore: '(x^a)', toStringAfter: '(-z^a)' }),
+        //         // new FactorReplaceTest({ input: 'a^b', toStringBefore: '(a^b)', toStringAfter: '(a^b)' }),
+        //         // new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '(g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x))' }),
+        //         // new FactorReplaceTest({ input: 'x', toStringBefore: '(x)', toStringAfter: '(-z)' }),
+        //         new FactorReplaceTest({ input: '-(x)', toStringBefore: '-(x)', toStringAfter: '-(-z)', sign: Sign.Negative }),
+        //     ];
+
+        //     mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+        //     mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+        // });
     });
 });
