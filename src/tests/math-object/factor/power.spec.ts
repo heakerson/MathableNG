@@ -3,11 +3,13 @@ import { Expression } from "src/models/math-object/factor/expression.model";
 import { Ln } from "src/models/math-object/factor/functions/log/ln.model";
 import { PI } from "src/models/math-object/factor/number/contant/pi.model";
 import { Power } from "src/models/math-object/factor/power.model";
+import { Variable } from "src/models/math-object/factor/variable.model";
+import { MathObject } from "src/models/math-object/math-object.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorTraverseTest } from "./factor.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
+import { factorConstructorTests, FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "./factor.spec";
 
 export function powerConstructorTests<TPower extends Power, TTest extends FactorConstTest>(
     additionalLabel: string,
@@ -122,6 +124,27 @@ describe('Power', () => {
             mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
+        });
+        
+        describe('Replace', () => {
+            const standardBuilder = (test: FactorReplaceTest) => new Power(test.input);
+            const staticBuilder = (test: FactorReplaceTest) => {
+                const parsed = StringFormatter.parsePowerFactor(test.input);
+                return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
+            };
+
+            const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+            const replacement = () => new Variable('-z');
+
+            const tests: FactorReplaceTest[] = [
+                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'a^x', toStringAfter: 'a^-z' }),
+                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'x^a', toStringAfter: '-z^a' }),
+                new FactorReplaceTest({ input: 'a^b', toStringBefore: 'a^b', toStringAfter: 'a^b' }),
+                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringAfter: 'g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)' }),
+            ];
+
+            mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+            mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
         });
     });
 });
