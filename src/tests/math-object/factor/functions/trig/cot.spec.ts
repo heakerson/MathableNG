@@ -3,9 +3,11 @@ import { Cot } from "src/models/math-object/factor/functions/trig/cot.model";
 import { Double } from "src/models/math-object/factor/number/double.model";
 import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
+import { Variable } from "src/models/math-object/factor/variable.model";
+import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorTraverseTest } from "../../factor.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
+import { factorConstructorTests, FactorReplaceTest, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -79,6 +81,39 @@ describe('Cot', () => {
             mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
+        });
+
+        describe('Replace', () => {
+            const standardBuilder = (test: FactorReplaceTest) => new Cot(test.input, test.sign);
+            const staticBuilder = (test: FactorReplaceTest) => {
+                const contents = Factory.buildFactor(test.input);
+                return Cot.fromFactor(contents, test.sign);
+            };
+
+            const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+            const replacement = () => new Variable('-z');
+
+            const tests: FactorReplaceTest[] = [
+                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'cot[a^x]', toStringAfter: 'cot[a^-z]' }),
+                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'cot[x^a]', toStringAfter: 'cot[-z^a]' }),
+                new FactorReplaceTest({ input: 'a^b', toStringBefore: '-cot[a^b]', toStringAfter: '-cot[a^b]', sign: Sign.Negative }),
+                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'cot[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'cot[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            ];
+
+            mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+            mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+
+
+            const finderRoot = (mo: MathObject) => mo.find(Cot, (m: Cot) => m.sign === Sign.Positive);
+            const replacementRoot = () => new Variable('x');
+
+            const rootTests: FactorReplaceTest[] = [
+                new FactorReplaceTest({ input: 'y', toStringBefore: 'cot[y]', toStringAfter: 'x' }),
+                new FactorReplaceTest({ input: 'log[y]', toStringBefore: 'cot[log[y,10]]', toStringAfter: 'x' }),
+            ];
+
+            mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);
+            mathObjectReplaceTests('STATIC Constructor - replace root', rootTests, staticBuilder, replacementRoot, finderRoot);
         });
     });
 });

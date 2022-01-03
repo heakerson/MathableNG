@@ -70,7 +70,7 @@ export abstract class MathObject {
         }
     }
 
-    public find<TMathObject extends MathObject>(type: typeof MathObject, predicateFn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
+    public find<TMathObject extends MathObject>(type: any, predicateFn: (mo: TMathObject, ctx: Context) => boolean = () => true, childFirst: boolean = false): Context | null {
         let foundContext = null;
         let continueSearch = true;
 
@@ -88,7 +88,7 @@ export abstract class MathObject {
         return foundContext;
     }
 
-    public findChild<TMathObject extends MathObject>(type: typeof MathObject, predicateFn: (mo: TMathObject) => boolean = () => true): TMathObject | null {
+    public findChild<TMathObject extends MathObject>(type: any, predicateFn: (mo: TMathObject) => boolean = () => true): TMathObject | null {
         let child: TMathObject | null = null;
         const children = this.getTraversableChildren();
 
