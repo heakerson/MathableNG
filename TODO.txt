@@ -1,5 +1,4 @@
 LEFT OFF:
-- Try creating variable 'WOW' - throws error
 - Get commented out tests in Expression working - Add the additional operator stuff in to the new replace child in expression
 - Get it so the find function only returns Mathobject and NOT null?
 - Write/test flipSign 

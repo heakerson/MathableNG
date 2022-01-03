@@ -40,10 +40,15 @@ describe('Variable', () => {
         describe('Success', () => {
             const constructorTests: VariableConstTest[] = [
                 new VariableConstTest({ input: 'a', children: [], toString: 'a', sign: Sign.Positive, name: 'a' }),
+                new VariableConstTest({ input: 'X', children: [], toString: 'X', sign: Sign.Positive, name: 'X' }),
                 new VariableConstTest({ input: '-a', children: [], toString: '-a', sign: Sign.Negative, name: 'a' }),
+                new VariableConstTest({ input: '-X', children: [], toString: '-X', sign: Sign.Negative, name: 'X' }),
                 new VariableConstTest({ input: '+a', children: [], toString: 'a', sign: Sign.Positive, name: 'a' }),
                 new VariableConstTest({ input: 'bob', children: [], toString: 'bob', sign: Sign.Positive, name: 'bob' }),
                 new VariableConstTest({ input: '-bob', children: [], toString: '-bob', sign: Sign.Negative, name: 'bob' }),
+                new VariableConstTest({ input: '-WOW', children: [], toString: '-WOW', sign: Sign.Negative, name: 'WOW' }),
+                new VariableConstTest({ input: 'WOW', children: [], toString: 'WOW', sign: Sign.Positive, name: 'WOW' }),
+                new VariableConstTest({ input: 'W_W', children: [], toString: 'W_W', sign: Sign.Positive, name: 'W_W' }),
             ];
     
             mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);

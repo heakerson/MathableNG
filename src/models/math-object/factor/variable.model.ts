@@ -26,7 +26,7 @@ export class Variable extends Factor {
             removedSign = removedSign.substring(1);
         }
 
-        if (!removedSign.match(/^[0-9a-z]+$/)) {
+        if (!removedSign.match(/^[a-zA-Z0-9_]+$/)) {
             ErrorHandler.throwError(ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT, this.constructor.name, this.inputWhitespaceRemoved, `Variable names are only alphanumeric and a single +/- sign`);
         }
 
