@@ -8,7 +8,14 @@ export abstract class Factor extends MathObject {
     }
 
     public flipSign<TFactor extends Factor>(): TFactor {
-        return Factory.buildFactor(`${this.sign === Sign.Positive ? Sign.Negative : Sign.Positive}${this.formattedInput}`) as TFactor;
+        let factorString = this.toString();
+
+        if (this.sign === Sign.Negative) {
+            factorString = factorString.substring(1);
+        } else {
+            factorString = `-${factorString}`;
+        }
+        return Factory.buildFactor(factorString) as TFactor;
     }
 
     public override copy(): Factor {
