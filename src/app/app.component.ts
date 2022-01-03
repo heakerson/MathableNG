@@ -23,13 +23,18 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    // let expression = new Expression('(a-1*(z+(b-1*(b+sin[z])*0))+c*(3.5*0+7+f^(x+-1+E)))');
-    let expression = new Expression('(a-1*(z+(b-1*(b+z)*0)))');
-    console.log('START', expression.toString());
+    const t1 = new Term('a');
+    const t2 = new Term('b');
+    let expression = Expression.fromTerms([t1, t2], Sign.Negative);
+    console.log(expression.toString());
 
-    expression = this.replaceZeroFactors(expression) as Expression;
-    expression = this.replaceZeroTerms(expression) as Expression;
-    console.log('FINAL', expression.toString());
+    // let expression = new Expression('(a-1*(z+(b-1*(b+sin[z])*0))+c*(3.5*0+7+f^(x+-1+E)))');
+    // let expression = new Expression('(a-1*(z+(b-1*(b+z)*0)))');
+    // console.log('START', expression.toString());
+
+    // expression = this.replaceZeroFactors(expression) as Expression;
+    // expression = this.replaceZeroTerms(expression) as Expression;
+    // console.log('FINAL', expression.toString());
   }
 
   replaceZeroTerms(mo: MathObject): MathObject {
