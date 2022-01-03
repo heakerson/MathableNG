@@ -9,7 +9,7 @@ import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export function powerConstructorTests<TPower extends Power, TTest extends FactorConstTest>(
     additionalLabel: string,
@@ -127,8 +127,8 @@ describe('Power', () => {
         });
         
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Power(test.input);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Power(test.input);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const parsed = StringFormatter.parsePowerFactor(test.input);
                 return Power.fromFactors(Factory.buildFactor(parsed.base), Factory.buildFactor(parsed.exponent));
             };
@@ -136,11 +136,11 @@ describe('Power', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'a^x', toStringAfter: 'a^-z' }),
-                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'x^a', toStringAfter: '-z^a' }),
-                new FactorReplaceTest({ input: 'a^b', toStringBefore: 'a^b', toStringAfter: 'a^b' }),
-                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringAfter: 'g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: 'a^x', toStringAfter: 'a^-z' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x^a', toStringBefore: 'x^a', toStringAfter: '-z^a' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: 'a^b', toStringAfter: 'a^b' }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringAfter: 'g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);

@@ -7,7 +7,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorReplaceTest, FactorTraverseTest } from "../../factor.spec";
+import { factorConstructorTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -84,8 +84,8 @@ describe('Cot', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Cot(test.input, test.sign);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Cot(test.input, test.sign);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const contents = Factory.buildFactor(test.input);
                 return Cot.fromFactor(contents, test.sign);
             };
@@ -93,11 +93,11 @@ describe('Cot', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'cot[a^x]', toStringAfter: 'cot[a^-z]' }),
-                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'cot[x^a]', toStringAfter: 'cot[-z^a]' }),
-                new FactorReplaceTest({ input: 'a^b', toStringBefore: '-cot[a^b]', toStringAfter: '-cot[a^b]', sign: Sign.Negative }),
-                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'cot[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'cot[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: 'cot[a^x]', toStringAfter: 'cot[a^-z]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x^a', toStringBefore: 'cot[x^a]', toStringAfter: 'cot[-z^a]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: '-cot[a^b]', toStringAfter: '-cot[a^b]', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'cot[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'cot[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
@@ -107,9 +107,9 @@ describe('Cot', () => {
             const finderRoot = (mo: MathObject) => mo.find(Cot, (m: Cot) => m.sign === Sign.Positive);
             const replacementRoot = () => new Variable('x');
 
-            const rootTests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'y', toStringBefore: 'cot[y]', toStringAfter: 'x' }),
-                new FactorReplaceTest({ input: 'log[y]', toStringBefore: 'cot[log[y,10]]', toStringAfter: 'x' }),
+            const rootTests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'y', toStringBefore: 'cot[y]', toStringAfter: 'x' }),
+                new FactorReplaceAndFlipSignTest({ input: 'log[y]', toStringBefore: 'cot[log[y,10]]', toStringAfter: 'x' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);

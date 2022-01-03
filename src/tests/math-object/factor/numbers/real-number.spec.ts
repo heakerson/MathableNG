@@ -1,5 +1,5 @@
 import { RealNumber } from "src/models/math-object/factor/number/real-number.model";
-import { FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "../factor.spec";
+import { FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../factor.spec";
 
 export class RealNumberConstrTest extends FactorConstTest {
     value: number = NaN;
@@ -19,7 +19,7 @@ export class RealNumberTraverseTest extends FactorTraverseTest {
     }
 }
 
-export class RealNumberReplaceTest extends FactorReplaceTest {
+export class RealNumberReplaceTest extends FactorReplaceAndFlipSignTest {
     value: number = NaN;
 
     constructor(props: Partial<RealNumberReplaceTest>) {

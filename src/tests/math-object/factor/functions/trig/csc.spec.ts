@@ -7,7 +7,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorReplaceTest, FactorTraverseTest } from "../../factor.spec";
+import { factorConstructorTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -85,8 +85,8 @@ describe('Csc', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Csc(test.input, test.sign);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Csc(test.input, test.sign);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const contents = Factory.buildFactor(test.input);
                 return Csc.fromFactor(contents, test.sign);
             };
@@ -94,11 +94,11 @@ describe('Csc', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'csc[a^x]', toStringAfter: 'csc[a^-z]' }),
-                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'csc[x^a]', toStringAfter: 'csc[-z^a]' }),
-                new FactorReplaceTest({ input: 'a^b', toStringBefore: '-csc[a^b]', toStringAfter: '-csc[a^b]', sign: Sign.Negative }),
-                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'csc[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'csc[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: 'csc[a^x]', toStringAfter: 'csc[a^-z]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x^a', toStringBefore: 'csc[x^a]', toStringAfter: 'csc[-z^a]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: '-csc[a^b]', toStringAfter: '-csc[a^b]', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'csc[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'csc[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
@@ -108,9 +108,9 @@ describe('Csc', () => {
             const finderRoot = (mo: MathObject) => mo.find(Csc, (m: Csc) => m.sign === Sign.Positive);
             const replacementRoot = () => new Variable('x');
 
-            const rootTests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'y', toStringBefore: 'csc[y]', toStringAfter: 'x' }),
-                new FactorReplaceTest({ input: 'log[y]', toStringBefore: 'csc[log[y,10]]', toStringAfter: 'x' }),
+            const rootTests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'y', toStringBefore: 'csc[y]', toStringAfter: 'x' }),
+                new FactorReplaceAndFlipSignTest({ input: 'log[y]', toStringBefore: 'csc[log[y,10]]', toStringAfter: 'x' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);

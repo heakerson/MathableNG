@@ -2,7 +2,7 @@ import { Sign } from "src/models/math-object/enums.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export class VariableConstTest extends FactorConstTest {
     name: string = '';
@@ -100,14 +100,14 @@ describe('Variable', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Variable(test.input);
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Variable(test.input);
 
             const finder = (variable: Variable) => variable.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'x', toStringBefore: 'x', toStringAfter: '-z' }),
-                new FactorReplaceTest({ input: '-x', toStringBefore: '-x', toStringAfter: '-x' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'x', toStringBefore: 'x', toStringAfter: '-z' }),
+                new FactorReplaceAndFlipSignTest({ input: '-x', toStringBefore: '-x', toStringAfter: '-x' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);

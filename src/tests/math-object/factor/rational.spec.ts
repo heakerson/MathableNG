@@ -8,7 +8,7 @@ import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export function rationalConstructorTests<TRational extends Rational, TTest extends FactorConstTest>(
     additionalLabel: string,
@@ -114,8 +114,8 @@ describe('Rational', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Rational(test.input);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Rational(test.input);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const parsed = StringFormatter.parseRationalExpressions(test.input);
                 return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
             };
@@ -123,12 +123,12 @@ describe('Rational', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: '(a/x)', toStringBefore: '(a/x)', toStringAfter: '(a/-z)' }),
-                new FactorReplaceTest({ input: '(a/b)', toStringBefore: '(a/b)', toStringAfter: '(a/b)' }),
-                new FactorReplaceTest({ input: '(x/a)', toStringBefore: '(x/a)', toStringAfter: '(-z/a)' }),
-                new FactorReplaceTest({ input: '-(x/a)', toStringBefore: '-(x/a)', toStringAfter: '-(-z/a)', sign: Sign.Negative }),
-                new FactorReplaceTest({ input: 'g/(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g/(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '(g/(a*(sin[a^(s-r*(p+(-z/d)))])*b*x))' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: '(a/x)', toStringBefore: '(a/x)', toStringAfter: '(a/-z)' }),
+                new FactorReplaceAndFlipSignTest({ input: '(a/b)', toStringBefore: '(a/b)', toStringAfter: '(a/b)' }),
+                new FactorReplaceAndFlipSignTest({ input: '(x/a)', toStringBefore: '(x/a)', toStringAfter: '(-z/a)' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(x/a)', toStringBefore: '-(x/a)', toStringAfter: '-(-z/a)', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'g/(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g/(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '(g/(a*(sin[a^(s-r*(p+(-z/d)))])*b*x))' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);

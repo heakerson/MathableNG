@@ -8,7 +8,7 @@ import { Term } from "src/models/math-object/term.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export class ExpressionConstTest extends FactorConstTest {
     additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]
@@ -186,8 +186,8 @@ describe('Expression', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Expression(test.input);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Expression(test.input);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const removedParenth = StringFormatter.stripSurroundingParenthesis(test.input);
                 let termStrings = StringFormatter.parseTermStrings(removedParenth);
     
@@ -216,32 +216,32 @@ describe('Expression', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a^x', toStringBefore: '(a^x)', toStringAfter: '(a^-z)' }),
-                new FactorReplaceTest({ input: 'x^a', toStringBefore: '(x^a)', toStringAfter: '(-z^a)' }),
-                new FactorReplaceTest({ input: 'a^b', toStringBefore: '(a^b)', toStringAfter: '(a^b)' }),
-                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '(g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x))' }),
-                new FactorReplaceTest({ input: 'x', toStringBefore: '(x)', toStringAfter: '(-z)' }),
-                new FactorReplaceTest({ input: '-(x)', toStringBefore: '-(x)', toStringAfter: '-(-z)', sign: Sign.Negative }),
-                new FactorReplaceTest({ input: 'a+x', toStringBefore: '(a+x)', toStringAfter: '(a-z)' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: '(a^x)', toStringAfter: '(a^-z)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x^a', toStringBefore: '(x^a)', toStringAfter: '(-z^a)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: '(a^b)', toStringAfter: '(a^b)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '(g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x))' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x', toStringBefore: '(x)', toStringAfter: '(-z)' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(x)', toStringBefore: '-(x)', toStringAfter: '-(-z)', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'a+x', toStringBefore: '(a+x)', toStringAfter: '(a-z)' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
             mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
 
             const extraOpFinder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Negative);
-            const extraOpsTests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+-z)' }),
-                new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a--z)' }),
+            const extraOpsTests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+-z)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a--z)' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - Extra Ops', extraOpsTests, standardBuilder, replacement, extraOpFinder);
             mathObjectReplaceTests('STATIC Constructor - Extra Ops', extraOpsTests, staticBuilder, replacement, extraOpFinder);
 
             const replacement2 = () => new Variable('z');
-            const extraOpsTestsDiffSign: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+z)' }),
-                new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a-z)' }),
+            const extraOpsTestsDiffSign: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+z)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a-z)' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, standardBuilder, replacement2, extraOpFinder);

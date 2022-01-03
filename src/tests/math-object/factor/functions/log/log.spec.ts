@@ -7,7 +7,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorReplaceTest, FactorTraverseTest } from "../../factor.spec";
+import { factorConstructorTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
 import { FuncConstrTest, functionConstructorTests } from "../function.spec";
 
 export class LogConstrTest extends FuncConstrTest {
@@ -28,7 +28,7 @@ export class LogTraverseTest extends FactorTraverseTest {
     }
 }
 
-export class LogReplaceTest extends FactorReplaceTest {
+export class LogReplaceTest extends FactorReplaceAndFlipSignTest {
     base?: string = undefined;
 
     constructor(props: Partial<LogReplaceTest>) {

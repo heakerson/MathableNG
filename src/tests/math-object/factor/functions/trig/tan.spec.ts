@@ -7,7 +7,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorReplaceTest, FactorTraverseTest } from "../../factor.spec";
+import { factorConstructorTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -84,8 +84,8 @@ describe('Tan', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: FactorReplaceTest) => new Tan(test.input, test.sign);
-            const staticBuilder = (test: FactorReplaceTest) => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Tan(test.input, test.sign);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
                 const contents = Factory.buildFactor(test.input);
                 return Tan.fromFactor(contents, test.sign);
             };
@@ -93,11 +93,11 @@ describe('Tan', () => {
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
-            const tests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'a^x', toStringBefore: 'tan[a^x]', toStringAfter: 'tan[a^-z]' }),
-                new FactorReplaceTest({ input: 'x^a', toStringBefore: 'tan[x^a]', toStringAfter: 'tan[-z^a]' }),
-                new FactorReplaceTest({ input: 'a^b', toStringBefore: '-tan[a^b]', toStringAfter: '-tan[a^b]', sign: Sign.Negative }),
-                new FactorReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'tan[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'tan[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: 'tan[a^x]', toStringAfter: 'tan[a^-z]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'x^a', toStringBefore: 'tan[x^a]', toStringAfter: 'tan[-z^a]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: '-tan[a^b]', toStringAfter: '-tan[a^b]', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'tan[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'tan[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
@@ -107,9 +107,9 @@ describe('Tan', () => {
             const finderRoot = (mo: MathObject) => mo.find(Tan, (m: Tan) => m.sign === Sign.Positive);
             const replacementRoot = () => new Variable('x');
 
-            const rootTests: FactorReplaceTest[] = [
-                new FactorReplaceTest({ input: 'y', toStringBefore: 'tan[y]', toStringAfter: 'x' }),
-                new FactorReplaceTest({ input: 'log[y]', toStringBefore: 'tan[log[y,10]]', toStringAfter: 'x' }),
+            const rootTests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'y', toStringBefore: 'tan[y]', toStringAfter: 'x' }),
+                new FactorReplaceAndFlipSignTest({ input: 'log[y]', toStringBefore: 'tan[log[y,10]]', toStringAfter: 'x' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);
