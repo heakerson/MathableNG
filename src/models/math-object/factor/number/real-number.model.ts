@@ -1,4 +1,5 @@
 import { ErrorCodes, ErrorHandler } from "src/models/services/error-handler.service";
+import { Sign } from "../../enums.model";
 import { Factor } from "../factor.model";
 
 export abstract class RealNumber extends Factor {
@@ -15,6 +16,9 @@ export abstract class RealNumber extends Factor {
     }
 
     public override toString(): string {
+        if (this.sign === Sign.Negative && this.value === 0) {
+            return `-${this.value.toString()}`
+        }
         return this.value.toString();
     }
 

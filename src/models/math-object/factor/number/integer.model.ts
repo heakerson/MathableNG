@@ -12,7 +12,9 @@ export class Integer extends Double {
     }
 
     public static override fromNumber(number: number): Integer {
-        return new Integer(number.toString());
+        const isNegativeZero = Object.is(number,-0);
+        const negativeZeroSign = isNegativeZero ? '-' : '';
+        return new Integer(`${negativeZeroSign}${number.toString()}`);
     }
 
     protected override checkCustomFormattingErrors(): void {

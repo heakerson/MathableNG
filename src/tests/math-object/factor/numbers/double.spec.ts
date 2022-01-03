@@ -20,6 +20,7 @@ describe('Double', () => {
                 new RealNumberConstrTest({ input: '-1', toString: '-1', value: -1, sign: Sign.Negative }),
                 new RealNumberConstrTest({ input: '-1.004', toString: '-1.004', value: -1.004, sign: Sign.Negative }),
                 new RealNumberConstrTest({ input: '0', toString: '0', value: 0, sign: Sign.Positive }),
+                new RealNumberConstrTest({ input: '-0', toString: '-0', value: -0, sign: Sign.Negative }),
                 new RealNumberConstrTest({ input: '-37.000000000007', toString: '-37.000000000007', value: -37.000000000007, sign: Sign.Negative }),
             ];
     
@@ -100,6 +101,7 @@ describe('Double', () => {
                 new RealNumberReplaceFlipSignTest({ input: '.34', toStringBefore: '0.34', toStringAfter: '-0.34', value: .34 }),
                 new RealNumberReplaceFlipSignTest({ input: '5', toStringBefore: '5', toStringAfter: '-5', value: 5 }),
                 new RealNumberReplaceFlipSignTest({ input: '-1', toStringBefore: '-1', toStringAfter: '1', value: -1 }),
+                new RealNumberReplaceFlipSignTest({ input: '-0', toStringBefore: '-0', toStringAfter: '0', value: -0 }),
             ];
 
             factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);

@@ -7,6 +7,8 @@ export class Double extends RealNumber {
     }
 
     public static fromNumber(number: number): Double {
-        return new Double(number.toString());
+        const isNegativeZero = Object.is(number,-0);
+        const negativeZeroSign = isNegativeZero ? '-' : '';
+        return new Double(`${negativeZeroSign}${number.toString()}`);
     }
 }
