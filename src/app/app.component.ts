@@ -23,10 +23,12 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const t1 = new Term('a');
-    const t2 = new Term('b');
-    let expression = Expression.fromTerms([t1, t2], Sign.Negative);
-    console.log(expression.toString());
+    // const thing = -0;
+    // const thing2 = 0;
+    // console.log('zero', thing);
+    // console.log('zero to string', thing.toString());
+    // console.log('equals -0', thing === -0);
+    // console.log('equals 0', thing === 0);
 
     // let expression = new Expression('(a-1*(z+(b-1*(b+sin[z])*0))+c*(3.5*0+7+f^(x+-1+E)))');
     // let expression = new Expression('(a-1*(z+(b-1*(b+z)*0)))');
