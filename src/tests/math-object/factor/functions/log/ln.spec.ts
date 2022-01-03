@@ -7,9 +7,9 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests } from "../../factor.spec";
+import { factorConstructorTests, factorFlipSignTests } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
-import { LogConstrTest, logConstructorTests, LogReplaceTest, LogTraverseTest } from "./log.spec";
+import { LogConstrTest, logConstructorTests, LogReplaceFlipSignTest, LogTraverseTest } from "./log.spec";
 
 describe('Ln', () => {
 
@@ -78,17 +78,17 @@ describe('Ln', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: LogReplaceTest) => new Ln(test.input, test.sign);
-            const staticBuilder = (test: LogReplaceTest) =>  Ln.fromFactors(Factory.buildFactor(test.input), test.sign);
+            const standardBuilder = (test: LogReplaceFlipSignTest) => new Ln(test.input, test.sign);
+            const staticBuilder = (test: LogReplaceFlipSignTest) =>  Ln.fromFactors(Factory.buildFactor(test.input), test.sign);
     
             const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
     
-            const tests: LogReplaceTest[] = [
-                new LogReplaceTest({ input: 'a^x', toStringBefore: 'ln[a^x]', toStringAfter: 'ln[a^-z]'}),
-                new LogReplaceTest({ input: 'x^a', toStringBefore: 'ln[x^a]', toStringAfter: 'ln[-z^a]' }),
-                new LogReplaceTest({ input: 'a^b', toStringBefore: '-ln[a^b]', toStringAfter: '-ln[a^b]', sign: Sign.Negative }),
-                new LogReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'ln[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'ln[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            const tests: LogReplaceFlipSignTest[] = [
+                new LogReplaceFlipSignTest({ input: 'a^x', toStringBefore: 'ln[a^x]', toStringAfter: 'ln[a^-z]'}),
+                new LogReplaceFlipSignTest({ input: 'x^a', toStringBefore: 'ln[x^a]', toStringAfter: 'ln[-z^a]' }),
+                new LogReplaceFlipSignTest({ input: 'a^b', toStringBefore: '-ln[a^b]', toStringAfter: '-ln[a^b]', sign: Sign.Negative }),
+                new LogReplaceFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'ln[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'ln[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
             ];
     
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
@@ -98,13 +98,28 @@ describe('Ln', () => {
             const finderRoot = (mo: MathObject) => mo.find(Ln, (m: Ln) => m.sign === Sign.Positive);
             const replacementRoot = () => new Variable('x');
     
-            const rootTests: LogReplaceTest[] = [
-                new LogReplaceTest({ input: 'y', toStringBefore: 'ln[y]', toStringAfter: 'x' }),
-                new LogReplaceTest({ input: 'log[y]', toStringBefore: 'ln[log[y,10]]', toStringAfter: 'x' }),
+            const rootTests: LogReplaceFlipSignTest[] = [
+                new LogReplaceFlipSignTest({ input: 'y', toStringBefore: 'ln[y]', toStringAfter: 'x' }),
+                new LogReplaceFlipSignTest({ input: 'log[y]', toStringBefore: 'ln[log[y,10]]', toStringAfter: 'x' }),
             ];
     
             mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);
             mathObjectReplaceTests('STATIC Constructor - replace root', rootTests, staticBuilder, replacementRoot, finderRoot);
+        });
+
+        describe('FlipSign', () => {
+            const standardBuilder = (test: LogReplaceFlipSignTest) => new Ln(test.input, test.sign);
+            const staticBuilder = (test: LogReplaceFlipSignTest) =>  Ln.fromFactors(Factory.buildFactor(test.input), test.sign);
+    
+            const tests: LogReplaceFlipSignTest[] = [
+                new LogReplaceFlipSignTest({ input: 'a^x', toStringBefore: 'ln[a^x]', toStringAfter: '-ln[a^x]'}),
+                new LogReplaceFlipSignTest({ input: 'a^b', toStringBefore: '-ln[a^b]', toStringAfter: 'ln[a^b]', sign: Sign.Negative }),
+                new LogReplaceFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'ln[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: '-ln[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]' }),
+                new LogReplaceFlipSignTest({ input: 'log[y]', toStringBefore: 'ln[log[y,10]]', toStringAfter: '-ln[log[y,10]]'}),
+            ];
+    
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });
