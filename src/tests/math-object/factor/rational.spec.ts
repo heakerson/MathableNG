@@ -8,7 +8,7 @@ import { ErrorCodes } from "src/models/services/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, factorFlipSignTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export function rationalConstructorTests<TRational extends Rational, TTest extends FactorConstTest>(
     additionalLabel: string,
@@ -133,6 +133,23 @@ describe('Rational', () => {
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
             mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+        });
+
+        describe('FlipSign', () => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Rational(test.input);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
+                const parsed = StringFormatter.parseRationalExpressions(test.input);
+                return Rational.fromFactors(Factory.buildFactor(parsed.numerator), Factory.buildFactor(parsed.denominator), test.sign);
+            };
+
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: '(a/x)', toStringBefore: '(a/x)', toStringAfter: '-(a/x)' }),
+                new FactorReplaceAndFlipSignTest({ input: '(a/(x+y))', toStringBefore: '(a/(x+y))', toStringAfter: '-(a/(x+y))' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(x/a)', toStringBefore: '-(x/a)', toStringAfter: '(x/a)', sign: Sign.Negative })
+            ];
+
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });

@@ -62,6 +62,7 @@ export function factorFlipSignTests<TFactor extends Factor, TTest extends Factor
                 // console.log('toString', mo.toString());
                 expect(mo.toString()).toEqual(test.toStringBefore);
                 expect(flipped.toString()).toEqual(test.toStringAfter);
+                expect(flipped.sign).not.toEqual(mo.sign);
             });
         });
     });
