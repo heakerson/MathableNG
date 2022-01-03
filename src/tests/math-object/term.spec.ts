@@ -119,7 +119,7 @@ describe('Term', () => {
                 return Term.fromFactors(...factors)
             };
 
-            const finder = (term: Term) => term.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+            const finder = (mo: Term) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
             const replacement = () => new Variable('-z');
 
             const tests: MathObjecReplaceTest[] = [

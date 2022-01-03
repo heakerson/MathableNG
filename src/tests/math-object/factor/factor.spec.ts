@@ -1,6 +1,6 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Factor } from "src/models/math-object/factor/factor.model";
-import { MathObjectConstTest, MathObjectTraverseTest } from "../math-object.spec";
+import { MathObjecReplaceTest, MathObjectConstTest, MathObjectTraverseTest } from "../math-object.spec";
 
 export class FactorConstTest extends MathObjectConstTest {
     sign: Sign = Sign.Positive;
@@ -15,6 +15,15 @@ export class FactorTraverseTest extends MathObjectTraverseTest {
     sign: Sign = Sign.Positive;
 
     constructor(props: Partial<FactorTraverseTest>) {
+        super(props);
+        Object.assign(this, props);
+    }
+}
+
+export class FactorReplaceTest extends MathObjecReplaceTest {
+    sign: Sign = Sign.Positive;
+
+    constructor(props: Partial<FactorReplaceTest>) {
         super(props);
         Object.assign(this, props);
     }

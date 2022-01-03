@@ -1,5 +1,6 @@
 LEFT OFF:
 - Test replace
+    - start with power
 - Get it so the find function only returns Mathobject and NOT null?
 - Try creating variable 'WOW' - throws error
 - Shouldn't the static constructor for expression need a sign? Are there more like that?

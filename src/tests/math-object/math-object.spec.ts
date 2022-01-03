@@ -202,7 +202,7 @@ export function mathObjectReplaceTests<TMathObject extends MathObject, TTest ext
 
     describe(`MathObject Replace Tests => ${additionalLabel}`, () => {
         tests.forEach((test: TTest) => {
-            it(`'${test.input}' => should find child`, () => {
+            it(`'${test.input}' => should replace child if found and do nothing if not found`, () => {
                 const mo: TMathObject = builder(test);
                 const replacement: MathObject = replacementBuilder();
                 const childCtx = finder(mo);
@@ -216,6 +216,9 @@ export function mathObjectReplaceTests<TMathObject extends MathObject, TTest ext
                     const newMo = mo.replace(replacement, replacement);
                     expect(newMo.toString()).toEqual(test.toStringBefore);
                 }
+
+                const rootReplaced = mo.replace(mo, replacement);
+                expect(rootReplaced.toString()).toEqual(replacement.toString());
             });
         });
     });
