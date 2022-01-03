@@ -12,6 +12,7 @@ import { Rational } from 'src/models/math-object/factor/rational.model';
 import { Variable } from 'src/models/math-object/factor/variable.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/factory.service';
+import { MathObject } from 'src/models/math-object/math-object.model';
 
 @Component({
   selector: 'app-root',
@@ -22,64 +23,66 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const expression = new Expression('(a-1*(z+(b-1*(b+sin[z])))+c*(3.5+7+f^(x+-1+E)))');
-    console.log(expression.toString());
-    // const z1 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z');
-    // const z2 = expression.find(Variable, (v: Variable, ctx) => v.name === 'z', true);
-    // let newExpression;
-    // let newExpression2;
-    // // console.log('   found: ', z?.target.toString());
-    // if (z1) {
-    //   newExpression = expression.replace(z1.target, new Variable('bob'));
-    // }
+    // let expression = new Expression('(a-1*(z+(b-1*(b+sin[z])*0))+c*(3.5*0+7+f^(x+-1+E)))');
+    let expression = new Expression('(a-1*(z+(b-1*(b+z)*0)))');
+    console.log('START', expression.toString());
 
-    // if (z2) {
-    //   newExpression2 = expression.replace(z2.target, new Variable('bob'));
-    // }
+    expression = this.replaceZeroFactors(expression) as Expression;
+    expression = this.replaceZeroTerms(expression) as Expression;
+    console.log('FINAL', expression.toString());
+  }
 
-    // console.log('   new: ', newExpression?.toString(), 'type: ', newExpression?.constructor.name);
-    // console.log('   new: ', newExpression2?.toString(), 'type: ', newExpression2?.constructor.name);
-
-    console.log('REPLACE ROOT WITH 0: ', expression.replace(expression, new Expression('0')));
-
-    // console.log('EXPRESSION', expression);
-
-    // expression.traverse<Sin>(Sin, (mo, ctx) => {
-    //   console.log(mo.toString());
-    //   // console.log(ctx);
-    // }, true);
-
-    // const found = expression.find<Expression>(Expression, (v, ctx) => {
-    //   return v.termCount > 1;
-    // }, true);
-
-    // console.log('FOUND', found?.target.toString());
-
-    // const double = expression.find<Sin>(Sin, (mo: Sin, ctx: Context) => {
-    //   return mo.value > 0;
-    // });
-
-    // console.log('FOUND!!!!', double?.target.toString());
-
-    // const thing = new Variable('-');
-    // const thing = Term.fromFactors(...[]);
-    // const thing = new Rational('a');
-    // const thing = Rational.fromFactors(null, null, Sign.Negative);
-    // const thing = Expression.fromTerms([new Term('a'), new Term('b')], [{ termIndex: 1, addtionalOperator: Operators.Addition }])
-    // const thing = new Double('x');
-    // const thing = new Integer('2.3');
-    // const thing = new Sin('x++b', Sign.Positive);
-    
-    // const thing = new Log('x-b', Sign.Positive, 'y++t');
-    // console.log(thing);
-    
-    // const type = Term;
-    // console.log('traverse for', type);
+  replaceZeroTerms(mo: MathObject): MathObject {
+    let findZeroTerm = (m: MathObject) => {
+      return m.find(Term, (t: Term) => {
+        if (t.factorCount === 1) {
+          const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0);
   
-    expression.traverse(Term, (term: Term) => {
-      // console.log('FOUND TERM', term);
+          if (zero) {
+            return true;
+          }
+        }
+  
+        return false;
+      });
+    }
+
+    let termIsZeroCtx = findZeroTerm(mo);
+
+    while (termIsZeroCtx) {
+      const parentExprCtx = termIsZeroCtx.parentContext;
+
+      if (parentExprCtx) {
+        const parentExpression = parentExprCtx.target;
+        const newExpressionChildren = parentExpression.children.filter(c => c.id !== termIsZeroCtx?.target.id) as Term[];
+        const newParentExpression = Expression.fromTerms(newExpressionChildren);
+
+        mo = mo.replace(parentExpression, newParentExpression);
+  
+        termIsZeroCtx = findZeroTerm(mo);
+      } else {
+        termIsZeroCtx = null;
+      }
+    }
+
+    return mo;
+  }
+
+  replaceZeroFactors(mo: MathObject): MathObject {
+    let termWithZeroCtx = mo.find(Term, (t: Term) => {
+      const zeroFactor = t.findChild<Double | Integer>(Double || Integer, (i) => i.value === 0);
+      return !!zeroFactor && t.factorCount > 1;
     });
 
-    // console.log(Factory.buildFactor('-sin[(x)]'));
+    while (termWithZeroCtx) {
+      mo = mo.replace(termWithZeroCtx.target, new Term('0'));
+
+      termWithZeroCtx = mo.find(Term, (t: Term) => {
+        const zeroFactor = t.findChild<Double | Integer>(Double || Integer, (i) => i.value === 0);
+        return !!zeroFactor && t.factorCount > 1;
+      });
+    }
+
+    return mo;
   }
 }

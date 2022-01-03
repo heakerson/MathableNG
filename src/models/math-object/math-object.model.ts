@@ -25,10 +25,6 @@ export abstract class MathObject {
         this.children = this.setChildren();
     }
 
-    public toString(): string {
-        return this.formattedInput;
-    }
-
     public traverse<TMathObject extends MathObject>(type: any, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
         const rootContext = new Context(this, new Position(0, 0));
         const traversableChildren = this.getTraversableChildren();
@@ -50,10 +46,6 @@ export abstract class MathObject {
                 c.traverseInternal(type, rootContext, i, fn, childFirst);
             });
         }
-    }
-
-    protected getTraversableChildren(): MathObject[] {
-        return this.children;
     }
 
     private traverseInternal<TMathObject extends MathObject>(type: any, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
@@ -96,7 +88,26 @@ export abstract class MathObject {
         return foundContext;
     }
 
-    public replace<TMathObject extends MathObject, TReplacementType extends MathObject>(previousMathObject: TReplacementType, newMathObject: TReplacementType): TMathObject | null {
+    public findChild<TMathObject extends MathObject>(type: typeof MathObject, predicateFn: (mo: TMathObject) => boolean = () => true): TMathObject | null {
+        let child: TMathObject | null = null;
+        const children = this.getTraversableChildren();
+
+        children.forEach(c => {
+            if (!child) {
+                if (c instanceof type) {
+                    const predicatePasses = predicateFn(c as TMathObject);
+    
+                    if (predicatePasses) {
+                        child = c as TMathObject;
+                    }
+                }
+            }
+        });
+
+        return child;
+    }
+
+    public replace<TReplacementType extends MathObject>(previousMathObject: TReplacementType, newMathObject: TReplacementType): this {
         let childCtx = this.find(MathObject, (mo) => mo.id === previousMathObject.id);
         let newObject = newMathObject;
 
@@ -114,7 +125,11 @@ export abstract class MathObject {
             return newObject as any;
         }
 
-        return this as any;
+        return this;
+    }
+
+    public toString(): string {
+        return this.formattedInput;
     }
 
     protected checkFormattingErrors(): void {
@@ -139,5 +154,9 @@ export abstract class MathObject {
         }
 
         return formatted;
+    }
+    
+    protected getTraversableChildren(): MathObject[] {
+        return this.children;
     }
 }
