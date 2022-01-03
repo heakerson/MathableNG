@@ -8,7 +8,7 @@ import { Term } from "src/models/math-object/term.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
-import { factorConstructorTests, FactorConstTest, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
+import { factorConstructorTests, FactorConstTest, factorFlipSignTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 
 export class ExpressionConstTest extends FactorConstTest {
     additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]
@@ -246,6 +246,53 @@ describe('Expression', () => {
 
             mathObjectReplaceTests('STANDARD Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, standardBuilder, replacement2, extraOpFinder);
             mathObjectReplaceTests('STATIC Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, staticBuilder, replacement2, extraOpFinder);
+        });
+
+        describe('FlipSign', () => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Expression(test.input);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
+                const removedParenth = StringFormatter.stripSurroundingParenthesis(test.input);
+                let termStrings = StringFormatter.parseTermStrings(removedParenth);
+    
+                const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
+                termStrings = termStrings.map((termString, i) => {
+                    if (termString.length > 2) {
+                        const prefix = termString.substring(0, 2);
+        
+                        if (prefix === '--') {
+                            additionalOps.push({ termIndex: i, addtionalOperator: Operators.Subtraction});
+                            return termString.substring(1);
+                        } else if (prefix === '+-') {
+                            additionalOps.push({ termIndex: i, addtionalOperator: Operators.Addition});
+                            return termString.substring(1);
+                        }
+                    }
+    
+                    return termString;
+                });
+    
+                const terms = termStrings.map(t => new Term(t));
+    
+                return Expression.fromTerms(terms, test.sign, additionalOps);
+            };
+
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: '(a^x)', toStringAfter: '-(a^x)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a+b', toStringBefore: '(a+b)', toStringAfter: '-(a+b)' }),
+                new FactorReplaceAndFlipSignTest({ input: '(a+b)', toStringBefore: '(a+b)', toStringAfter: '-(a+b)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: '(g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x))', toStringAfter: '-(g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x))' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(x)', toStringBefore: '-(x)', toStringAfter: '(x)', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '-(a+-x)' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(a+-x)', toStringBefore: '-(a+-x)', toStringAfter: '(a+-x)', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '-(a--x)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '-(a+-x)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '-(a--x)' }),
+                new FactorReplaceAndFlipSignTest({ input: '-(a+-x)', toStringBefore: '-(a+-x)', toStringAfter: '(a+-x)', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: '-(a--x)', toStringBefore: '-(a--x)', toStringAfter: '(a--x)', sign: Sign.Negative }),
+            ];
+
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });
