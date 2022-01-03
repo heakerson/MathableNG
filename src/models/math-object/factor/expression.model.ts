@@ -1,6 +1,6 @@
 import { ErrorCodes, ErrorHandler } from "src/models/services/error-handler.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { Operators } from "../enums.model";
+import { Operators, Sign } from "../enums.model";
 import { Term } from "../term.model";
 import { Factor } from "./factor.model";
 
@@ -25,7 +25,7 @@ export class Expression extends Factor {
         this.additionalOperators = this.setAdditionalOperators();
     }
 
-    public static fromTerms(terms: Term[], additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]): Expression {
+    public static fromTerms(terms: Term[], sign: Sign = Sign.Positive, additionalOperators?: { termIndex: number, addtionalOperator: Operators }[]): Expression {
         let innerTerms = '';
 
         if (additionalOperators?.length) {
@@ -48,14 +48,14 @@ export class Expression extends Factor {
             return innerTerms += `${op}${sign}${term.toString()}`;
         });
 
-        return new Expression(innerTerms);
+        return new Expression(`${sign}(${innerTerms})`);
     }
 
     public replaceChild(newTerm: Term, previousTerm: Term): Expression {
         const currentTermIndex = this.children.findIndex(t => t.id === previousTerm.id);
         const newChildren = this.children.map(c => c.id === previousTerm.id ? newTerm : c) as Term[];
         const additionalOperators = this.additionalOperators.filter(o => o.termIndex !== currentTermIndex);
-        return Expression.fromTerms(newChildren, additionalOperators);
+        return Expression.fromTerms(newChildren, this.sign, additionalOperators);
     }
 
     public override toString(): string {

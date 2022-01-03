@@ -42,7 +42,8 @@ describe('Expression', () => {
     describe('Constructor Tests', () => {
         const standardBuilder = (test: ExpressionConstTest) => new Expression(test.input);
         const staticBuilder = (test: ExpressionConstTest) => {
-            let termStrings = StringFormatter.parseTermStrings(test.input);
+            const removedParenth = StringFormatter.stripSurroundingParenthesis(test.input);
+            let termStrings = StringFormatter.parseTermStrings(removedParenth);
 
             const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
             termStrings = termStrings.map((termString, i) => {
@@ -63,7 +64,7 @@ describe('Expression', () => {
 
             const terms = termStrings.map(t => new Term(t));
 
-            return Expression.fromTerms(terms, additionalOps);
+            return Expression.fromTerms(terms, test.sign, additionalOps);
         };
 
         describe('Success', () => {
@@ -120,7 +121,7 @@ describe('Expression', () => {
 
             const staticErrorBuilder = (test: ExpressionConstTest) => {
                 const terms = test.children.map(t => new Term(t));
-                return Expression.fromTerms(terms, test.additionalOperators);
+                return Expression.fromTerms(terms, test.sign, test.additionalOperators);
             }
 
             const constructorTests: ExpressionConstTest[] = baseMathObjectErrorTests.map(ex => {
@@ -137,7 +138,8 @@ describe('Expression', () => {
         describe('Traverse', () => {
             const standardBuilder = (test: FactorTraverseTest) => new Expression(test.input);
             const staticBuilder = (test: FactorTraverseTest) => {
-                let termStrings = StringFormatter.parseTermStrings(test.input);
+                const removedParenth = StringFormatter.stripSurroundingParenthesis(test.input);
+                let termStrings = StringFormatter.parseTermStrings(removedParenth);
     
                 const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
                 termStrings = termStrings.map((termString, i) => {
@@ -158,7 +160,7 @@ describe('Expression', () => {
     
                 const terms = termStrings.map(t => new Term(t));
     
-                return Expression.fromTerms(terms, additionalOps);
+                return Expression.fromTerms(terms, test.sign, additionalOps);
             };
 
             const tests: FactorTraverseTest[] = [
@@ -184,7 +186,8 @@ describe('Expression', () => {
         // describe('Replace', () => {
         //     const standardBuilder = (test: FactorReplaceTest) => new Expression(test.input);
         //     const staticBuilder = (test: FactorReplaceTest) => {
-        //         let termStrings = StringFormatter.parseTermStrings(test.input);
+            // const removedParenth = StringFormatter.stripSurroundingParenthesis(test.input);
+            // let termStrings = StringFormatter.parseTermStrings(removedParenth);
     
         //         const additionalOps: { termIndex: number, addtionalOperator: Operators }[] = [];
         //         termStrings = termStrings.map((termString, i) => {
