@@ -2,8 +2,8 @@ import { Sign } from "src/models/math-object/enums.model";
 import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
 import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests } from "../factor.spec";
-import { RealNumberConstrTest, realNumberConstructorTests, RealNumberReplaceTest, RealNumberTraverseTest } from "./real-number.spec";
+import { factorConstructorTests, factorFlipSignTests } from "../factor.spec";
+import { RealNumberConstrTest, realNumberConstructorTests, realNumberFlipSignTests, RealNumberReplaceFlipSignTest, RealNumberTraverseTest } from "./real-number.spec";
 
 
 export function integerConstructorTests<TInteger extends Integer, TTest extends RealNumberConstrTest>(
@@ -99,21 +99,38 @@ describe('Integer', () => {
         });
 
         describe('Replace', () => {
-            const standardBuilder = (test: RealNumberReplaceTest) => new Integer(test.input);
-            const staticBuilder = (test: RealNumberReplaceTest) => Integer.fromNumber(test.value);
+            const standardBuilder = (test: RealNumberReplaceFlipSignTest) => new Integer(test.input);
+            const staticBuilder = (test: RealNumberReplaceFlipSignTest) => Integer.fromNumber(test.value);
 
             const finder = (mo: Integer) => mo.find(Integer, (m: Integer) => m.value === 1);
             const replacement = () => new Integer('0');
 
-            const tests: RealNumberReplaceTest[] = [
-                new RealNumberReplaceTest({ input: '1', toStringBefore: '1', toStringAfter: '0', value: 1 }),
-                new RealNumberReplaceTest({ input: '1.0', toStringBefore: '1', toStringAfter: '0', value: 1.0 }),
-                new RealNumberReplaceTest({ input: '5', toStringBefore: '5', toStringAfter: '5', value: 5 }),
-                new RealNumberReplaceTest({ input: '-1', toStringBefore: '-1', toStringAfter: '-1', value: -1 }),
+            const tests: RealNumberReplaceFlipSignTest[] = [
+                new RealNumberReplaceFlipSignTest({ input: '1', toStringBefore: '1', toStringAfter: '0', value: 1 }),
+                new RealNumberReplaceFlipSignTest({ input: '1.0', toStringBefore: '1', toStringAfter: '0', value: 1.0 }),
+                new RealNumberReplaceFlipSignTest({ input: '5', toStringBefore: '5', toStringAfter: '5', value: 5 }),
+                new RealNumberReplaceFlipSignTest({ input: '-1', toStringBefore: '-1', toStringAfter: '-1', value: -1 }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
             mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+        });
+
+        describe('FlipSign', () => {
+            const standardBuilder = (test: RealNumberReplaceFlipSignTest) => new Integer(test.input);
+            const staticBuilder = (test: RealNumberReplaceFlipSignTest) => Integer.fromNumber(test.value);
+
+            const tests: RealNumberReplaceFlipSignTest[] = [
+                new RealNumberReplaceFlipSignTest({ input: '1', toStringBefore: '1', toStringAfter: '-1', value: 1 }),
+                new RealNumberReplaceFlipSignTest({ input: '1.0', toStringBefore: '1', toStringAfter: '-1', value: 1.0 }),
+                new RealNumberReplaceFlipSignTest({ input: '5', toStringBefore: '5', toStringAfter: '-5', value: 5 }),
+                new RealNumberReplaceFlipSignTest({ input: '-1', toStringBefore: '-1', toStringAfter: '1', value: -1 }),
+            ];
+
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
+            realNumberFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            realNumberFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });
