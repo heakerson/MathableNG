@@ -7,7 +7,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
-import { factorConstructorTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
+import { factorConstructorTests, factorFlipSignTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
 import { TrigConstrTest, trigConstructorTests } from "./trig.spec";
 
@@ -115,6 +115,23 @@ describe('sin', () => {
 
             mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);
             mathObjectReplaceTests('STATIC Constructor - replace root', rootTests, staticBuilder, replacementRoot, finderRoot);
+        });
+
+        describe('FlipSign', () => {
+            const standardBuilder = (test: FactorReplaceAndFlipSignTest) => new Sin(test.input, test.sign);
+            const staticBuilder = (test: FactorReplaceAndFlipSignTest) => {
+                const contents = Factory.buildFactor(test.input);
+                return Sin.fromFactor(contents, test.sign);
+            };
+
+            const tests: FactorReplaceAndFlipSignTest[] = [
+                new FactorReplaceAndFlipSignTest({ input: 'a^x', toStringBefore: 'sin[a^x]', toStringAfter: '-sin[a^x]' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a^b', toStringBefore: '-sin[a^b]', toStringAfter: 'sin[a^b]', sign: Sign.Negative }),
+                new FactorReplaceAndFlipSignTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'sin[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: '-sin[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]' }),
+            ];
+
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });
