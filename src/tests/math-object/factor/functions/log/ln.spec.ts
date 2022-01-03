@@ -3,11 +3,13 @@ import { Ln } from "src/models/math-object/factor/functions/log/ln.model";
 import { Double } from "src/models/math-object/factor/number/double.model";
 import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
+import { Variable } from "src/models/math-object/factor/variable.model";
+import { MathObject } from "src/models/math-object/math-object.model";
 import { Factory } from "src/models/services/factory.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
+import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
-import { LogConstrTest, logConstructorTests, LogTraverseTest } from "./log.spec";
+import { LogConstrTest, logConstructorTests, LogReplaceTest, LogTraverseTest } from "./log.spec";
 
 describe('Ln', () => {
 
@@ -73,6 +75,36 @@ describe('Ln', () => {
             mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
+        });
+
+        describe('Replace', () => {
+            const standardBuilder = (test: LogReplaceTest) => new Ln(test.input, test.sign);
+            const staticBuilder = (test: LogReplaceTest) =>  Ln.fromFactors(Factory.buildFactor(test.input), test.sign);
+    
+            const finder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+            const replacement = () => new Variable('-z');
+    
+            const tests: LogReplaceTest[] = [
+                new LogReplaceTest({ input: 'a^x', toStringBefore: 'ln[a^x]', toStringAfter: 'ln[a^-z]'}),
+                new LogReplaceTest({ input: 'x^a', toStringBefore: 'ln[x^a]', toStringAfter: 'ln[-z^a]' }),
+                new LogReplaceTest({ input: 'a^b', toStringBefore: '-ln[a^b]', toStringAfter: '-ln[a^b]', sign: Sign.Negative }),
+                new LogReplaceTest({ input: 'g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)', toStringBefore: 'ln[g^(a*(sin[a^(s-r*(p+(x/d)))])*b*x)]', toStringAfter: 'ln[g^(a*(sin[a^(s-r*(p+(-z/d)))])*b*x)]' }),
+            ];
+    
+            mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+            mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+    
+    
+            const finderRoot = (mo: MathObject) => mo.find(Ln, (m: Ln) => m.sign === Sign.Positive);
+            const replacementRoot = () => new Variable('x');
+    
+            const rootTests: LogReplaceTest[] = [
+                new LogReplaceTest({ input: 'y', toStringBefore: 'ln[y]', toStringAfter: 'x' }),
+                new LogReplaceTest({ input: 'log[y]', toStringBefore: 'ln[log[y,10]]', toStringAfter: 'x' }),
+            ];
+    
+            mathObjectReplaceTests('STANDARD Constructor - replace root', rootTests, standardBuilder, replacementRoot, finderRoot);
+            mathObjectReplaceTests('STATIC Constructor - replace root', rootTests, staticBuilder, replacementRoot, finderRoot);
         });
     });
 });
