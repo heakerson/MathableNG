@@ -1,9 +1,9 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Double } from "src/models/math-object/factor/number/double.model";
 import { ErrorCodes } from "src/models/services/error-handler.service";
-import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
+import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests } from "../factor.spec";
-import { RealNumberConstrTest, realNumberConstructorTests, RealNumberTraverseTest } from "./real-number.spec";
+import { RealNumberConstrTest, realNumberConstructorTests, RealNumberReplaceTest, RealNumberTraverseTest } from "./real-number.spec";
 
 describe('Double', () => {
 
@@ -70,6 +70,24 @@ describe('Double', () => {
             mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
+        });
+
+        describe('Replace', () => {
+            const standardBuilder = (test: RealNumberReplaceTest) => new Double(test.input);
+            const staticBuilder = (test: RealNumberReplaceTest) => Double.fromNumber(test.value);
+
+            const finder = (mo: Double) => mo.find(Double, (m: Double) => m.value === 1);
+            const replacement = () => new Double('0');
+
+            const tests: RealNumberReplaceTest[] = [
+                new RealNumberReplaceTest({ input: '1', toStringBefore: '1', toStringAfter: '0', value: 1 }),
+                new RealNumberReplaceTest({ input: '1.0', toStringBefore: '1', toStringAfter: '0', value: 1.0 }),
+                new RealNumberReplaceTest({ input: '5', toStringBefore: '5', toStringAfter: '5', value: 5 }),
+                new RealNumberReplaceTest({ input: '-1', toStringBefore: '-1', toStringAfter: '-1', value: -1 }),
+            ];
+
+            mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+            mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
         });
     });
 });
