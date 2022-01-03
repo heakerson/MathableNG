@@ -57,6 +57,10 @@ export class Term extends MathObject {
         return factorString;
     }
 
+    public flipFirstFactorSign(): Term {
+        return this.replaceChild(this.factors[0].flipSign(), this.factors[0]);
+    }
+
     protected override setChildren(): Factor[] {
         return StringFormatter.parseFactorStrings(this.formattedInput).map(f => Factory.buildFactor(f));
     }

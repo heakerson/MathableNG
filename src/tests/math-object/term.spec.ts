@@ -17,6 +17,15 @@ export class TermConstTest extends MathObjectConstTest {
     }
 }
 
+export class TermFlipSignTest extends MathObjecReplaceTest {
+    sign: Sign = Sign.Positive;
+
+    constructor(props: Partial<TermFlipSignTest>) {
+        super(props);
+        Object.assign(this, props);
+    }
+}
+
 export function termConstructorTests<TTerm extends Term, TTest extends TermConstTest>(
     additionalLabel: string,
     tests: TTest[],
@@ -39,6 +48,28 @@ export function termConstructorTests<TTerm extends Term, TTest extends TermConst
     });
 }
 
+export function factorFlipSignTests<TTerm extends Term, TTest extends TermFlipSignTest>(
+    additionalLabel: string,
+    tests: TTest[],
+    builder: (test: TTest) => TTerm
+): void {
+
+    describe(`MathObject Constructor Tests => ${additionalLabel}`, () => {
+        tests.forEach((test: TTest) => {
+            it(`'${test.input}' => should populate base properties correctly`, () => {
+                const mo: TTerm = builder(test);
+                const flipped = mo.flipFirstFactorSign();
+                // console.log(test);
+                // console.log(mo);
+                // console.log('toString', mo.toString());
+                expect(mo.toString()).toEqual(test.toStringBefore);
+                expect(flipped.toString()).toEqual(test.toStringAfter);
+                expect(flipped.sign).not.toEqual(mo.sign);
+            });
+        });
+    });
+}
+
 describe('Term', () => {
 
     describe('Constructor Tests', () => {
@@ -48,6 +79,7 @@ describe('Term', () => {
                 new TermConstTest({ input: 'a', children: ['a'], toString: 'a', sign: Sign.Positive }),
                 new TermConstTest({ input: 'a*b', children: ['a', 'b'], toString: 'a*b', sign: Sign.Positive }),
                 new TermConstTest({ input: '-a*b', children: ['-a', 'b'], toString: '-a*b', sign: Sign.Negative }),
+                new TermConstTest({ input: '-0*b', children: ['-0', 'b'], toString: '-0*b', sign: Sign.Negative }),
                 new TermConstTest({ input: '+a*b', children: ['a', 'b'], toString: 'a*b', sign: Sign.Positive }),
                 new TermConstTest({ input: '-a-b', children: ['(-a-b)'], toString: '(-a-b)', sign: Sign.Positive }),
                 new TermConstTest({ input: 'a*b^c', children: ['a', 'b^c'], toString: 'a*b^c', sign: Sign.Positive }),
@@ -135,6 +167,28 @@ describe('Term', () => {
 
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
             mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
+        });
+
+        describe('FlipFirstFactorSign', () => {
+            const standardBuilder = (test: TermFlipSignTest) => new Term(test.input);
+            const staticBuilder = (test: TermFlipSignTest) => {
+                const factors = StringFormatter.parseFactorStrings(test.input).map(f => Factory.buildFactor(f));
+                return Term.fromFactors(...factors)
+            };
+
+            const tests: TermFlipSignTest[] = [
+                new TermFlipSignTest({ input: 'a*x*b', toStringBefore: 'a*x*b', toStringAfter: '-a*x*b' }),
+                new TermFlipSignTest({ input: '-a*x*b', toStringBefore: '-a*x*b', toStringAfter: 'a*x*b' }),
+                new TermFlipSignTest({ input: '5', toStringBefore: '5', toStringAfter: '-5' }),
+                new TermFlipSignTest({ input: '0', toStringBefore: '0', toStringAfter: '-0' }),
+                new TermFlipSignTest({ input: '-0*a', toStringBefore: '-0*a', toStringAfter: '0*a' }),
+                new TermFlipSignTest({ input: 'a/x', toStringBefore: '(a/x)', toStringAfter: '-(a/x)' }),
+                new TermFlipSignTest({ input: 'a+x', toStringBefore: '(a+x)', toStringAfter: '-(a+x)' }),
+                new TermFlipSignTest({ input: '-a^x', toStringBefore: '-a^x', toStringAfter: 'a^x' }),
+            ];
+
+            factorFlipSignTests('STANDARD Constructor', tests, standardBuilder);
+            factorFlipSignTests('STATIC Constructor', tests, staticBuilder);
         });
     });
 });
