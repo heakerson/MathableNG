@@ -6,7 +6,7 @@ import { Variable } from "src/models/math-object/factor/variable.model";
 import { Term } from "src/models/math-object/term.model";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
-import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest, MathObjectTraverseTest, mathObjectTraverseTests } from "./math-object.spec";
+import { baseMathObjectErrorTests, MathObjecReplaceTest, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest, mathObjectReplaceTests, MathObjectTraverseTest, mathObjectTraverseTests } from "./math-object.spec";
 
 export class TermConstTest extends MathObjectConstTest {
     sign: Sign = Sign.Positive;
@@ -66,7 +66,7 @@ describe('Term', () => {
             mathObjectConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
             mathObjectConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
     
-            termConstructorTests('STANDARD CONSTRUCTOR', constructorTests, standardBuilder);
+            termConstructorTests('STANDARD Constructor', constructorTests, standardBuilder);
             termConstructorTests('STATIC Constructor', constructorTests, staticBuilder);
         });
 
@@ -110,6 +110,31 @@ describe('Term', () => {
             mathObjectTraverseTests('Parent First STATIC', tests, staticBuilder, false);
             mathObjectTraverseTests('Child First STANDARD', childFirstTests, standardBuilder, true);
             mathObjectTraverseTests('Child First STATIC', childFirstTests, staticBuilder, true);
+        });
+
+        describe('Replace', () => {
+            const standardBuilder = (test: MathObjecReplaceTest) => new Term(test.input);
+            const staticBuilder = (test: MathObjecReplaceTest) => {
+                const factors = StringFormatter.parseFactorStrings(test.input).map(f => Factory.buildFactor(f));
+                return Term.fromFactors(...factors)
+            };
+
+            const finder = (term: Term) => term.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Positive);
+            const replacement = () => new Variable('-z');
+
+            const tests: MathObjecReplaceTest[] = [
+                new MathObjecReplaceTest({ input: 'a*x*b', toStringBefore: 'a*x*b', toStringAfter: 'a*-z*b' }),
+                new MathObjecReplaceTest({ input: 'x*a*b', toStringBefore: 'x*a*b', toStringAfter: '-z*a*b' }),
+                new MathObjecReplaceTest({ input: 'x', toStringBefore: 'x', toStringAfter: '-z' }),
+                new MathObjecReplaceTest({ input: 'a^x*b', toStringBefore: 'a^x*b', toStringAfter: 'a^-z*b' }),
+                new MathObjecReplaceTest({ input: 'a/x', toStringBefore: '(a/x)', toStringAfter: '(a/-z)' }),
+                new MathObjecReplaceTest({ input: 'a*c*b', toStringBefore: 'a*c*b', toStringAfter: 'a*c*b' }),
+                new MathObjecReplaceTest({ input: '-x', toStringBefore: '-x', toStringAfter: '-x' }),
+                new MathObjecReplaceTest({ input: 'a*(sin[a^(s-r*(p+(x/d)))])*b*x', toStringBefore: 'a*(sin[a^(s-r*(p+(x/d)))])*b*x', toStringAfter: 'a*(sin[a^(s-r*(p+(-z/d)))])*b*x' }),
+            ];
+
+            mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
+            mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
         });
     });
 });

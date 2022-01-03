@@ -1,7 +1,4 @@
 LEFT OFF:
-- Test findChild
-- Test replaceChild
-- Test find
 - Test replace
 - Get it so the find function only returns Mathobject and NOT null?
 - Try creating variable 'WOW' - throws error
@@ -10,6 +7,7 @@ LEFT OFF:
 - Write/test flipSign 
 - Go through all the objects and start adding any other method tests needed
 - start building basic simplifier
+    - create a looping function that allows you to pass in a list of functions
 - Create tests for new EMPTY_PARAMETER function errors - USE STASH
     - Maybe only check for this error in the Factory class since that's the only place it might show up? The rest will be caught through constructor inputs
     - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters

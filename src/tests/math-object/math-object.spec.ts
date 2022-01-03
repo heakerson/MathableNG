@@ -181,3 +181,42 @@ export class MathObjectTraverseTest {
         Object.assign(this, props);
     }
 }
+
+export class MathObjecReplaceTest {
+    input: string = '';
+    toStringBefore: string = '';
+    toStringAfter: string = '';
+
+    constructor(props: Partial<MathObjecReplaceTest>) {
+        Object.assign(this, props);
+    }
+}
+
+export function mathObjectReplaceTests<TMathObject extends MathObject, TTest extends MathObjecReplaceTest>(
+    additionalLabel: string,
+    tests: TTest[],
+    builder: (test: TTest) => TMathObject,
+    replacementBuilder: () => MathObject,
+    finder: (mo: TMathObject) => Context | null
+): void {
+
+    describe(`MathObject Replace Tests => ${additionalLabel}`, () => {
+        tests.forEach((test: TTest) => {
+            it(`'${test.input}' => should find child`, () => {
+                const mo: TMathObject = builder(test);
+                const replacement: MathObject = replacementBuilder();
+                const childCtx = finder(mo);
+
+                if (childCtx) {
+                    const newMo = mo.replace(childCtx.target, replacement);
+    
+                    expect(mo.toString()).toEqual(test.toStringBefore);
+                    expect(newMo.toString()).toEqual(test.toStringAfter);
+                } else {
+                    const newMo = mo.replace(replacement, replacement);
+                    expect(newMo.toString()).toEqual(test.toStringBefore);
+                }
+            });
+        });
+    });
+}
