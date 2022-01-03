@@ -229,23 +229,23 @@ describe('Expression', () => {
             mathObjectReplaceTests('STANDARD Constructor', tests, standardBuilder, replacement, finder);
             mathObjectReplaceTests('STATIC Constructor', tests, staticBuilder, replacement, finder);
 
-            // const extraOpFinder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Negative);
-            // const extraOpsTests: FactorReplaceTest[] = [
-            //     new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+-z)' }),
-            //     new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a--z)' }),
-            // ];
+            const extraOpFinder = (mo: MathObject) => mo.find(Variable, (m: Variable) => m.name === 'x' && m.sign === Sign.Negative);
+            const extraOpsTests: FactorReplaceTest[] = [
+                new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+-z)' }),
+                new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a--z)' }),
+            ];
 
-            // mathObjectReplaceTests('STANDARD Constructor - Extra Ops', extraOpsTests, standardBuilder, replacement, extraOpFinder);
-            // mathObjectReplaceTests('STATIC Constructor - Extra Ops', extraOpsTests, staticBuilder, replacement, extraOpFinder);
+            mathObjectReplaceTests('STANDARD Constructor - Extra Ops', extraOpsTests, standardBuilder, replacement, extraOpFinder);
+            mathObjectReplaceTests('STATIC Constructor - Extra Ops', extraOpsTests, staticBuilder, replacement, extraOpFinder);
 
-            // const replacement2 = () => new Variable('z');
-            // const extraOpsTestsDiffSign: FactorReplaceTest[] = [
-            //     new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+z)' }),
-            //     new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a-z)' }),
-            // ];
+            const replacement2 = () => new Variable('z');
+            const extraOpsTestsDiffSign: FactorReplaceTest[] = [
+                new FactorReplaceTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+z)' }),
+                new FactorReplaceTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a-z)' }),
+            ];
 
-            // mathObjectReplaceTests('STANDARD Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, standardBuilder, replacement2, extraOpFinder);
-            // mathObjectReplaceTests('STATIC Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, staticBuilder, replacement2, extraOpFinder);
+            mathObjectReplaceTests('STANDARD Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, standardBuilder, replacement2, extraOpFinder);
+            mathObjectReplaceTests('STATIC Constructor - Extra Ops, different replacement sign', extraOpsTestsDiffSign, staticBuilder, replacement2, extraOpFinder);
         });
     });
 });

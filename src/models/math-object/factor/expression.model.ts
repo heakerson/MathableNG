@@ -53,8 +53,19 @@ export class Expression extends Factor {
 
     public replaceChild(newTerm: Term, previousTerm: Term): Expression {
         const currentTermIndex = this.children.findIndex(t => t.id === previousTerm.id);
+        let additionalOperators = this.additionalOperators.filter(o => o.termIndex === currentTermIndex);
+
+        if (additionalOperators.length && newTerm.sign === Sign.Positive) {
+            const additionalOp = additionalOperators[0].addtionalOperator;
+            additionalOperators.pop();
+
+            if (additionalOp === Operators.Subtraction) {
+                const firstFactor = newTerm.factors[0];
+                newTerm = newTerm.replaceChild(firstFactor.flipSign(), firstFactor);
+            }
+        }
+
         const newChildren = this.children.map(c => c.id === previousTerm.id ? newTerm : c) as Term[];
-        const additionalOperators = this.additionalOperators.filter(o => o.termIndex !== currentTermIndex);
         return Expression.fromTerms(newChildren, this.sign, additionalOperators);
     }
 
