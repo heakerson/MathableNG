@@ -60,8 +60,7 @@ export class Expression extends Factor {
             additionalOperators.pop();
 
             if (additionalOp === Operators.Subtraction) {
-                const firstFactor = newTerm.factors[0];
-                newTerm = newTerm.replaceChild(firstFactor.flipSign(), firstFactor);
+                newTerm = newTerm.flipFirstFactorSign();
             }
         }
 

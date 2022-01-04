@@ -1,5 +1,4 @@
 LEFT OFF:
-- I should update replace child in expression with new term flip sign function
 - swap inputs for replaceChild
 - start building basic simplifier
     - create a looping function that allows you to pass in a list of functions that return a LIST OF CHANGE OBJECTS
