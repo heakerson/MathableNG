@@ -1,7 +1,13 @@
 LEFT OFF:
-- start building basic simplifier
-    - create a looping function that allows you to pass in a list of functions that return a LIST OF CHANGE OBJECTS
-    - inside services, create a 'Core' services folder and a 'Math' services folder
+- I need to add the operation id to the change object
+- I think I need to change how I'm setting the AFTER highlight objects? I need to find them WITHIN the new root object
+    - create a getObjectAtPosition - update the position data
+- Test the operation functions
+- Create testing application - sepearate angular module
+- Add new operations!
+    - Try to find old app and see what order I did things in and what I'm missing
+- maybe combine the multiplication/addition/subtraction/zero factors/zero terms operators in to one?
+- inside services, create a 'Core' services and move the factory/error-handler/string formatter in to it
 - Create tests for new EMPTY_PARAMETER function errors - USE STASH
     - Maybe only check for this error in the Factory class since that's the only place it might show up? The rest will be caught through constructor inputs
     - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters

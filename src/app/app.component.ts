@@ -13,6 +13,7 @@ import { Variable } from 'src/models/math-object/factor/variable.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/factory.service';
 import { MathObject } from 'src/models/math-object/math-object.model';
+import { Mathable } from 'src/tests/services/math/mathable.model';
 
 @Component({
   selector: 'app-root',
@@ -23,20 +24,15 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    // const thing = -0;
-    // const thing2 = 0;
-    // console.log('zero', thing);
-    // console.log('zero to string', thing.toString());
-    // console.log('equals -0', thing === -0);
-    // console.log('equals 0', thing === 0);
+    const mo = new Expression('a*b*0 + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
+    const solution = Mathable.simplify(mo);
+    console.log(`${mo.toString()} ====== `);
 
-    // let expression = new Expression('(a-1*(z+(b-1*(b+sin[z])*0))+c*(3.5*0+7+f^(x+-1+E)))');
-    // let expression = new Expression('(a-1*(z+(b-1*(b+z)*0)))');
-    // console.log('START', expression.toString());
+    solution.changes.forEach(c => {
+      console.log('   ', c.newMathObject.toString());
+    });
 
-    // expression = this.replaceZeroFactors(expression) as Expression;
-    // expression = this.replaceZeroTerms(expression) as Expression;
-    // console.log('FINAL', expression.toString());
+    console.log(`${solution.final.toString()} ====== `);
   }
 
   replaceZeroTerms(mo: MathObject): MathObject {
