@@ -8,7 +8,7 @@ export abstract class MathObject {
     public readonly children: MathObject[];
 
     public abstract copy(): MathObject;
-    public abstract replaceChild(newMathObject: MathObject, previousMathObject: MathObject): MathObject;
+    public abstract replaceChild(previousMathObject: MathObject, newMathObject: MathObject): MathObject;
 
     protected readonly inputWhitespaceRemoved: string;
     protected readonly formattedInput: string;
@@ -116,7 +116,7 @@ export abstract class MathObject {
     
             while (parentCtx) {
                 const parent: MathObject = parentCtx.target;
-                newObject = parent.replaceChild(newObject, childCtx.target) as any;
+                newObject = parent.replaceChild(childCtx.target, newObject) as any;
 
                 childCtx = parentCtx;
                 parentCtx = parentCtx.parentContext;

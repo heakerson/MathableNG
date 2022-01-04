@@ -38,7 +38,7 @@ export class Term extends MathObject {
         return new Term(factorString);
     }
 
-    public replaceChild(newFactor: Factor, previousFactor: Factor): Term {
+    public replaceChild(previousFactor: Factor, newFactor: Factor): Term {
         const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Term.fromFactors(...newChildren);
     }
@@ -58,7 +58,7 @@ export class Term extends MathObject {
     }
 
     public flipFirstFactorSign(): Term {
-        return this.replaceChild(this.factors[0].flipSign(), this.factors[0]);
+        return this.replaceChild(this.factors[0], this.factors[0].flipSign());
     }
 
     protected override setChildren(): Factor[] {

@@ -21,7 +21,7 @@ export class Log extends Function {
         return new Log(factor.toString(), sign, base.toString());
     }
 
-    public replaceChild(newFactor: Factor, previousFactor: Factor): Log {
+    public replaceChild(previousFactor: Factor, newFactor: Factor): Log {
         const newChildren = this.children.map(c => c.id === previousFactor.id ? newFactor : c) as Factor[];
         return Log.fromFactors(newChildren[0], this.sign, newChildren[1]);
     }

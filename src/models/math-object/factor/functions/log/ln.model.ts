@@ -18,8 +18,12 @@ export class Ln extends Log {
         return new Ln(factor.toString(), sign);
     }
 
-    public override replaceChild(newMathObject: Factor): Ln {
-        return Ln.fromFactors(newMathObject, this.sign);
+    public override replaceChild(previousChild: Factor, newMathObject: Factor): Ln {
+        if (this.contents.id === previousChild.id) {
+            return Ln.fromFactors(newMathObject, this.sign);
+        }
+
+        return this;
     }
 
     public override copy(): Log {

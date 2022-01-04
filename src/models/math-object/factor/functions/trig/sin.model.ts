@@ -13,8 +13,12 @@ export class Sin extends Trig {
         return Factory.buildFactor(`${sign}sin[${contents}]`) as Sin;
     }
 
-    public replaceChild(newContents: Factor): Sin {
-        return Sin.fromFactor(newContents, this.sign);
+    public replaceChild(previousContents: Factor, newContents: Factor): Sin {
+        if (this.contents.id === previousContents.id) {
+            return Sin.fromFactor(newContents, this.sign);
+        }
+
+        return this;
     }
 
     public override copy(): Sin {

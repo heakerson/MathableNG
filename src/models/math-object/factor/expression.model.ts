@@ -51,7 +51,7 @@ export class Expression extends Factor {
         return new Expression(`${sign}(${innerTerms})`);
     }
 
-    public replaceChild(newTerm: Term, previousTerm: Term): Expression {
+    public replaceChild(previousTerm: Term, newTerm: Term): Expression {
         const currentTermIndex = this.children.findIndex(t => t.id === previousTerm.id);
         let additionalOperators = this.additionalOperators.filter(o => o.termIndex === currentTermIndex);
 

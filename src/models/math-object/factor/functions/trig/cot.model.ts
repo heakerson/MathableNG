@@ -13,8 +13,12 @@ export class Cot extends Trig {
         return Factory.buildFactor(`${sign}cot[${contents}]`) as Cot;
     }
 
-    public replaceChild(newContents: Factor): Cot {
-        return Cot.fromFactor(newContents, this.sign);
+    public replaceChild(previousContents: Factor, newContents: Factor): Cot {
+        if (this.contents.id === previousContents.id) {
+            return Cot.fromFactor(newContents, this.sign);
+        }
+
+        return this;
     }
 
     public override copy(): Cot {

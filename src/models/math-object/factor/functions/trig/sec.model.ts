@@ -13,8 +13,12 @@ export class Sec extends Trig {
         return Factory.buildFactor(`${sign}sec[${contents}]`) as Sec;
     }
 
-    public replaceChild(newContents: Factor): Sec {
-        return Sec.fromFactor(newContents, this.sign);
+    public replaceChild(previousContents: Factor, newContents: Factor): Sec {
+        if (this.contents.id === previousContents.id) {
+            return Sec.fromFactor(newContents, this.sign);
+        }
+
+        return this;
     }
 
     public override copy(): Sec {

@@ -1,5 +1,4 @@
 LEFT OFF:
-- swap inputs for replaceChild
 - start building basic simplifier
     - create a looping function that allows you to pass in a list of functions that return a LIST OF CHANGE OBJECTS
     - inside services, create a 'Core' services folder and a 'Math' services folder
