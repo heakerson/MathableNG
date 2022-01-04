@@ -1,4 +1,5 @@
 import { MathObject } from "src/models/math-object/math-object.model";
+import { ActionTypes } from "./actions.model";
 
 export class Chainer {
 
@@ -29,6 +30,7 @@ export class ChangeContext {
     public newMathObject!: MathObject;
     public previousHighlightObjects: MathObject[] = [];
     public newHighlightObjects: MathObject[] = [];
+    public action!: ActionTypes;
 
     constructor(props: Partial<ChangeContext>) {
         Object.assign(this, props);

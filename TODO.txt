@@ -1,5 +1,4 @@
 LEFT OFF:
-- I need to add the operation id to the change object
 - I think I need to change how I'm setting the AFTER highlight objects? I need to find them WITHIN the new root object
     - create a getObjectAtPosition - update the position data
 - Test the operation functions

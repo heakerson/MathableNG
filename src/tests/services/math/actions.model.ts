@@ -7,9 +7,9 @@ import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/factory.service';
 import { ChangeContext } from './chainer.model';
 
-export class Operations {
+export class Actions {
 
-  public static removeFirstZeroFactor(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static removeZeroFactor(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
     let zeroFactor: Factor = {} as Factor;
 
     const termWithZeroFactorCtx = rootMo.find(Term, (t: Term) => {
@@ -26,6 +26,7 @@ export class Operations {
           newMathObject: newMo,
           previousHighlightObjects: [zeroFactor],
           newHighlightObjects: [termWithZeroFactorCtx.target],
+          action: ActionTypes.removeZeroFactor
         }),
       ];
     }
@@ -33,7 +34,7 @@ export class Operations {
     return [];
   }
 
-  public static removeFirstZeroTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static removeZeroTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
     const zeroTermCtx = rootMo.find(Term, (t: Term) => {
       if (t.factorCount === 1) {
         const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0) as Double;
@@ -57,6 +58,7 @@ export class Operations {
             previousMathObject: rootMo,
             newMathObject: newMo,
             previousHighlightObjects: [zeroTermCtx.target],
+            action: ActionTypes.removeZeroTerm
           }),
         ];
       }
@@ -89,6 +91,7 @@ export class Operations {
           newMathObject: newMo,
           previousHighlightObjects: [c1, c2],
           newHighlightObjects: [newConstant],
+          action: ActionTypes.constantMultiplication
         }),
       ];
     }
@@ -120,10 +123,18 @@ export class Operations {
           newMathObject: newMo,
           previousHighlightObjects: [t1, t2],
           newHighlightObjects: [newConstant],
+          action: ActionTypes.constantAdditionSubtraction
         }),
       ];
     }
 
     return [];
   }
+}
+
+export enum ActionTypes {
+  removeZeroFactor = 'removeZeroFactor',
+  removeZeroTerm = 'removeZeroTerm',
+  constantAdditionSubtraction = 'constantAdditionSubtraction',
+  constantMultiplication = 'constantMultiplication'
 }

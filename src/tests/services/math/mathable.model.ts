@@ -1,14 +1,14 @@
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Chainer, ChangeContext } from './chainer.model';
-import { Operations } from './operations.model';
+import { Actions } from './actions.model';
 
 export class Mathable {
   public static simplify(mo: MathObject): Solution {
     const changes = Chainer.loopChain(mo, [
-      Operations.removeFirstZeroTerm,
-      Operations.removeFirstZeroFactor,
-      Operations.constantMultiplication,
-      Operations.constantAdditionSubtraction
+      Actions.removeZeroTerm,
+      Actions.removeZeroFactor,
+      Actions.constantMultiplication,
+      Actions.constantAdditionSubtraction
     ]);
 
     return new Solution({ changes });
