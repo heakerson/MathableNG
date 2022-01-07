@@ -14,6 +14,7 @@ import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/factory.service';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Mathable } from 'src/tests/services/math/mathable.model';
+import { Position } from 'src/models/search/position.model';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,16 @@ export class AppComponent implements OnInit {
     });
 
     console.log(`${solution.final.toString()} ====== `);
+
+
+    const sevenCtx = mo.find(Integer, (i: Integer) => i.value === 7);
+    if (sevenCtx) {
+      const newMo = mo.replace(sevenCtx?.target, new Integer('100'));
+      const newOneHundred = newMo.getObjectAtPosition(sevenCtx.position);
+      // const newInt = newMo.getObjectAtPosition(new Position([0, 10, 0]));
+
+      console.log('FOUND 100?', newOneHundred);
+    }
   }
 
   replaceZeroTerms(mo: MathObject): MathObject {

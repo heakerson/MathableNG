@@ -128,6 +128,30 @@ export abstract class MathObject {
         return this;
     }
 
+    public getObjectAtPosition<TMathObject extends MathObject>(position: Position): TMathObject | null {
+        if (position.indexPath.length && position.indexPath[0] === 0) {
+            let pathIndex = 0;
+            let moPosition = position.indexPath[pathIndex];
+            let mo: any = this;
+    
+            while (position.indexPath.length > pathIndex + 1) {
+                pathIndex++;
+                moPosition = position.indexPath[pathIndex];
+
+                if (mo.children.length > moPosition) {
+                    mo = mo.children[moPosition];
+                } else {
+                    pathIndex = position.indexPath.length + 1;
+                    mo = null;
+                }
+            }
+
+            return mo as TMathObject;
+        }
+
+        return null;
+    }
+
     public toString(): string {
         return this.formattedInput;
     }

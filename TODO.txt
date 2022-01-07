@@ -1,6 +1,6 @@
 LEFT OFF:
-- create/test getObjectAtPosition
-    - use this to get the after highlight object (check before)
+- test getObjectAtPosition
+- use getObjectAtPosition to get the after highlight object (check before)
 - Should I add a siblings getter to the context object? Would that help my existing actions?
     - And/or leftSiblings & rightSiblings?
 - Test the operation functions
