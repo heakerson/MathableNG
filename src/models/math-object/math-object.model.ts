@@ -26,7 +26,7 @@ export abstract class MathObject {
     }
 
     public traverse<TMathObject extends MathObject>(type: any, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
-        const rootContext = new Context(this, new Position(0, 0));
+        const rootContext = new Context(this, new Position([0]));
         const traversableChildren = this.getTraversableChildren();
 
         if (childFirst) {
@@ -49,7 +49,7 @@ export abstract class MathObject {
     }
 
     private traverseInternal<TMathObject extends MathObject>(type: any, parentCtx: Context, index: number, fn: (mo: TMathObject, ctx: Context) => void, childFirst: boolean = false): void {
-        const context = new Context(this, new Position(parentCtx.position.level + 1, index), parentCtx);
+        const context = new Context(this, new Position([...parentCtx.position.indexPath, index]), parentCtx);
 
         if (childFirst) {
             this.children.forEach((c, i) => {

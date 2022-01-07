@@ -106,7 +106,7 @@ export function mathObjectTraverseTests<TMathObject extends MathObject, TTest ex
 
                     if (ctx.isRoot) {
                         expect(mo.toString()).toEqual(root.toString());
-                        expect(ctx.position.level).toEqual(0);
+                        expect(ctx.position.indexPath.length).toEqual(1);
                         expect(ctx.position.index).toEqual(0);
                         expect(ctx.target.toString()).toEqual(root.toString());
                     } else {
@@ -116,7 +116,7 @@ export function mathObjectTraverseTests<TMathObject extends MathObject, TTest ex
 
                         expect(moId).toEqual(indexID);
 
-                        let level = ctx.position.level;
+                        let level = ctx.position.indexPath.length;
                         let target = ctx.target;
 
                         while (level > 0) {
@@ -126,8 +126,8 @@ export function mathObjectTraverseTests<TMathObject extends MathObject, TTest ex
 
                         if (!childFirst) {
                             expect(ctx.parentContext).toBeTruthy();
-                            const levelIncremented = ctx.position.level > (ctx.parentContext as any).position.level;
-                            const indexIncremented = ctx.position.level > (ctx.parentContext as any).position.level;
+                            const levelIncremented = ctx.position.indexPath.length > (ctx.parentContext as any).position.indexPath.length;
+                            const indexIncremented = ctx.position.indexPath.length > (ctx.parentContext as any).position.indexPath.length;
                             expect(levelIncremented || indexIncremented).toBeTrue();
                         }
                     }

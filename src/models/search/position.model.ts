@@ -1,3 +1,8 @@
 export class Position {
-    constructor(public level: number, public index: number) {}
+
+    public get index(): number {
+        return this.indexPath[this.indexPath.length - 1];
+    }
+
+    constructor(public indexPath: number[]) {}
 }

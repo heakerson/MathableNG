@@ -1,6 +1,8 @@
 LEFT OFF:
-- I think I need to change how I'm setting the AFTER highlight objects? I need to find them WITHIN the new root object
-    - create a getObjectAtPosition - update the position data
+- create/test getObjectAtPosition
+    - use this to get the after highlight object (check before)
+- Should I add a siblings getter to the context object? Would that help my existing actions?
+    - And/or leftSiblings & rightSiblings?
 - Test the operation functions
 - Create testing application - sepearate angular module
 - Add new operations!
