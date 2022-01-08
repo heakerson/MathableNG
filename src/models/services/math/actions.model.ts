@@ -19,7 +19,8 @@ export class Actions {
     });
 
     if (termWithZeroFactorCtx) {
-      const newMo = rootMo.replace(termWithZeroFactorCtx.target, new Term('0'));
+      const termTgt = termWithZeroFactorCtx.target as Term;
+      const newMo = rootMo.replace(termTgt, new Term(`${termTgt.sign}0`));
 
       return [
         new ChangeContext({
