@@ -1,4 +1,4 @@
-import { StringFormatter } from "../services/string-formatter.service";
+import { StringFormatter } from "../services/core/string-formatter.service";
 import * as uuid from 'uuid';
 import { Context } from "../search/context.model";
 import { Position } from "../search/position.model";

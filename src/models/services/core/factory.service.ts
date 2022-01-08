@@ -16,7 +16,7 @@ import { Sec } from "../../math-object/factor/functions/trig/sec.model";
 import { Sin } from "../../math-object/factor/functions/trig/sin.model";
 import { Tan } from "../../math-object/factor/functions/trig/tan.model";
 import { Variable } from "../../math-object/factor/variable.model";
-import { StringFormatter } from "../string-formatter.service";
+import { StringFormatter } from "./string-formatter.service";
 
 export class Factory {
 

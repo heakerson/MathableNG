@@ -5,7 +5,7 @@ import { Power } from "src/models/math-object/factor/power.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { Term } from "src/models/math-object/term.model";
 import { Factory } from "src/models/services/core/factory.service";
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { StringFormatter } from "src/models/services/core/string-formatter.service";
 import { baseMathObjectErrorTests, MathObjecReplaceTest, mathObjectConstructorErrorTests, mathObjectConstructorTests, MathObjectConstTest, mathObjectReplaceTests, MathObjectTraverseTest, mathObjectTraverseTests } from "./math-object.spec";
 
 export class TermConstTest extends MathObjectConstTest {

@@ -1,6 +1,6 @@
 import { ErrorHandler } from "../services/core/error-handler.service";
 import { Factory } from "../services/core/factory.service";
-import { StringFormatter } from "../services/string-formatter.service";
+import { StringFormatter } from "../services/core/string-formatter.service";
 import { Sign } from "./enums.model";
 import { Factor } from "./factor/factor.model";
 import { MathObject } from "./math-object.model";

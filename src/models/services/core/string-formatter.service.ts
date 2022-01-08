@@ -1,4 +1,4 @@
-import { Constants, LogTypes, TrigTypes } from "../math-object/enums.model";
+import { Constants, LogTypes, TrigTypes } from "../../math-object/enums.model";
 export class StringFormatter {
     public static operators = ['+', '-', '/', '*', '^'];
     public static nonSignOperators = ['/', '*', '^'];

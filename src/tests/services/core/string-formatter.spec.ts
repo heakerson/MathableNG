@@ -1,4 +1,4 @@
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { StringFormatter } from "src/models/services/core/string-formatter.service";
 
 describe('StringFormatter', () => {
 

@@ -1,5 +1,5 @@
 import { ErrorCodes, ErrorHandler } from "src/models/services/core/error-handler.service";
-import { StringFormatter } from "src/models/services/string-formatter.service";
+import { StringFormatter } from "src/models/services/core/string-formatter.service";
 import { Operators, Sign } from "../enums.model";
 import { Term } from "../term.model";
 import { Factor } from "./factor.model";
