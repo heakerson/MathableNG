@@ -4,6 +4,7 @@ import { Double } from 'src/models/math-object/factor/number/double.model';
 import { Integer } from 'src/models/math-object/factor/number/integer.model';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
+import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/factory.service';
 import { ChangeContext } from './chainer.model';
 
@@ -25,7 +26,7 @@ export class Actions {
           previousMathObject: rootMo,
           newMathObject: newMo,
           previousHighlightObjects: [zeroFactor],
-          newHighlightObjects: [termWithZeroFactorCtx.target],
+          newHighlightObjects: [ newMo.getObjectAtPosition(termWithZeroFactorCtx.position) as MathObject ],
           action: ActionTypes.removeZeroFactor
         }),
       ];
@@ -82,6 +83,7 @@ export class Actions {
       const newConstant = Factory.buildFactor((c1.value*c2.value).toString());
       const newTermFactors = term.factors.map(f => f.id === c1.id ? newConstant : f).filter(f => f.id !== c2.id);
       const newTerm = Term.fromFactors(...newTermFactors);
+      const c1Position = rootMo.find(MathObject, (mo) => mo.id === c1.id)?.position as Position;
 
       const newMo = rootMo.replace(term, newTerm);
 
@@ -90,7 +92,7 @@ export class Actions {
           previousMathObject: rootMo,
           newMathObject: newMo,
           previousHighlightObjects: [c1, c2],
-          newHighlightObjects: [newConstant],
+          newHighlightObjects: [ newMo.getObjectAtPosition(c1Position) as MathObject ],
           action: ActionTypes.constantMultiplication
         }),
       ];
@@ -114,6 +116,7 @@ export class Actions {
       const newConstant = Factory.buildFactor(((t1.factors[0] as Double).value+(t2.factors[0] as Double).value).toString());
       const newTerms = exp.terms.map(t => t.id === t1.id ? Term.fromFactors(newConstant) : t).filter(t => t.id !== t2.id);
       const newExp = Expression.fromTerms(newTerms, exp.sign);
+      const newConstantPosition = rootMo.find(MathObject, (mo) => mo.id === newConstant.id)?.position as Position;
 
       const newMo = rootMo.replace(exp, newExp);
 
@@ -122,7 +125,7 @@ export class Actions {
           previousMathObject: rootMo,
           newMathObject: newMo,
           previousHighlightObjects: [t1, t2],
-          newHighlightObjects: [newConstant],
+          newHighlightObjects: [ newMo.getObjectAtPosition(newConstantPosition) as MathObject ],
           action: ActionTypes.constantAdditionSubtraction
         }),
       ];

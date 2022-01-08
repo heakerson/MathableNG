@@ -1,9 +1,7 @@
 LEFT OFF:
-- test getObjectAtPosition
-- use getObjectAtPosition to get the after highlight object (check before)
+- Test the operation functions
 - Should I add a siblings getter to the context object? Would that help my existing actions?
     - And/or leftSiblings & rightSiblings?
-- Test the operation functions
 - Create testing application - sepearate angular module
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
