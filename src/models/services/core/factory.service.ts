@@ -1,22 +1,22 @@
-import { Sign, TrigTypes, LogTypes, Constants } from "../math-object/enums.model";
-import { Expression } from "../math-object/factor/expression.model";
-import { Factor } from "../math-object/factor/factor.model";
-import { E } from "../math-object/factor/number/contant/e.model";
-import { PI } from "../math-object/factor/number/contant/pi.model";
-import { Double } from "../math-object/factor/number/double.model";
-import { Integer } from "../math-object/factor/number/integer.model";
-import { Power } from "../math-object/factor/power.model";
-import { Rational } from "../math-object/factor/rational.model";
-import { Ln } from "../math-object/factor/functions/log/ln.model";
-import { Log } from "../math-object/factor/functions/log/log.model";
-import { Cos } from "../math-object/factor/functions/trig/cos.model";
-import { Cot } from "../math-object/factor/functions/trig/cot.model";
-import { Csc } from "../math-object/factor/functions/trig/csc.model";
-import { Sec } from "../math-object/factor/functions/trig/sec.model";
-import { Sin } from "../math-object/factor/functions/trig/sin.model";
-import { Tan } from "../math-object/factor/functions/trig/tan.model";
-import { Variable } from "../math-object/factor/variable.model";
-import { StringFormatter } from "./string-formatter.service";
+import { Sign, TrigTypes, LogTypes, Constants } from "../../math-object/enums.model";
+import { Expression } from "../../math-object/factor/expression.model";
+import { Factor } from "../../math-object/factor/factor.model";
+import { E } from "../../math-object/factor/number/contant/e.model";
+import { PI } from "../../math-object/factor/number/contant/pi.model";
+import { Double } from "../../math-object/factor/number/double.model";
+import { Integer } from "../../math-object/factor/number/integer.model";
+import { Power } from "../../math-object/factor/power.model";
+import { Rational } from "../../math-object/factor/rational.model";
+import { Ln } from "../../math-object/factor/functions/log/ln.model";
+import { Log } from "../../math-object/factor/functions/log/log.model";
+import { Cos } from "../../math-object/factor/functions/trig/cos.model";
+import { Cot } from "../../math-object/factor/functions/trig/cot.model";
+import { Csc } from "../../math-object/factor/functions/trig/csc.model";
+import { Sec } from "../../math-object/factor/functions/trig/sec.model";
+import { Sin } from "../../math-object/factor/functions/trig/sin.model";
+import { Tan } from "../../math-object/factor/functions/trig/tan.model";
+import { Variable } from "../../math-object/factor/variable.model";
+import { StringFormatter } from "../string-formatter.service";
 
 export class Factory {
 

@@ -6,7 +6,7 @@ import { Power } from "src/models/math-object/factor/power.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { ErrorCodes } from "src/models/services/core/error-handler.service";
-import { Factory } from "src/models/services/factory.service";
+import { Factory } from "src/models/services/core/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
 import { factorConstructorTests, FactorConstTest, factorFlipSignTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";

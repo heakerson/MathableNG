@@ -1,5 +1,5 @@
 import { Sign } from "src/models/math-object/enums.model";
-import { Factory } from "src/models/services/factory.service";
+import { Factory } from "src/models/services/core/factory.service";
 import { Factor } from "../../factor.model";
 import { Trig } from "./trig.model";
 

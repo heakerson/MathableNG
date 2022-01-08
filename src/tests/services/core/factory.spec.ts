@@ -16,7 +16,7 @@ import { Sin } from "src/models/math-object/factor/functions/trig/sin.model";
 import { Tan } from "src/models/math-object/factor/functions/trig/tan.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
-import { Factory } from "src/models/services/factory.service";
+import { Factory } from "src/models/services/core/factory.service";
 
 describe('Factory', () => {
 

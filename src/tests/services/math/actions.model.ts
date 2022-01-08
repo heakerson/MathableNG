@@ -5,7 +5,7 @@ import { Integer } from 'src/models/math-object/factor/number/integer.model';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Position } from 'src/models/search/position.model';
-import { Factory } from 'src/models/services/factory.service';
+import { Factory } from 'src/models/services/core/factory.service';
 import { ChangeContext } from './chainer.model';
 
 export class Actions {

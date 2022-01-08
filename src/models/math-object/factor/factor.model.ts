@@ -1,4 +1,4 @@
-import { Factory } from "src/models/services/factory.service";
+import { Factory } from "src/models/services/core/factory.service";
 import { Sign } from "../enums.model";
 import { MathObject } from "../math-object.model";
 

@@ -5,7 +5,7 @@ import { Integer } from "src/models/math-object/factor/number/integer.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
-import { Factory } from "src/models/services/factory.service";
+import { Factory } from "src/models/services/core/factory.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests, factorFlipSignTests } from "../../factor.spec";
 import { functionConstructorTests } from "../function.spec";
