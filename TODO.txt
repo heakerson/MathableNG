@@ -3,6 +3,8 @@ LEFT OFF:
 - Should I add a siblings getter to the context object? Would that help my existing actions?
     - And/or leftSiblings & rightSiblings?
 - Create testing application - sepearate angular module
+- move string formatter
+- move other service
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
 - maybe combine the multiplication/addition/subtraction/zero factors/zero terms operators in to one?

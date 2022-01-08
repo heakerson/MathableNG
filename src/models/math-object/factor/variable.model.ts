@@ -1,4 +1,4 @@
-import { ErrorCodes, ErrorHandler } from 'src/models/services/error-handler.service';
+import { ErrorCodes, ErrorHandler } from 'src/models/services/core/error-handler.service';
 import { Constants } from '../enums.model';
 import { Factor } from './factor.model';
 

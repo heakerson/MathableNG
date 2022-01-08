@@ -4,7 +4,7 @@ import { E } from "src/models/math-object/factor/number/contant/e.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
 import { MathObject } from "src/models/math-object/math-object.model";
-import { ErrorCodes } from "src/models/services/error-handler.service";
+import { ErrorCodes } from "src/models/services/core/error-handler.service";
 import { Factory } from "src/models/services/factory.service";
 import { StringFormatter } from "src/models/services/string-formatter.service";
 import { baseMathObjectErrorTests, mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";

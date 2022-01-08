@@ -1,4 +1,4 @@
-import { StringFormatter } from "./string-formatter.service";
+import { StringFormatter } from "../string-formatter.service";
 
 export class ErrorHandler {
 

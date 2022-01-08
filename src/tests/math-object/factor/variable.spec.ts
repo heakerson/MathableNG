@@ -1,6 +1,6 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Variable } from "src/models/math-object/factor/variable.model";
-import { ErrorCodes } from "src/models/services/error-handler.service";
+import { ErrorCodes } from "src/models/services/core/error-handler.service";
 import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "../math-object.spec";
 import { factorConstructorTests, FactorConstTest, factorFlipSignTests, FactorReplaceAndFlipSignTest, FactorTraverseTest } from "./factor.spec";
 

@@ -1,6 +1,6 @@
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Context } from "src/models/search/context.model";
-import { ErrorCodes } from "src/models/services/error-handler.service";
+import { ErrorCodes } from "src/models/services/core/error-handler.service";
 import * as uuid from 'uuid';
 
 export function mathObjectConstructorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(

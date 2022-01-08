@@ -1,4 +1,4 @@
-import { ErrorHandler } from "../services/error-handler.service";
+import { ErrorHandler } from "../services/core/error-handler.service";
 import { Factory } from "../services/factory.service";
 import { StringFormatter } from "../services/string-formatter.service";
 import { Sign } from "./enums.model";

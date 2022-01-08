@@ -1,4 +1,4 @@
-import { ErrorHandler } from "src/models/services/error-handler.service";
+import { ErrorHandler } from "src/models/services/core/error-handler.service";
 
 describe('ErrorHandler', () => {
 

@@ -1,6 +1,6 @@
 import { Sign } from "src/models/math-object/enums.model";
 import { Double } from "src/models/math-object/factor/number/double.model";
-import { ErrorCodes } from "src/models/services/error-handler.service";
+import { ErrorCodes } from "src/models/services/core/error-handler.service";
 import { mathObjectConstructorErrorTests, mathObjectConstructorTests, mathObjectReplaceTests, mathObjectTraverseTests } from "src/tests/math-object/math-object.spec";
 import { factorConstructorTests, factorFlipSignTests } from "../factor.spec";
 import { RealNumberConstrTest, realNumberConstructorTests, realNumberFlipSignTests, RealNumberReplaceFlipSignTest, RealNumberTraverseTest } from "./real-number.spec";
