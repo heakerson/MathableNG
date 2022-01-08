@@ -13,7 +13,7 @@ import { Variable } from 'src/models/math-object/factor/variable.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { MathObject } from 'src/models/math-object/math-object.model';
-import { Mathable } from 'src/tests/services/math/mathable.model';
+import { Mathable } from 'src/models/services/math/mathable.model';
 import { Position } from 'src/models/search/position.model';
 
 @Component({
