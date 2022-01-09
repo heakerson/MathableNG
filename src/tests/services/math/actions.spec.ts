@@ -2,6 +2,7 @@ import { Expression } from "src/models/math-object/factor/expression.model";
 import { Power } from "src/models/math-object/factor/power.model";
 import { Rational } from "src/models/math-object/factor/rational.model";
 import { MathObject } from "src/models/math-object/math-object.model";
+import { Term } from "src/models/math-object/term.model";
 import { Actions, ActionTypes } from "src/models/services/math/actions.model";
 import { ChangeContext } from "src/models/services/math/chainer.model";
 
@@ -60,6 +61,28 @@ describe('Mathobject Actions', () => {
 
         actionTester('Remove the first zero term it finds', tests, Actions.removeZeroTerm);
     });
+
+    describe('constantMultiplication', () => {
+        const tests: ActionTest[] = [
+            new ActionTest({ mo: new Expression('0'), finalResult: '(0)' }),
+            new ActionTest({ mo: new Expression('0.0'), finalResult: '(0)' }),
+            new ActionTest({ mo: new Expression('-0.0'), finalResult: '(-0)' }),
+            new ActionTest({ mo: new Term('-1*b'), finalResult: '-1*b' }),
+            new ActionTest({ mo: new Term('2^2'), finalResult: '2^2' }),
+            new ActionTest({ mo: new Term('-0*sin[y]*2'), finalResult: '-0*sin[y]', beforeHighlights: [['-0', '2']], afterHighlights: [['-0']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-2*sin[y]*0'), finalResult: '-0*sin[y]', beforeHighlights: [['-2', '0']], afterHighlights: [['-0']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('0*-2'), finalResult: '0', beforeHighlights: [['0', '-2']], afterHighlights: [['0']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('2*-0'), finalResult: '0', beforeHighlights: [['2', '-0']], afterHighlights: [['0']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('2*3'), finalResult: '6', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('2.9*t*.7'), finalResult: '2.03*t', beforeHighlights: [['2.9', '0.7']], afterHighlights: [['2.03']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-2*3'), finalResult: '-6', beforeHighlights: [['-2', '3']], afterHighlights: [['-6']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-2*x*-3'), finalResult: '6*x', beforeHighlights: [['-2', '-3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-2*x*-3*(x*4*-2)'), finalResult: '-2*x*-3*(x*-8)', beforeHighlights: [['4', '-2']], afterHighlights: [['-8']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-2*x*(-p*10.5*-6)*-3*(x*4*-2)'), finalResult: '-2*x*(-p*-63)*-3*(x*4*-2)', beforeHighlights: [['10.5', '-6']], afterHighlights: [['-63']], actions: [ActionTypes.constantMultiplication] }),
+        ];
+
+        actionTester('Remove the first constant multiplication found, child first', tests, Actions.constantMultiplication);
+    });
 });
 
 export function actionTester<TTest extends ActionTest>(
@@ -100,6 +123,7 @@ export function actionTester<TTest extends ActionTest>(
                             expect(prevHighlightMo.toString()).toEqual(highlightStr);
                             const prevHighlightCtx = mo.find(MathObject, (child) => child.id === prevHighlightMo.id);
                             expect(prevHighlightCtx?.target).toBeTruthy();
+                            expect(prevHighlightCtx?.target.toString()).toEqual(highlightStr);
                         });
 
                         changeCtx.newHighlightObjects.forEach((newHighlightMO: MathObject, hi: number) => {
@@ -107,6 +131,7 @@ export function actionTester<TTest extends ActionTest>(
                             expect(newHighlightMO.toString()).toEqual(highlightStr);
                             const newHighlightCtx = changeCtx.newMathObject.find(MathObject, (child) => child.id === newHighlightMO.id);
                             expect(newHighlightCtx?.target).toBeTruthy();
+                            expect(newHighlightCtx?.target.toString()).toEqual(highlightStr);
                         });
                     });
                 } else {

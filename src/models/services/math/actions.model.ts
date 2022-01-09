@@ -77,13 +77,17 @@ export class Actions {
     const termWithMultiplConstantsCtx = rootMo.find(Term, (t: Term) => {
       constantFactors = t.factors.filter(f => f instanceof Double) as Double[];
       return constantFactors.length > 1;
-    });
+    }, true);
 
     if (termWithMultiplConstantsCtx) {
       const term = termWithMultiplConstantsCtx.target as Term;
       const c1 = constantFactors[0];
       const c2 = constantFactors[1];
-      const newConstant = Factory.buildFactor((c1.value*c2.value).toString());
+
+      const newValue = c1.value*c2.value;
+      const newValueString = newValue !== 0 ? newValue.toString() : `${c1.sign}${newValue.toString()}`;
+
+      const newConstant = Factory.buildFactor(newValueString);
       const newTermFactors = term.factors.map(f => f.id === c1.id ? newConstant : f).filter(f => f.id !== c2.id);
       const newTerm = Term.fromFactors(...newTermFactors);
       const c1Position = rootMo.find(MathObject, (mo) => mo.id === c1.id)?.position as Position;

@@ -1,7 +1,6 @@
 LEFT OFF:
 - Test the operation functions
     - add tests that do not do anything
-    - tests with previous changes
     - tests with multiple places that COULD be changed so that the order is tested
 - Should I add a siblings getter to the context object? Would that help my existing actions?
     - And/or leftSiblings & rightSiblings?
