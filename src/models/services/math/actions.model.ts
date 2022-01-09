@@ -114,7 +114,7 @@ export class Actions {
     const exprWithMultipleConstantFactorsCtx = rootMo.find(Expression, (e: Expression) => {
       constantTerms = e.terms.filter(t => t.factorCount === 1 && t.factors[0] instanceof Double);
       return constantTerms.length > 1;
-    })
+    }, true);
 
     if (exprWithMultipleConstantFactorsCtx) {
       const exp = exprWithMultipleConstantFactorsCtx.target as Expression;
@@ -123,7 +123,7 @@ export class Actions {
       const newConstant = Factory.buildFactor(((t1.factors[0] as Double).value+(t2.factors[0] as Double).value).toString());
       const newTerms = exp.terms.map(t => t.id === t1.id ? Term.fromFactors(newConstant) : t).filter(t => t.id !== t2.id);
       const newExp = Expression.fromTerms(newTerms, exp.sign);
-      const newConstantPosition = rootMo.find(MathObject, (mo) => mo.id === newConstant.id)?.position as Position;
+      const newConstantPosition = rootMo.find(MathObject, (mo) => mo.id === t1.id)?.position as Position;
 
       const newMo = rootMo.replace(exp, newExp);
 

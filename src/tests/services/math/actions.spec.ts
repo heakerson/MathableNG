@@ -69,6 +69,7 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Expression('-0.0'), finalResult: '(-0)' }),
             new ActionTest({ mo: new Term('-1*b'), finalResult: '-1*b' }),
             new ActionTest({ mo: new Term('2^2'), finalResult: '2^2' }),
+            new ActionTest({ mo: new Term('-1+2'), finalResult: '(-1+2)' }),
             new ActionTest({ mo: new Term('-0*sin[y]*2'), finalResult: '-0*sin[y]', beforeHighlights: [['-0', '2']], afterHighlights: [['-0']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('-2*sin[y]*0'), finalResult: '-0*sin[y]', beforeHighlights: [['-2', '0']], afterHighlights: [['-0']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('0*-2'), finalResult: '0', beforeHighlights: [['0', '-2']], afterHighlights: [['0']], actions: [ActionTypes.constantMultiplication] }),
@@ -82,6 +83,32 @@ describe('Mathobject Actions', () => {
         ];
 
         actionTester('Remove the first constant multiplication found, child first', tests, Actions.constantMultiplication);
+    });
+
+    describe('constantAdditionSubtraction', () => {
+        const tests: ActionTest[] = [
+            new ActionTest({ mo: new Expression('0'), finalResult: '(0)' }),
+            new ActionTest({ mo: new Expression('0.0'), finalResult: '(0)' }),
+            new ActionTest({ mo: new Expression('-0.0'), finalResult: '(-0)' }),
+            new ActionTest({ mo: new Term('-1*2'), finalResult: '-1*2' }),
+            new ActionTest({ mo: new Term('2^2'), finalResult: '2^2' }),
+            new ActionTest({ mo: new Term('0+0'), finalResult: '(0)', beforeHighlights: [['0', '0']], afterHighlights: [['0']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-0+0'), finalResult: '(0)', beforeHighlights: [['-0', '0']], afterHighlights: [['0']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-0-0'), finalResult: '(0)', beforeHighlights: [['-0', '-0']], afterHighlights: [['0']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-1+2'), finalResult: '(1)', beforeHighlights: [['-1', '2']], afterHighlights: [['1']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-0-sin[y]+2'), finalResult: '(2-sin[y])', beforeHighlights: [['-0', '2']], afterHighlights: [['2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-2+sin[y]-0'), finalResult: '(-2+sin[y])', beforeHighlights: [['-2', '-0']], afterHighlights: [['-2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('0-2'), finalResult: '(-2)', beforeHighlights: [['0', '-2']], afterHighlights: [['-2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('2-0'), finalResult: '(2)', beforeHighlights: [['2', '-0']], afterHighlights: [['2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('2+3'), finalResult: '(5)', beforeHighlights: [['2', '3']], afterHighlights: [['5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('2.9-t-.7'), finalResult: '(2.2-t)', beforeHighlights: [['2.9', '-0.7']], afterHighlights: [['2.2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-2-3'), finalResult: '(-5)', beforeHighlights: [['-2', '-3']], afterHighlights: [['-5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-2+x-3'), finalResult: '(-5+x)', beforeHighlights: [['-2', '-3']], afterHighlights: [['-5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-2-x-3+(x+4-2)'), finalResult: '(-2-x-3+(x+2))', beforeHighlights: [['4', '-2']], afterHighlights: [['2']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-2-x-(-p-10.5-6)-3+(x+4-2)'), finalResult: '(-2-x-(-p-16.5)-3+(x+4-2))', beforeHighlights: [['-10.5', '-6']], afterHighlights: [['-16.5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+        ];
+
+        actionTester('Remove the first constant addition/subtraction found, child first', tests, Actions.constantAdditionSubtraction);
     });
 });
 
