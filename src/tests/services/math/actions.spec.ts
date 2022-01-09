@@ -1,4 +1,6 @@
 import { Expression } from "src/models/math-object/factor/expression.model";
+import { Power } from "src/models/math-object/factor/power.model";
+import { Rational } from "src/models/math-object/factor/rational.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Actions, ActionTypes } from "src/models/services/math/actions.model";
 import { ChangeContext } from "src/models/services/math/chainer.model";
@@ -25,6 +27,7 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Expression('a-0'), finalResult: '(a-0)' }),
             new ActionTest({ mo: new Expression('0'), finalResult: '(0)' }),
             new ActionTest({ mo: new Expression('-0'), finalResult: '(-0)' }),
+            new ActionTest({ mo: new Rational('0/x'), finalResult: '(0/x)' }),
             new ActionTest({ mo: new Expression('a^(3*0)'), finalResult: '(a^(0))', beforeHighlights: [['0']], afterHighlights: [['0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a^(-3*0)'), finalResult: '(a^(-0))', beforeHighlights: [['0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a+3*0'), finalResult: '(a+0)', beforeHighlights: [['0']], afterHighlights: [['0']], actions: [ ActionTypes.removeZeroFactor ] }),
@@ -36,7 +39,26 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Expression('a+3*(b+c*0)*0'), finalResult: '(a+0)', beforeHighlights: [['0']], afterHighlights: [['0']], actions: [ ActionTypes.removeZeroFactor ] }),
         ];
 
-        actionTester('Remove turn any terms with zero factors to a zero term', tests, Actions.removeZeroFactor);
+        actionTester('Turn any terms with zero factors to a zero', tests, Actions.removeZeroFactor);
+    });
+
+    describe('removeZeroTerm', () => {
+        const tests: ActionTest[] = [
+            new ActionTest({ mo: new Expression('0'), finalResult: '(0)' }),
+            new ActionTest({ mo: new Expression('-0'), finalResult: '(-0)' }),
+            new ActionTest({ mo: new Power('a^-0'), finalResult: 'a^-0' }),
+            new ActionTest({ mo: new Rational('(a/(b+(0)))'), finalResult: '(a/(b+(0)))' }),
+            new ActionTest({ mo: new Rational('(a/(b+(-0)))'), finalResult: '(a/(b+(-0)))' }),
+            new ActionTest({ mo: new Expression('a+0'), finalResult: '(a)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Expression('a-0'), finalResult: '(a)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ]  }),
+            new ActionTest({ mo: new Expression('a^(3+0)'), finalResult: '(a^(3))', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Rational('(a/(x+0*(b^(2+0))))'), finalResult: '(a/(x+0*(b^(2))))', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0))))'), finalResult: '(a/(x+0*(b^(2))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Rational('(a/(x+0*(b^(2+0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+        ];
+
+        actionTester('Remove the first zero term it finds', tests, Actions.removeZeroTerm);
     });
 });
 
@@ -65,25 +87,26 @@ export function actionTester<TTest extends ActionTest>(
                     
                     allChangeCtxs.forEach((changeCtx: ChangeContext, ci: number) => {
                         // console.log('ChangeContext', changeCtx);
+                        
                         const prevHighlightStrs = test.beforeHighlights[ci];
                         const newHighlightStrs = test.afterHighlights[ci];
 
-                        expect(changeCtx.previousHighlightObjects.length).toEqual(prevHighlightStrs.length);
-                        expect(changeCtx.newHighlightObjects.length).toEqual(newHighlightStrs.length);
+                        expect(changeCtx.previousHighlightObjects.length).toEqual(prevHighlightStrs ? prevHighlightStrs.length: 0);
+                        expect(changeCtx.newHighlightObjects.length).toEqual(newHighlightStrs ? newHighlightStrs.length : 0);
                         expect(changeCtx.action).toEqual(test.actions[ci]);
 
                         changeCtx.previousHighlightObjects.forEach((prevHighlightMo: MathObject, hi: number) => {
                             const highlightStr = prevHighlightStrs[hi];
                             expect(prevHighlightMo.toString()).toEqual(highlightStr);
                             const prevHighlightCtx = mo.find(MathObject, (child) => child.id === prevHighlightMo.id);
-                            expect(prevHighlightCtx).toBeTruthy();
+                            expect(prevHighlightCtx?.target).toBeTruthy();
                         });
 
                         changeCtx.newHighlightObjects.forEach((newHighlightMO: MathObject, hi: number) => {
                             const highlightStr = newHighlightStrs[hi];
                             expect(newHighlightMO.toString()).toEqual(highlightStr);
                             const newHighlightCtx = changeCtx.newMathObject.find(MathObject, (child) => child.id === newHighlightMO.id);
-                            expect(newHighlightCtx).toBeTruthy();
+                            expect(newHighlightCtx?.target).toBeTruthy();
                         });
                     });
                 } else {

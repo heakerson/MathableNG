@@ -22,6 +22,14 @@ export class Context {
     }
   }
 
+  public get siblings(): MathObject[] {
+    if (this.parentContext) {
+      return this.parentContext.target.children.filter(c => c.id !== this.target.id);
+    }
+
+    return [];
+  }
+
   constructor(
     public target: MathObject,
     public position: Position,

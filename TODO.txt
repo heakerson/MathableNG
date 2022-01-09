@@ -1,5 +1,4 @@
 LEFT OFF:
-- ADD TESTS WITH PREVIOUS CHANGES TO removeZeroFactor TESTS
 - Test the operation functions
     - add tests that do not do anything
     - tests with previous changes

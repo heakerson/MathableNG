@@ -4,6 +4,7 @@ import { Double } from 'src/models/math-object/factor/number/double.model';
 import { Integer } from 'src/models/math-object/factor/number/integer.model';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
+import { Context } from 'src/models/search/context.model';
 import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { ChangeContext } from './chainer.model';
@@ -37,10 +38,11 @@ export class Actions {
   }
 
   public static removeZeroTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
-    const zeroTermCtx = rootMo.find(Term, (t: Term) => {
+    const zeroTermCtx = rootMo.find(Term, (t: Term, ctx: Context) => {
       if (t.factorCount === 1) {
         const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0) as Double;
-        return !!zero;
+        const hasSiblings = !!ctx.siblings.length;
+        return !!zero && hasSiblings;
       }
 
       return false;
