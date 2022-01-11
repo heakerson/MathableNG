@@ -151,28 +151,35 @@ export class Actions {
     }, true);
 
     if (singleTermExpressionCtx) {
-      const singleTermExpr = singleTermExpressionCtx.target as Expression;
-      const parentTermCtx = singleTermExpressionCtx?.parentContext;
+      return Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx);
+    }
 
-      if (parentTermCtx) {
-        const singleTermFactors = singleTermExpr.terms[0].factors;
-        const parentTerm = parentTermCtx.target as Term;
-        const singleTermExpressionIndex = singleTermExpressionCtx.position.index;
-        const newParentTermFactors = Utilities.insert(singleTermExpressionIndex, parentTerm.factors.filter(f => f.id !== singleTermExpr.id), singleTermFactors) as Factor[];
+    return [];
+  }
 
-        const newMo = rootMo.replace(parentTerm, Term.fromFactors(...newParentTermFactors));
-        const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
+  private static removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx: Context): ChangeContext[] {
+    const singleTermExpr = singleTermExpressionCtx.target as Expression;
+    const parentTermCtx = singleTermExpressionCtx?.parentContext;
+    const root = singleTermExpressionCtx.root;
 
-        return [
-          new ChangeContext({
-            previousMathObject: rootMo,
-            newMathObject: newMo,
-            previousHighlightObjects: [singleTermExpr],
-            newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= singleTermExpressionIndex && i < singleTermExpressionIndex+singleTermFactors.length)],
-            action: ActionTypes.removeParenthFromSingleTerm
-          }),
-        ];
-      }
+    if (parentTermCtx) {
+      const singleTermFactors = singleTermExpr.terms[0].factors;
+      const parentTerm = parentTermCtx.target as Term;
+      const singleTermExpressionIndex = singleTermExpressionCtx.position.index;
+      const newParentTermFactors = Utilities.insert(singleTermExpressionIndex, parentTerm.factors.filter(f => f.id !== singleTermExpr.id), singleTermFactors) as Factor[];
+
+      const newMo = root.replace(parentTerm, Term.fromFactors(...newParentTermFactors));
+      const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
+
+      return [
+        new ChangeContext({
+          previousMathObject: root,
+          newMathObject: newMo,
+          previousHighlightObjects: [singleTermExpr],
+          newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= singleTermExpressionIndex && i < singleTermExpressionIndex+singleTermFactors.length)],
+          action: ActionTypes.removeParenthFromSingleTerm
+        }),
+      ];
     }
 
     return [];
