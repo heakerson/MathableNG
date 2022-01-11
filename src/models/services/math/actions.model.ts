@@ -8,6 +8,7 @@ import { Context } from 'src/models/search/context.model';
 import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { ChangeContext } from './chainer.model';
+import { Utilities } from './utilities.model';
 
 export class Actions {
 
@@ -140,11 +141,48 @@ export class Actions {
 
     return [];
   }
+
+  public static removeParenthFromSingleTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+
+    const singleTermExpressionCtx = rootMo.find(Expression, (e: Expression, ctx: Context) => {
+      const singleTermExprNonRoot = e.termCount === 1 && !ctx.isRoot;
+      const parentIsTerm = !!ctx.parent && ctx.parent instanceof Term;
+      return singleTermExprNonRoot && parentIsTerm;
+    }, true);
+
+    if (singleTermExpressionCtx) {
+      const singleTermExpr = singleTermExpressionCtx.target as Expression;
+      const parentTermCtx = singleTermExpressionCtx?.parentContext;
+
+      if (parentTermCtx) {
+        const singleTermFactors = singleTermExpr.terms[0].factors;
+        const parentTerm = parentTermCtx.target as Term;
+        const singleTermExpressionIndex = singleTermExpressionCtx.position.index;
+        const newParentTermFactors = Utilities.insert(singleTermExpressionIndex, parentTerm.factors.filter(f => f.id !== singleTermExpr.id), singleTermFactors) as Factor[];
+
+        const newMo = rootMo.replace(parentTerm, Term.fromFactors(...newParentTermFactors));
+        const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
+
+        return [
+          new ChangeContext({
+            previousMathObject: rootMo,
+            newMathObject: newMo,
+            previousHighlightObjects: [singleTermExpr],
+            newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= singleTermExpressionIndex && i < singleTermExpressionIndex+singleTermFactors.length)],
+            action: ActionTypes.removeParenthFromSingleTerm
+          }),
+        ];
+      }
+    }
+
+    return [];
+  }
 }
 
 export enum ActionTypes {
   removeZeroFactor = 'removeZeroFactor',
   removeZeroTerm = 'removeZeroTerm',
   constantAdditionSubtraction = 'constantAdditionSubtraction',
-  constantMultiplication = 'constantMultiplication'
+  constantMultiplication = 'constantMultiplication',
+  removeParenthFromSingleTerm = 'removeParenthFromSingleTerm'
 }

@@ -1,9 +1,14 @@
 LEFT OFF:
+- Add negative tests for removing ()
+- Add constructor tests to rational around situations like 'a*b/c' => presumable ((a*b)/c)?
+- Maybe rename removeParenthFromSingleTerm to basicRemoveParenth? Since this particuar case is ignoring num/denom/base/exponent/function cases?
 - Test the operation functions
     - add tests that do not do anything
     - tests with multiple places that COULD be changed so that the order is tested
-- Should I add a siblings getter to the context object? Would that help my existing actions?
-    - And/or leftSiblings & rightSiblings?
+- Look for other utility functions to create and places to use them
+- Test utilities functions
+- For the removing () action - for NOW, it's very simple. It ignores base/exponent/num/denom/function content stuff - I'm wondering if those cases should be handled on a case by case
+    basis in more complex simplifying actions
 - Create testing application - sepearate angular module
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
