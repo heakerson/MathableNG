@@ -1,3 +1,4 @@
+import { Sign } from 'src/models/math-object/enums.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
 import { Factor } from 'src/models/math-object/factor/factor.model';
 import { Double } from 'src/models/math-object/factor/number/double.model';
@@ -143,15 +144,57 @@ export class Actions {
   }
 
   public static removeParenthFromSingleTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
-
-    const singleTermExpressionCtx = rootMo.find(Expression, (e: Expression, ctx: Context) => {
+    const finder = (mo: MathObject) => mo.find(Expression, (e: Expression, ctx: Context) => {
       const singleTermExprNonRoot = e.termCount === 1 && !ctx.isRoot;
       const parentIsTerm = !!ctx.parent && ctx.parent instanceof Term;
       return singleTermExprNonRoot && parentIsTerm;
     }, true);
 
+    let singleTermExpressionCtx = finder(rootMo);
+
     if (singleTermExpressionCtx) {
+      const isNegative = (singleTermExpressionCtx.target as Expression).sign == Sign.Negative;
+
+      if (isNegative) {
+        const negativeChanges = Actions.expandNegativeFactor(singleTermExpressionCtx);
+        const newMo = negativeChanges[0].newMathObject;
+        singleTermExpressionCtx = finder(newMo) as Context;
+        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx)];
+      }
+
       return Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx);
+    }
+
+    return [];
+  }
+
+  private static expandNegativeFactor(negativeFactorCtx: Context): ChangeContext[] {
+    const negativeFactor = negativeFactorCtx.target;
+    const parentTermCtx = negativeFactorCtx.parentContext;
+    const isNegativeFactor = negativeFactor instanceof Factor && negativeFactor.sign === Sign.Negative;
+
+    if (isNegativeFactor && parentTermCtx) {
+      const parentIsTerm = parentTermCtx.target instanceof Term;
+
+      if (parentIsTerm) {
+        const parentTerm = parentTermCtx.target as Term;
+        const negativeFactorIndex = negativeFactorCtx.position.index;
+        const newChildren = Utilities.replace(negativeFactorIndex, parentTerm.factors, [new Integer('-1'), negativeFactor.flipSign()]) as Factor[];
+        const newParentTerm = Term.fromFactors(...newChildren);
+        const newMo = negativeFactorCtx.root.replace(parentTerm, newParentTerm);
+        const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
+
+        return [
+          new ChangeContext({
+            previousMathObject: negativeFactorCtx.root,
+            newMathObject: newMo,
+            previousHighlightObjects: [negativeFactor],
+            newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= negativeFactorIndex && i <= negativeFactorIndex+1)],
+            action: ActionTypes.expandNegativeFactor
+          })
+        ];
+      }
+
     }
 
     return [];
@@ -159,7 +202,7 @@ export class Actions {
 
   private static removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx: Context): ChangeContext[] {
     const singleTermExpr = singleTermExpressionCtx.target as Expression;
-    const parentTermCtx = singleTermExpressionCtx?.parentContext;
+    const parentTermCtx = singleTermExpressionCtx.parentContext;
     const root = singleTermExpressionCtx.root;
 
     if (parentTermCtx) {
@@ -191,5 +234,6 @@ export enum ActionTypes {
   removeZeroTerm = 'removeZeroTerm',
   constantAdditionSubtraction = 'constantAdditionSubtraction',
   constantMultiplication = 'constantMultiplication',
-  removeParenthFromSingleTerm = 'removeParenthFromSingleTerm'
+  removeParenthFromSingleTerm = 'removeParenthFromSingleTerm',
+  expandNegativeFactor = 'expandNegativeFactor'
 }

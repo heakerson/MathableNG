@@ -12,6 +12,7 @@ export class ActionTest {
     beforeHighlights: string[][] = [];
     afterHighlights: string[][] = [];
     actions: ActionTypes[] = [];
+    steps: string[] = [];
     previousChanges: ChangeContext[] = [];
 
 
@@ -125,6 +126,7 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('a*b*(x*(m+n)*y)*c'), finalResult: 'a*b*x*(m+n)*y*c', beforeHighlights: [['(x*(m+n)*y)']], afterHighlights: [['x', '(m+n)', 'y']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('a*b*(x*(m*-n)*y)*c'), finalResult: 'a*b*(x*m*-n*y)*c', beforeHighlights: [['(m*-n)']], afterHighlights: [['m', '-n']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('sin[x+(a*b)]'), finalResult: 'sin[(x+a*b)]', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
+            new ActionTest({mo: new Term('a*-(b*c)'), finalResult: 'a*-1*b*c', steps: ['a*-1*(b*c)', 'a*-1*b*c'], beforeHighlights: [['-(b*c)'], ['(b*c)']], afterHighlights: [['-1', '(b*c)'], ['b', 'c']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthFromSingleTerm]}),
         ];
 
         actionTester('Remove first instance of a single term enclosed by (), child first', tests, Actions.removeParenthFromSingleTerm);
@@ -153,12 +155,19 @@ export function actionTester<TTest extends ActionTest>(
                     // console.log('allChangeCtxs', allChangeCtxs);
 
                     expect(finalMo.toString()).toEqual(test.finalResult);
+
+                    if (allChangeCtxs.length > 1) {
+                        const allSteps = allChangeCtxs.map(c => c.newMathObject.toString());
+                        expect(test.steps).toEqual(allSteps);
+                    }
                     
                     allChangeCtxs.forEach((changeCtx: ChangeContext, ci: number) => {
                         // console.log('ChangeContext', changeCtx);
                         
                         const prevHighlightStrs = test.beforeHighlights[ci];
                         const newHighlightStrs = test.afterHighlights[ci];
+                        // console.log('expected new highlightStrings', newHighlightStrs);
+                        // console.log('action new highlights', changeCtx.newHighlightObjects);
 
                         expect(changeCtx.previousHighlightObjects.length).toEqual(prevHighlightStrs ? prevHighlightStrs.length: 0);
                         expect(changeCtx.newHighlightObjects.length).toEqual(newHighlightStrs ? newHighlightStrs.length : 0);
@@ -167,7 +176,7 @@ export function actionTester<TTest extends ActionTest>(
                         changeCtx.previousHighlightObjects.forEach((prevHighlightMo: MathObject, hi: number) => {
                             const highlightStr = prevHighlightStrs[hi];
                             expect(prevHighlightMo.toString()).toEqual(highlightStr);
-                            const prevHighlightCtx = mo.find(MathObject, (child) => child.id === prevHighlightMo.id);
+                            const prevHighlightCtx = changeCtx.previousMathObject.find(MathObject, (child) => child.id === prevHighlightMo.id);
                             expect(prevHighlightCtx?.target).toBeTruthy();
                             expect(prevHighlightCtx?.target.toString()).toEqual(highlightStr);
                         });

@@ -8,4 +8,10 @@ export class Utilities {
         return [...preList, ...inserting, ...postList];
     }
 
+    public static replace(index: number, list: MathObject[], replacement: MathObject[]): MathObject[] {
+        const preList = list.filter((mo, i) => i < index);
+        const postList = list.filter((mo, i) => i > index);
+        return [...preList, ...replacement, ...postList];
+    }
+
 }
