@@ -6,7 +6,6 @@ import { Integer } from 'src/models/math-object/factor/number/integer.model';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Context } from 'src/models/search/context.model';
-import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { Chainer, ChangeContext } from './chainer.model';
 import { ActionHelpers } from './action-helpers.model';
@@ -75,40 +74,37 @@ export class Actions {
   }
 
   public static constantMultiplication(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
-    let constantFactors: Double[] = [];
+    const isConstantFactor = (f: Factor) => f instanceof Double && !(f instanceof Constant);
 
-    const termWithMultiplConstantsCtx = rootMo.find(Term, (t: Term) => {
-      constantFactors = t.factors.filter(f => f instanceof Double && !(f instanceof Constant)) as Double[];
-      return constantFactors.length > 1;
-    }, true);
+    const childrenFinder = (root: MathObject) => {
+      let children: Context[] = [];
+      const parentTermCtx = root.find(Term, (e: Term) => e.factors.filter(t => isConstantFactor(t)).length > 1, true);
 
-    if (termWithMultiplConstantsCtx) {
-      const term = termWithMultiplConstantsCtx.target as Term;
-      const c1 = constantFactors[0];
-      const c2 = constantFactors[1];
+      if (parentTermCtx) {
+        (parentTermCtx.target as Term).factors.forEach(f => {
+          if (children.length < 2 && isConstantFactor(f)) {
+            children.push(root.find(Factor, (factor: Factor) => factor.id === f.id) as Context);
+          }
+        })
+      }
 
-      const newValue = c1.value*c2.value;
-      const newValueString = newValue !== 0 ? newValue.toString() : `${c1.sign}${newValue.toString()}`;
-
-      const newConstant = Factory.buildFactor(newValueString);
-      const newTermFactors = term.factors.map(f => f.id === c1.id ? newConstant : f).filter(f => f.id !== c2.id);
-      const newTerm = Term.fromFactors(...newTermFactors);
-      const c1Position = rootMo.find(MathObject, (mo) => mo.id === c1.id)?.position as Position;
-
-      const newMo = rootMo.replace(term, newTerm);
-
-      return [
-        new ChangeContext({
-          previousMathObject: rootMo,
-          newMathObject: newMo,
-          previousHighlightObjects: [c1, c2],
-          newHighlightObjects: [ newMo.getObjectAtPosition(c1Position) as MathObject ],
-          action: ActionTypes.constantMultiplication
-        }),
-      ];
+      return children;
     }
 
-    return [];
+    const newChildBuilder = (childrenCtxs: Context[]) => {
+      const c1 = (childrenCtxs[0].target as Double);
+      const c2 = (childrenCtxs[1].target as Double);
+      const newValue = c1.value*c2.value;
+      const newValueString = newValue !== 0 ? newValue.toString() : `${c1.sign}${newValue.toString()}`
+      return Factory.buildFactor(newValueString);
+    };
+
+    return ActionHelpers.reduceChildren(
+      ActionTypes.constantMultiplication,
+      rootMo,
+      childrenFinder,
+      newChildBuilder
+    );
   }
 
   public static constantAdditionSubtraction(rootMo: MathObject): ChangeContext[] {
@@ -129,15 +125,17 @@ export class Actions {
       return children;
     }
 
+    const newChildBuilder = (childrenCtxs: Context[]) => {
+      const c1 = (childrenCtxs[0].target as Term).factors[0] as Double;
+      const c2 = (childrenCtxs[1].target as Term).factors[0] as Double;
+      return Term.fromFactors(Factory.buildFactor((c1.value + c2.value).toString()));
+    };
+
     return ActionHelpers.reduceChildren(
       ActionTypes.constantAdditionSubtraction,
       rootMo,
       childrenFinder,
-      (childrenCtxs: Context[]) => {
-        const c1 = (childrenCtxs[0].target as Term).factors[0] as Double;
-        const c2 = (childrenCtxs[1].target as Term).factors[0] as Double;
-        return Term.fromFactors(Factory.buildFactor((c1.value + c2.value).toString()));
-      }
+      newChildBuilder
     );
   }
 
