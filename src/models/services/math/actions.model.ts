@@ -173,11 +173,7 @@ export class Actions {
       ActionTypes.expandNegativeFactor,
       rootMo,
       negativeFactorFinder,
-      (childToReplaceCtx: Context) => [new Integer('-1'), (childToReplaceCtx.target as Factor).flipSign()],
-      (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => {
-        const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
-        return Term.fromFactors(...newParentTermFactors);
-      }
+      (childToReplaceCtx: Context) => [new Integer('-1'), (childToReplaceCtx.target as Factor).flipSign()]
     );
   }
 
@@ -186,11 +182,7 @@ export class Actions {
       ActionTypes.removeParenthFromSingleTerm,
       rootMo,
       expressionFinder,
-      (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors,
-      (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => {
-        const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
-        return Term.fromFactors(...newParentTermFactors);
-      }
+      (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors
     );
   }
 
@@ -198,8 +190,7 @@ export class Actions {
     action: ActionTypes,
     root: MathObject,
     childToReplaceFinder: (root: MathObject) => Context,
-    replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[],
-    newParentBuilder: (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => MathObject
+    replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[]
   ): ChangeContext[]
   {
     const childCtx = childToReplaceFinder(root);
@@ -207,7 +198,7 @@ export class Actions {
 
     if (parentCtx) {
       const replacementChildren = replacementChildrenBuilder(childCtx, parentCtx);
-      const newParent = newParentBuilder(parentCtx, childCtx, replacementChildren);
+      const newParent = Actions.buildParentForReplacingChildren(parentCtx, childCtx, replacementChildren);
   
       const newMo = root.replace(parentCtx.target, newParent);
       const newParentInsideNewMo = newMo.find(MathObject, (c, ctx) => ctx.position.equals(parentCtx.position)) as Context;
@@ -225,6 +216,11 @@ export class Actions {
     }
 
     return [];
+  }
+
+  private static buildParentForReplacingChildren(parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]): MathObject {
+    const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
+    return Term.fromFactors(...newParentTermFactors);
   }
 }
 
