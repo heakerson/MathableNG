@@ -144,13 +144,13 @@ export class Actions {
   }
 
   public static removeParenthFromSingleTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
-    const finder = (mo: MathObject) => mo.find(Expression, (e: Expression, ctx: Context) => {
+    const childFinder: (mo: MathObject) => Context = (mo: MathObject) => mo.find(Expression, (e: Expression, ctx: Context) => {
       const singleTermExprNonRoot = e.termCount === 1 && !ctx.isRoot;
       const parentIsTerm = !!ctx.parent && ctx.parent instanceof Term;
       return singleTermExprNonRoot && parentIsTerm;
-    }, true);
+    }, true) as Context;
 
-    let singleTermExpressionCtx = finder(rootMo);
+    let singleTermExpressionCtx = childFinder(rootMo);
 
     if (singleTermExpressionCtx) {
       const isNegative = (singleTermExpressionCtx.target as Expression).sign == Sign.Negative;
@@ -158,11 +158,11 @@ export class Actions {
       if (isNegative) {
         const negativeChanges = Actions.expandNegativeFactor(singleTermExpressionCtx);
         const newMo = negativeChanges[0].newMathObject;
-        singleTermExpressionCtx = finder(newMo) as Context;
-        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx)];
+        singleTermExpressionCtx = childFinder(newMo) as Context;
+        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx, singleTermExpressionCtx.root, childFinder)];
       }
 
-      return Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx);
+      return Actions.removeParenthFromSingleTermExpressionHelper(rootMo, childFinder);
     }
 
     return [];
@@ -200,28 +200,46 @@ export class Actions {
     return [];
   }
 
-  private static removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx: Context): ChangeContext[] {
-    const singleTermExpr = singleTermExpressionCtx.target as Expression;
-    const parentTermCtx = singleTermExpressionCtx.parentContext;
-    const root = singleTermExpressionCtx.root;
+  private static removeParenthFromSingleTermExpressionHelper(rootMo: MathObject, expressionFinder: (root: MathObject) => Context): ChangeContext[] {
+    return Actions.replaceChildren(
+      rootMo,
+      expressionFinder,
+      (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors,
+      (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => {
+        const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
+        return Term.fromFactors(...newParentTermFactors);
+      },
+      ActionTypes.removeParenthFromSingleTerm
+    );
+  }
 
-    if (parentTermCtx) {
-      const singleTermFactors = singleTermExpr.terms[0].factors;
-      const parentTerm = parentTermCtx.target as Term;
-      const singleTermExpressionIndex = singleTermExpressionCtx.position.index;
-      const newParentTermFactors = Utilities.insert(singleTermExpressionIndex, parentTerm.factors.filter(f => f.id !== singleTermExpr.id), singleTermFactors) as Factor[];
+  private static replaceChildren(
+    root: MathObject,
+    childToReplaceFinder: (root: MathObject) => Context,
+    replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[],
+    newParentBuilder: (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => MathObject,
+    action: ActionTypes
+  ): ChangeContext[]
+  {
+    const childCtx = childToReplaceFinder(root);
+    const parentCtx = childCtx.parentContext;
 
-      const newMo = root.replace(parentTerm, Term.fromFactors(...newParentTermFactors));
-      const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
-
+    if (parentCtx) {
+      const replacementChildren = replacementChildrenBuilder(childCtx, parentCtx);
+      const newParent = newParentBuilder(parentCtx, childCtx, replacementChildren);
+  
+      const newMo = root.replace(parentCtx.target, newParent);
+      const newParentInsideNewMo = newMo.find(MathObject, (c, ctx) => ctx.position.equals(parentCtx.position)) as Context;
+      const newHighlightObjects = newParentInsideNewMo.target.children.filter((c, i) => i >= childCtx.position.index && i < childCtx.position.index + replacementChildren.length);
+  
       return [
         new ChangeContext({
           previousMathObject: root,
           newMathObject: newMo,
-          previousHighlightObjects: [singleTermExpr],
-          newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= singleTermExpressionIndex && i < singleTermExpressionIndex+singleTermFactors.length)],
-          action: ActionTypes.removeParenthFromSingleTerm
-        }),
+          previousHighlightObjects: [childCtx.target],
+          newHighlightObjects,
+          action
+        })
       ];
     }
 

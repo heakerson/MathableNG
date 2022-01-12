@@ -1,5 +1,5 @@
 LEFT OFF:
-- IMPORTANT!!! Look at current actions and helpers and create generic helpers for reducing, expanding, replacing, removing, and moving children
+- IMPORTANT!!! Look at current actions and helpers and create generic helpers for reducing, expanding/replacing, removing, and moving children
     - Can I get rid of the utilities class?
 - Try to create a function that chains actions together (example - combining the expand negative with the removing () )
 - In action tests, remove 'finalResult' and only use the steps property
