@@ -114,15 +114,11 @@ export class Actions {
     const isConstantTerm = (t: Term) => t.factorCount === 1 && t.factors[0] instanceof Double;
 
     const childrenFinder = (root: MathObject) => {
-      const children: Context[] = [];
+      let children: Context[] = [];
+      const parentExprCtx = root.find(Expression, (e: Expression) => e.terms.filter(t => isConstantTerm(t)).length > 1, true);
 
-      const exprWithMultipleConstantFactorsCtx = root.find(Expression, (e: Expression) => {
-        const constantTerms = e.terms.filter(t => isConstantTerm(t));
-        return constantTerms.length > 1;
-      }, true);
-
-      if (exprWithMultipleConstantFactorsCtx) {
-        (exprWithMultipleConstantFactorsCtx.target as Expression).terms.forEach(t => {
+      if (parentExprCtx) {
+        (parentExprCtx.target as Expression).terms.forEach(t => {
           if (children.length < 2 && isConstantTerm(t)) {
             children.push(root.find(Term, (term: Term) => term.id === t.id) as Context);
           }
