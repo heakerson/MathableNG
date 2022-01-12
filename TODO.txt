@@ -1,5 +1,5 @@
 LEFT OFF:
-- clean up reduceChildren and constantAdditionSubtraction
+- use reduceChildren in constantMultiplication
 - IMPORTANT!!! Look at current actions and helpers and create generic helpers for reducing, expanding/replacing, removing, and moving children
 - Try to create a function that chains actions together (example - combining the expand negative with the removing () )
 - In action tests, remove 'finalResult' and only use the steps property

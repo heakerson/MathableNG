@@ -10,6 +10,7 @@ import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { Chainer, ChangeContext } from './chainer.model';
 import { ActionHelpers } from './action-helpers.model';
+import { Constant } from 'src/models/math-object/factor/number/contant/constant.model';
 
 export class Actions {
 
@@ -77,7 +78,7 @@ export class Actions {
     let constantFactors: Double[] = [];
 
     const termWithMultiplConstantsCtx = rootMo.find(Term, (t: Term) => {
-      constantFactors = t.factors.filter(f => f instanceof Double) as Double[];
+      constantFactors = t.factors.filter(f => f instanceof Double && !(f instanceof Constant)) as Double[];
       return constantFactors.length > 1;
     }, true);
 
@@ -111,7 +112,7 @@ export class Actions {
   }
 
   public static constantAdditionSubtraction(rootMo: MathObject): ChangeContext[] {
-    const isConstantTerm = (t: Term) => t.factorCount === 1 && t.factors[0] instanceof Double;
+    const isConstantTerm = (t: Term) => t.factorCount === 1 && t.factors[0] instanceof Double && !(t.factors[0] instanceof Constant);
 
     const childrenFinder = (root: MathObject) => {
       let children: Context[] = [];
