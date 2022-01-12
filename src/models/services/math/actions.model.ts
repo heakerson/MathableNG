@@ -110,37 +110,38 @@ export class Actions {
     return [];
   }
 
-  public static constantAdditionSubtraction(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
-    let constantTerms: Term[] = [];
+  public static constantAdditionSubtraction(rootMo: MathObject): ChangeContext[] {
+    const isConstantTerm = (t: Term) => t.factorCount === 1 && t.factors[0] instanceof Double;
 
-    const exprWithMultipleConstantFactorsCtx = rootMo.find(Expression, (e: Expression) => {
-      constantTerms = e.terms.filter(t => t.factorCount === 1 && t.factors[0] instanceof Double);
-      return constantTerms.length > 1;
-    }, true);
+    const childrenFinder = (root: MathObject) => {
+      const children: Context[] = [];
 
-    if (exprWithMultipleConstantFactorsCtx) {
-      const exp = exprWithMultipleConstantFactorsCtx.target as Expression;
-      const t1 = constantTerms[0];
-      const t2 = constantTerms[1];
-      const newConstant = Factory.buildFactor(((t1.factors[0] as Double).value+(t2.factors[0] as Double).value).toString());
-      const newTerms = exp.terms.map(t => t.id === t1.id ? Term.fromFactors(newConstant) : t).filter(t => t.id !== t2.id);
-      const newExp = Expression.fromTerms(newTerms, exp.sign);
-      const newConstantPosition = rootMo.find(MathObject, (mo) => mo.id === t1.id)?.position as Position;
+      const exprWithMultipleConstantFactorsCtx = root.find(Expression, (e: Expression) => {
+        const constantTerms = e.terms.filter(t => isConstantTerm(t));
+        return constantTerms.length > 1;
+      }, true);
 
-      const newMo = rootMo.replace(exp, newExp);
+      if (exprWithMultipleConstantFactorsCtx) {
+        (exprWithMultipleConstantFactorsCtx.target as Expression).terms.forEach(t => {
+          if (children.length < 2 && isConstantTerm(t)) {
+            children.push(root.find(Term, (term: Term) => term.id === t.id) as Context);
+          }
+        })
+      }
 
-      return [
-        new ChangeContext({
-          previousMathObject: rootMo,
-          newMathObject: newMo,
-          previousHighlightObjects: [t1, t2],
-          newHighlightObjects: [ newMo.getObjectAtPosition(newConstantPosition) as MathObject ],
-          action: ActionTypes.constantAdditionSubtraction
-        }),
-      ];
+      return children;
     }
 
-    return [];
+    return ActionHelpers.reduceChildren(
+      ActionTypes.constantAdditionSubtraction,
+      rootMo,
+      childrenFinder,
+      (childrenCtxs: Context[]) => {
+        const c1 = (childrenCtxs[0].target as Term).factors[0] as Double;
+        const c2 = (childrenCtxs[1].target as Term).factors[0] as Double;
+        return Term.fromFactors(Factory.buildFactor((c1.value + c2.value).toString()));
+      }
+    );
   }
 
   public static removeParenthFromSingleTerm(rootMo: MathObject): ChangeContext[] {
@@ -160,7 +161,7 @@ export class Actions {
 
     return Chainer.chain(rootMo, [
       (root: MathObject) => Actions.expandNegativeFactor(root, negativeChildFinder),
-      (root: MathObject) => ActionHelpers.replaceChild(
+      (root: MathObject) => ActionHelpers.replaceExpandChild(
         ActionTypes.removeParenthFromSingleTerm,
         root,
         childFinder,
@@ -170,7 +171,7 @@ export class Actions {
   }
 
   private static expandNegativeFactor(rootMo: MathObject, negativeFactorFinder: (root: MathObject) => Context | null): ChangeContext[] {
-    return ActionHelpers.replaceChild(
+    return ActionHelpers.replaceExpandChild(
       ActionTypes.expandNegativeFactor,
       rootMo,
       negativeFactorFinder,
