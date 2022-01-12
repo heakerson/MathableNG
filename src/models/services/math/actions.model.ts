@@ -8,7 +8,7 @@ import { Term } from 'src/models/math-object/term.model';
 import { Context } from 'src/models/search/context.model';
 import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
-import { ChangeContext } from './chainer.model';
+import { Chainer, ChangeContext } from './chainer.model';
 import { Utilities } from './utilities.model';
 
 export class Actions {
@@ -143,32 +143,33 @@ export class Actions {
     return [];
   }
 
-  public static removeParenthFromSingleTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static removeParenthFromSingleTerm(rootMo: MathObject): ChangeContext[] {
     const childFinder: (mo: MathObject) => Context = (mo: MathObject) => mo.find(Expression, (e: Expression, ctx: Context) => {
       const singleTermExprNonRoot = e.termCount === 1 && !ctx.isRoot;
       const parentIsTerm = !!ctx.parent && ctx.parent instanceof Term;
       return singleTermExprNonRoot && parentIsTerm;
     }, true) as Context;
 
-    let singleTermExpressionCtx = childFinder(rootMo);
-
-    if (singleTermExpressionCtx) {
-      const isNegative = (singleTermExpressionCtx.target as Expression).sign == Sign.Negative;
-
-      if (isNegative) {
-        const negativeChanges = Actions.expandNegativeFactor(rootMo, childFinder);
-        const newMo = negativeChanges[0].newMathObject;
-        singleTermExpressionCtx = childFinder(newMo) as Context;
-        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx.root, childFinder)];
+    const negativeChildFinder = (mo: MathObject) => {
+      const childCtx = childFinder(mo);
+      if (childCtx && childCtx.target instanceof Factor) {
+        return childCtx.target.sign === Sign.Negative ? childCtx : null;
       }
-
-      return Actions.removeParenthFromSingleTermExpressionHelper(rootMo, childFinder);
+      return null;
     }
 
-    return [];
+    return Chainer.chain(rootMo, [
+      (root: MathObject) => Actions.expandNegativeFactor(root, negativeChildFinder),
+      (root: MathObject) => Actions.replaceChildren(
+        ActionTypes.removeParenthFromSingleTerm,
+        root,
+        childFinder,
+        (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors
+      )
+    ]);
   }
 
-  private static expandNegativeFactor(rootMo: MathObject, negativeFactorFinder: (root: MathObject) => Context): ChangeContext[] {
+  private static expandNegativeFactor(rootMo: MathObject, negativeFactorFinder: (root: MathObject) => Context | null): ChangeContext[] {
     return Actions.replaceChildren(
       ActionTypes.expandNegativeFactor,
       rootMo,
@@ -177,42 +178,36 @@ export class Actions {
     );
   }
 
-  private static removeParenthFromSingleTermExpressionHelper(rootMo: MathObject, expressionFinder: (root: MathObject) => Context): ChangeContext[] {
-    return Actions.replaceChildren(
-      ActionTypes.removeParenthFromSingleTerm,
-      rootMo,
-      expressionFinder,
-      (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors
-    );
-  }
-
   private static replaceChildren(
     action: ActionTypes,
     root: MathObject,
-    childToReplaceFinder: (root: MathObject) => Context,
+    childToReplaceFinder: (root: MathObject) => Context | null,
     replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[]
   ): ChangeContext[]
   {
     const childCtx = childToReplaceFinder(root);
-    const parentCtx = childCtx.parentContext;
 
-    if (parentCtx) {
-      const replacementChildren = replacementChildrenBuilder(childCtx, parentCtx);
-      const newParent = Actions.buildParentForReplacingChildren(parentCtx, childCtx, replacementChildren);
-  
-      const newMo = root.replace(parentCtx.target, newParent);
-      const newParentInsideNewMo = newMo.find(MathObject, (c, ctx) => ctx.position.equals(parentCtx.position)) as Context;
-      const newHighlightObjects = newParentInsideNewMo.target.children.filter((c, i) => i >= childCtx.position.index && i < childCtx.position.index + replacementChildren.length);
-  
-      return [
-        new ChangeContext({
-          previousMathObject: root,
-          newMathObject: newMo,
-          previousHighlightObjects: [childCtx.target],
-          newHighlightObjects,
-          action
-        })
-      ];
+    if (childCtx) {
+      const parentCtx = childCtx.parentContext;
+
+      if (parentCtx) {
+        const replacementChildren = replacementChildrenBuilder(childCtx, parentCtx);
+        const newParent = Actions.buildParentForReplacingChildren(parentCtx, childCtx, replacementChildren);
+    
+        const newMo = root.replace(parentCtx.target, newParent);
+        const newParentInsideNewMo = newMo.find(MathObject, (c, ctx) => ctx.position.equals(parentCtx.position)) as Context;
+        const newHighlightObjects = newParentInsideNewMo.target.children.filter((c, i) => i >= childCtx.position.index && i < childCtx.position.index + replacementChildren.length);
+    
+        return [
+          new ChangeContext({
+            previousMathObject: root,
+            newMathObject: newMo,
+            previousHighlightObjects: [childCtx.target],
+            newHighlightObjects,
+            action
+          })
+        ];
+      }
     }
 
     return [];
