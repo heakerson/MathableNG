@@ -9,7 +9,7 @@ import { Context } from 'src/models/search/context.model';
 import { Position } from 'src/models/search/position.model';
 import { Factory } from 'src/models/services/core/factory.service';
 import { Chainer, ChangeContext } from './chainer.model';
-import { Utilities } from './utilities.model';
+import { ActionHelpers } from './action-helpers.model';
 
 export class Actions {
 
@@ -160,7 +160,7 @@ export class Actions {
 
     return Chainer.chain(rootMo, [
       (root: MathObject) => Actions.expandNegativeFactor(root, negativeChildFinder),
-      (root: MathObject) => Actions.replaceChildren(
+      (root: MathObject) => ActionHelpers.replaceChild(
         ActionTypes.removeParenthFromSingleTerm,
         root,
         childFinder,
@@ -170,52 +170,12 @@ export class Actions {
   }
 
   private static expandNegativeFactor(rootMo: MathObject, negativeFactorFinder: (root: MathObject) => Context | null): ChangeContext[] {
-    return Actions.replaceChildren(
+    return ActionHelpers.replaceChild(
       ActionTypes.expandNegativeFactor,
       rootMo,
       negativeFactorFinder,
       (childToReplaceCtx: Context) => [new Integer('-1'), (childToReplaceCtx.target as Factor).flipSign()]
     );
-  }
-
-  private static replaceChildren(
-    action: ActionTypes,
-    root: MathObject,
-    childToReplaceFinder: (root: MathObject) => Context | null,
-    replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[]
-  ): ChangeContext[]
-  {
-    const childCtx = childToReplaceFinder(root);
-
-    if (childCtx) {
-      const parentCtx = childCtx.parentContext;
-
-      if (parentCtx) {
-        const replacementChildren = replacementChildrenBuilder(childCtx, parentCtx);
-        const newParent = Actions.buildParentForReplacingChildren(parentCtx, childCtx, replacementChildren);
-    
-        const newMo = root.replace(parentCtx.target, newParent);
-        const newParentInsideNewMo = newMo.find(MathObject, (c, ctx) => ctx.position.equals(parentCtx.position)) as Context;
-        const newHighlightObjects = newParentInsideNewMo.target.children.filter((c, i) => i >= childCtx.position.index && i < childCtx.position.index + replacementChildren.length);
-    
-        return [
-          new ChangeContext({
-            previousMathObject: root,
-            newMathObject: newMo,
-            previousHighlightObjects: [childCtx.target],
-            newHighlightObjects,
-            action
-          })
-        ];
-      }
-    }
-
-    return [];
-  }
-
-  private static buildParentForReplacingChildren(parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]): MathObject {
-    const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
-    return Term.fromFactors(...newParentTermFactors);
   }
 }
 
