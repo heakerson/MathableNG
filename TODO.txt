@@ -1,8 +1,8 @@
 LEFT OFF:
-- Add MORE negative tests for removing ()
 - IMPORTANT!!! Look at current actions and helpers and create generic helpers for reducing, expanding, replacing, removing, and moving children
     - Can I get rid of the utilities class?
 - Try to create a function that chains actions together (example - combining the expand negative with the removing () )
+- In action tests, remove 'finalResult' and only use the steps property
 - Starting to get the feeling that I SHOULD force exponents and num/denoms to be expressions
 - Add constructor tests to rational around situations like 'a*b/c' => presumable ((a*b)/c)?
 - Maybe rename removeParenthFromSingleTerm to basicRemoveParenth? Since this particuar case is ignoring num/denom/base/exponent/function cases?

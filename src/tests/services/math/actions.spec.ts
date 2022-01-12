@@ -115,18 +115,24 @@ describe('Mathobject Actions', () => {
     describe('removeParentFromSingleTerm', () => {
         const tests: ActionTest[] = [
             new ActionTest({ mo: new Expression('(a*b)'), finalResult: '(a*b)'}),
+            new ActionTest({ mo: new Expression('-(a*b)'), finalResult: '-(a*b)'}),
             new ActionTest({ mo: new Expression('(a+b)'), finalResult: '(a+b)'}),
             new ActionTest({ mo: new Term('(a+b)'), finalResult: '(a+b)'}),
             new ActionTest({ mo: new Term('sin[(x)]'), finalResult: 'sin[(x)]'}),
             new ActionTest({ mo: new Term('((x)/(y))'), finalResult: '((x)/(y))'}),
+            new ActionTest({ mo: new Term('(-(x)/(y))'), finalResult: '(-(x)/(y))'}),
             new ActionTest({ mo: new Term('(x)^(y)'), finalResult: '(x)^(y)'}),
+            new ActionTest({ mo: new Term('-(x)^(y)'), finalResult: '-(x)^(y)'}),
+            new ActionTest({ mo: new Term('(x)^-(y)'), finalResult: '(x)^-(y)'}),
             new ActionTest({ mo: new Term('(a*b)'), finalResult: 'a*b', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
+            new ActionTest({ mo: new Term('-(a*b)'), finalResult: '-1*a*b', steps: ['-1*(a*b)', '-1*a*b'], beforeHighlights: [['-(a*b)'], ['(a*b)']], afterHighlights: [['-1', '(a*b)'], ['a', 'b']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('a*b*(x*y)*c'), finalResult: 'a*b*x*y*c', beforeHighlights: [['(x*y)']], afterHighlights: [['x', 'y']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('a*b*(-x)*c'), finalResult: 'a*b*-x*c', beforeHighlights: [['(-x)']], afterHighlights: [['-x']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('a*b*(x*(m+n)*y)*c'), finalResult: 'a*b*x*(m+n)*y*c', beforeHighlights: [['(x*(m+n)*y)']], afterHighlights: [['x', '(m+n)', 'y']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('a*b*(x*(m*-n)*y)*c'), finalResult: 'a*b*(x*m*-n*y)*c', beforeHighlights: [['(m*-n)']], afterHighlights: [['m', '-n']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
             new ActionTest({ mo: new Term('sin[x+(a*b)]'), finalResult: 'sin[(x+a*b)]', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthFromSingleTerm]}),
-            new ActionTest({mo: new Term('a*-(b*c)'), finalResult: 'a*-1*b*c', steps: ['a*-1*(b*c)', 'a*-1*b*c'], beforeHighlights: [['-(b*c)'], ['(b*c)']], afterHighlights: [['-1', '(b*c)'], ['b', 'c']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthFromSingleTerm]}),
+            new ActionTest({ mo: new Term('a*-(b*c)'), finalResult: 'a*-1*b*c', steps: ['a*-1*(b*c)', 'a*-1*b*c'], beforeHighlights: [['-(b*c)'], ['(b*c)']], afterHighlights: [['-1', '(b*c)'], ['b', 'c']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthFromSingleTerm]}),
+            new ActionTest({ mo: new Term('sin[x-(a*b)]'), finalResult: 'sin[(x-1*a*b)]', steps: ['sin[(x-1*(a*b))]','sin[(x-1*a*b)]'], beforeHighlights: [['-(a*b)'], ['(a*b)']], afterHighlights: [['-1', '(a*b)'], ['a', 'b']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthFromSingleTerm]}),
         ];
 
         actionTester('Remove first instance of a single term enclosed by (), child first', tests, Actions.removeParenthFromSingleTerm);
