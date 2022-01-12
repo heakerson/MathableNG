@@ -156,10 +156,10 @@ export class Actions {
       const isNegative = (singleTermExpressionCtx.target as Expression).sign == Sign.Negative;
 
       if (isNegative) {
-        const negativeChanges = Actions.expandNegativeFactor(singleTermExpressionCtx);
+        const negativeChanges = Actions.expandNegativeFactor(rootMo, childFinder);
         const newMo = negativeChanges[0].newMathObject;
         singleTermExpressionCtx = childFinder(newMo) as Context;
-        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx, singleTermExpressionCtx.root, childFinder)];
+        return [...negativeChanges, ...Actions.removeParenthFromSingleTermExpressionHelper(singleTermExpressionCtx.root, childFinder)];
       }
 
       return Actions.removeParenthFromSingleTermExpressionHelper(rootMo, childFinder);
@@ -168,57 +168,38 @@ export class Actions {
     return [];
   }
 
-  private static expandNegativeFactor(negativeFactorCtx: Context): ChangeContext[] {
-    const negativeFactor = negativeFactorCtx.target;
-    const parentTermCtx = negativeFactorCtx.parentContext;
-    const isNegativeFactor = negativeFactor instanceof Factor && negativeFactor.sign === Sign.Negative;
-
-    if (isNegativeFactor && parentTermCtx) {
-      const parentIsTerm = parentTermCtx.target instanceof Term;
-
-      if (parentIsTerm) {
-        const parentTerm = parentTermCtx.target as Term;
-        const negativeFactorIndex = negativeFactorCtx.position.index;
-        const newChildren = Utilities.replace(negativeFactorIndex, parentTerm.factors, [new Integer('-1'), negativeFactor.flipSign()]) as Factor[];
-        const newParentTerm = Term.fromFactors(...newChildren);
-        const newMo = negativeFactorCtx.root.replace(parentTerm, newParentTerm);
-        const newTermInNewObject = newMo.getObjectAtPosition(parentTermCtx.position) as Term;
-
-        return [
-          new ChangeContext({
-            previousMathObject: negativeFactorCtx.root,
-            newMathObject: newMo,
-            previousHighlightObjects: [negativeFactor],
-            newHighlightObjects: [...newTermInNewObject.factors.filter((f, i) => i >= negativeFactorIndex && i <= negativeFactorIndex+1)],
-            action: ActionTypes.expandNegativeFactor
-          })
-        ];
+  private static expandNegativeFactor(rootMo: MathObject, negativeFactorFinder: (root: MathObject) => Context): ChangeContext[] {
+    return Actions.replaceChildren(
+      ActionTypes.expandNegativeFactor,
+      rootMo,
+      negativeFactorFinder,
+      (childToReplaceCtx: Context) => [new Integer('-1'), (childToReplaceCtx.target as Factor).flipSign()],
+      (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => {
+        const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
+        return Term.fromFactors(...newParentTermFactors);
       }
-
-    }
-
-    return [];
+    );
   }
 
   private static removeParenthFromSingleTermExpressionHelper(rootMo: MathObject, expressionFinder: (root: MathObject) => Context): ChangeContext[] {
     return Actions.replaceChildren(
+      ActionTypes.removeParenthFromSingleTerm,
       rootMo,
       expressionFinder,
       (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors,
       (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => {
         const newParentTermFactors = Utilities.insert(childToReplaceCtx.position.index, (parentCtx.target as Term).factors.filter(f => f.id !== childToReplaceCtx.target.id), newChildren) as Factor[];
         return Term.fromFactors(...newParentTermFactors);
-      },
-      ActionTypes.removeParenthFromSingleTerm
+      }
     );
   }
 
   private static replaceChildren(
+    action: ActionTypes,
     root: MathObject,
     childToReplaceFinder: (root: MathObject) => Context,
     replacementChildrenBuilder: (childToReplaceCtx: Context, parentCtx: Context) => MathObject[],
-    newParentBuilder: (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => MathObject,
-    action: ActionTypes
+    newParentBuilder: (parentCtx: Context, childToReplaceCtx: Context, newChildren: MathObject[]) => MathObject
   ): ChangeContext[]
   {
     const childCtx = childToReplaceFinder(root);
