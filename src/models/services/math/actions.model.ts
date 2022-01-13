@@ -13,7 +13,7 @@ import { Constant } from 'src/models/math-object/factor/number/contant/constant.
 
 export class Actions {
 
-  public static removeZeroFactor(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static removeZeroFactor(rootMo: MathObject): ChangeContext[] {
     let zeroFactor: Factor = {} as Factor;
 
     const termWithZeroFactorCtx = rootMo.find(Term, (t: Term) => {
@@ -39,7 +39,7 @@ export class Actions {
     return [];
   }
 
-  public static removeZeroTerm(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static removeZeroTerm(rootMo: MathObject): ChangeContext[] {
     const zeroTermCtx = rootMo.find(Term, (t: Term, ctx: Context) => {
       if (t.factorCount === 1) {
         const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0) as Double;
@@ -73,7 +73,7 @@ export class Actions {
     return [];
   }
 
-  public static constantMultiplication(rootMo: MathObject, previousChanges: ChangeContext[]): ChangeContext[] {
+  public static constantMultiplication(rootMo: MathObject): ChangeContext[] {
     const isConstantFactor = (f: Factor) => f instanceof Double && !(f instanceof Constant);
 
     const childrenFinder = (root: MathObject) => {
