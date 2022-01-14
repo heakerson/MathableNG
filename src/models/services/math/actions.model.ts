@@ -14,63 +14,51 @@ import { Constant } from 'src/models/math-object/factor/number/contant/constant.
 export class Actions {
 
   public static removeZeroFactor(rootMo: MathObject): ChangeContext[] {
-    let zeroFactor: Factor = {} as Factor;
+    const childrenFinder = (root: MathObject) => {
+      const termWithZeroFactorCtx = rootMo.find(Term, (t: Term) => {
+        const zeroFactor = t.findChild<Double | Integer>(Double || Integer, (i) => i.value === 0) as Factor;
+        return !!zeroFactor && t.factorCount > 1;
+      });
 
-    const termWithZeroFactorCtx = rootMo.find(Term, (t: Term) => {
-      zeroFactor = t.findChild<Double | Integer>(Double || Integer, (i) => i.value === 0) as Factor;
-      return !!zeroFactor && t.factorCount > 1;
-    });
+      if (termWithZeroFactorCtx && termWithZeroFactorCtx.target.children.length > 1) {
+        return termWithZeroFactorCtx.target.children.map(c => root.getObjectById(c.id));
+      }
 
-    if (termWithZeroFactorCtx) {
-      const termTgt = termWithZeroFactorCtx.target as Term;
-      const newMo = rootMo.replace(termTgt, new Term(`${termTgt.sign}0`));
-
-      return [
-        new ChangeContext({
-          previousMathObject: rootMo,
-          newMathObject: newMo,
-          previousHighlightObjects: [zeroFactor],
-          newHighlightObjects: [ newMo.getObjectAtPosition(termWithZeroFactorCtx.position) as MathObject ],
-          action: ActionTypes.removeZeroFactor
-        }),
-      ];
+      return [];
     }
 
-    return [];
+    const newChildBuilder = (childrenCtxs: Context[]) => Factory.buildFactor(`${(childrenCtxs[0].target as Factor).sign}0`);
+    const optionalPrevHighlightsBuilder = (childToReplaceCtxs: Context[]) => [ childToReplaceCtxs.find(ctx => ctx.target instanceof Double && ctx.target.value === 0)?.target as Double ];
+
+    return ActionHelpers.reduceRemoveChildren(
+      ActionTypes.removeZeroFactor,
+      rootMo,
+      childrenFinder,
+      newChildBuilder,
+      optionalPrevHighlightsBuilder
+    );
   }
 
   public static removeZeroTerm(rootMo: MathObject): ChangeContext[] {
-    const zeroTermCtx = rootMo.find(Term, (t: Term, ctx: Context) => {
-      if (t.factorCount === 1) {
-        const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0) as Double;
-        const hasSiblings = !!ctx.siblings.length;
-        return !!zero && hasSiblings;
-      }
+    const childrenFinder = (root: MathObject) => {
+      const zeroTermCtx = root.find(Term, (t: Term, ctx: Context) => {
+        if (t.factorCount === 1) {
+          const zero = t.findChild<Double | Integer>(Double || Integer, (n) => n.value === 0) as Double;
+          const hasSiblings = !!ctx.siblings.length;
+          return !!zero && hasSiblings;
+        }
+  
+        return false;
+      });
 
-      return false;
-    });
-
-    if (zeroTermCtx) {
-      const parentExprCtx = zeroTermCtx.parentContext;
-
-      if (parentExprCtx) {
-        const parentExpression = parentExprCtx.target;
-        const newExpressionChildren = parentExpression.children.filter((c) => c.id !== zeroTermCtx?.target.id) as Term[];
-        const newParentExpression = Expression.fromTerms(newExpressionChildren);
-        const newMo = rootMo.replace(parentExpression, newParentExpression);
-
-        return [
-          new ChangeContext({
-            previousMathObject: rootMo,
-            newMathObject: newMo,
-            previousHighlightObjects: [zeroTermCtx.target],
-            action: ActionTypes.removeZeroTerm
-          }),
-        ];
-      }
+      return zeroTermCtx ? [zeroTermCtx] : [];
     }
 
-    return [];
+    return ActionHelpers.reduceRemoveChildren(
+      ActionTypes.removeZeroTerm,
+      rootMo,
+      childrenFinder
+    );
   }
 
   public static constantMultiplication(rootMo: MathObject): ChangeContext[] {
@@ -99,7 +87,7 @@ export class Actions {
       return Factory.buildFactor(newValueString);
     };
 
-    return ActionHelpers.reduceChildren(
+    return ActionHelpers.reduceRemoveChildren(
       ActionTypes.constantMultiplication,
       rootMo,
       childrenFinder,
@@ -131,7 +119,7 @@ export class Actions {
       return Term.fromFactors(Factory.buildFactor((c1.value + c2.value).toString()));
     };
 
-    return ActionHelpers.reduceChildren(
+    return ActionHelpers.reduceRemoveChildren(
       ActionTypes.constantAdditionSubtraction,
       rootMo,
       childrenFinder,
