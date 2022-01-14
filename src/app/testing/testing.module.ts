@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TestingDashboardComponent } from './testing-dashboard/testing-dashboard.component';
 import { MaterialModule } from '../material/material.module';
+import { TestingRoutingModule } from './testing-routing.module';
 
 
 
@@ -11,6 +12,7 @@ import { MaterialModule } from '../material/material.module';
   ],
   imports: [
     CommonModule,
+    TestingRoutingModule,
     MaterialModule
   ],
   exports: [

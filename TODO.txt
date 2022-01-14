@@ -1,5 +1,7 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
+    - TEST LAZY LOADING IS WORKING CORRECTLY
+    - Create header with link to testing - try to only display testing when in dev mode
 - Starting to get the feeling that I SHOULD force exponents and num/denoms to be expressions
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
