@@ -128,6 +128,10 @@ export abstract class MathObject {
         return this;
     }
 
+    public getObjectById(id: string): Context {
+        return this.find(MathObject, (mo) => mo.id === id) as Context;
+    }
+
     public getObjectAtPosition<TMathObject extends MathObject>(position: Position): TMathObject | null {
         if (position.indexPath.length && position.indexPath[0] === 0) {
             let pathIndex = 0;

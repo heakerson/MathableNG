@@ -52,7 +52,8 @@ export class ActionHelpers {
     action: ActionTypes,
     root: MathObject,
     childrenToReplaceFinder: (root: MathObject) => Context[],
-    replacementChildBuilder: (childToReplaceCtx: Context[], parentCtx: Context) => MathObject
+    replacementChildBuilder: (childToReplaceCtxs: Context[], parentCtx: Context) => MathObject,
+    previousChildHighlightsBuilder?: (childToReplaceCtxs: Context[], parentCtx: Context) => MathObject[]
   ): ChangeContext[]
   {
     const allChildrenCtxs = childrenToReplaceFinder(root);
@@ -70,7 +71,7 @@ export class ActionHelpers {
           new ChangeContext({
             previousMathObject: root,
             newMathObject: newMo,
-            previousHighlightObjects: allChildrenCtxs.map(c => c.target),
+            previousHighlightObjects: previousChildHighlightsBuilder ? previousChildHighlightsBuilder(allChildrenCtxs, parentCtx) : allChildrenCtxs.map(c => c.target),
             newHighlightObjects,
             action
           })
