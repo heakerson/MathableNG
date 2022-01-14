@@ -6,6 +6,7 @@ export class Mathable {
   public static simplify(mo: MathObject): Solution {
     const changes = Chainer.loopChain(mo, [
       Actions.removeZeroTerm,
+      Actions.removeParenthBasic,
       Actions.removeZeroFactor,
       Actions.constantMultiplication,
       Actions.constantAdditionSubtraction

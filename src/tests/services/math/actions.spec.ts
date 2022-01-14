@@ -138,6 +138,7 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('sin[x+(a*b)]'), finalResult: 'sin[(x+a*b)]', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthBasic]}),
             new ActionTest({ mo: new Term('a*-(b*c)'), finalResult: 'a*-1*b*c', steps: ['a*-1*(b*c)', 'a*-1*b*c'], beforeHighlights: [['-(b*c)'], ['(b*c)']], afterHighlights: [['-1', '(b*c)'], ['b', 'c']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthBasic]}),
             new ActionTest({ mo: new Term('sin[x-(a*b)]'), finalResult: 'sin[(x-1*a*b)]', steps: ['sin[(x-1*(a*b))]','sin[(x-1*a*b)]'], beforeHighlights: [['-(a*b)'], ['(a*b)']], afterHighlights: [['-1', '(a*b)'], ['a', 'b']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthBasic]}),
+            new ActionTest({ mo: new Expression('(0)+13+((a+35)/d)'), finalResult: '(0+13+((a+35)/d))', beforeHighlights: [['(0)']], afterHighlights: [['0']], actions: [ActionTypes.removeParenthBasic]}),
         ];
 
         actionTester('Remove first instance of a single term enclosed by (), child first', tests, Actions.removeParenthBasic);
