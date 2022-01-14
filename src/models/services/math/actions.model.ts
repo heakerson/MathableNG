@@ -127,7 +127,7 @@ export class Actions {
     );
   }
 
-  public static removeParenthFromSingleTerm(rootMo: MathObject): ChangeContext[] {
+  public static removeParenthBasic(rootMo: MathObject): ChangeContext[] {
     const childFinder: (mo: MathObject) => Context = (mo: MathObject) => mo.find(Expression, (e: Expression, ctx: Context) => {
       const singleTermExprNonRoot = e.termCount === 1 && !ctx.isRoot;
       const parentIsTerm = !!ctx.parent && ctx.parent instanceof Term;
@@ -145,7 +145,7 @@ export class Actions {
     return Chainer.chain(rootMo, [
       (root: MathObject) => Actions.expandNegativeFactor(root, negativeChildFinder),
       (root: MathObject) => ActionHelpers.replaceExpandChild(
-        ActionTypes.removeParenthFromSingleTerm,
+        ActionTypes.removeParenthBasic,
         root,
         childFinder,
         (childToReplaceCtx: Context) => (childToReplaceCtx.target as Expression).terms[0].factors
@@ -168,6 +168,6 @@ export enum ActionTypes {
   removeZeroTerm = 'removeZeroTerm',
   constantAdditionSubtraction = 'constantAdditionSubtraction',
   constantMultiplication = 'constantMultiplication',
-  removeParenthFromSingleTerm = 'removeParenthFromSingleTerm',
+  removeParenthBasic = 'removeParenthBasic',
   expandNegativeFactor = 'expandNegativeFactor'
 }
