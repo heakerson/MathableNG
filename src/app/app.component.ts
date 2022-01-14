@@ -25,25 +25,25 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const mo = new Expression('a*b*0 + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
-    const solution = Mathable.simplify(mo);
-    console.log(`${mo.toString()} ====== `);
+    // const mo = new Expression('a*b*0 + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
+    // const solution = Mathable.simplify(mo);
+    // console.log(`${mo.toString()} ====== `);
 
-    solution.changes.forEach(c => {
-      console.log('   ', c.newMathObject.toString());
-    });
+    // solution.changes.forEach(c => {
+    //   console.log('   ', c.newMathObject.toString());
+    // });
 
-    console.log(`${solution.final.toString()} ====== `);
+    // console.log(`${solution.final.toString()} ====== `);
 
 
-    const sevenCtx = mo.find(Integer, (i: Integer) => i.value === 7);
-    if (sevenCtx) {
-      const newMo = mo.replace(sevenCtx?.target, new Integer('100'));
-      const newOneHundred = newMo.getObjectAtPosition(sevenCtx.position);
-      // const newInt = newMo.getObjectAtPosition(new Position([0, 10, 0]));
+    // const sevenCtx = mo.find(Integer, (i: Integer) => i.value === 7);
+    // if (sevenCtx) {
+    //   const newMo = mo.replace(sevenCtx?.target, new Integer('100'));
+    //   const newOneHundred = newMo.getObjectAtPosition(sevenCtx.position);
+    //   // const newInt = newMo.getObjectAtPosition(new Position([0, 10, 0]));
 
-      console.log('FOUND 100?', newOneHundred);
-    }
+    //   console.log('FOUND 100?', newOneHundred);
+    // }
   }
 
   replaceZeroTerms(mo: MathObject): MathObject {

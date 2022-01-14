@@ -146,8 +146,8 @@ describe('StringFormatter', () => {
             { input: 'a*cot[a/b/c]', expectedNum: '', expectedDenom: ''},
             { input: 'a/cot[a/b/c]', expectedNum: 'a', expectedDenom: 'cot[a/b/c]'},
             { input: 'a-cot[a/b/c]', expectedNum: '', expectedDenom: ''},
-            { input: '(a*b/c)', expectedNum: '', expectedDenom: ''},
-            { input: 'a/b*x/c', expectedNum: '', expectedDenom: ''},
+            { input: '(a*b/c)', expectedNum: 'a*b', expectedDenom: 'c'},
+            { input: 'a/b*x/c', expectedNum: 'a', expectedDenom: 'b*x/c'},
         ];
 
         inputs.forEach((test) => {

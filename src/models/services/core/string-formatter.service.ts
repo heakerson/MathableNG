@@ -88,48 +88,43 @@ export class StringFormatter {
 
     public static parseRationalExpressions(factorString: string): { numerator: string, denominator: string } {
         factorString = this.stripSurroundingParenthesis(factorString);
-        const isSingleFactor = this.parseFactorStrings(factorString).length === 1;
-        const isSingleTerm = this.parseTermStrings(factorString).length === 1;
         let num = '';
         let denom = '';
+        let bracketCt = 0;
+        let parenthCt = 0;
+        let found = false;
 
-        if (isSingleFactor && isSingleTerm) {
-            let bracketCt = 0;
-            let parenthCt = 0;
-            let found = false;
-    
-            [...factorString].forEach((c, i) => {
-                if (!found) {
-                    switch(c) {
-                        case '[':
-                            bracketCt++;
-                            break;
-                        case ']':
-                            bracketCt--;
-                            break;
-                        case '(':
-                            parenthCt++;
-                            break;
-                        case ')':
-                            parenthCt--;
-                            break;
-                        case '/':
-                            if (bracketCt === 0 && parenthCt === 0) {
-                                const tempNum = factorString.substring(0, i);
-                                const tempDenom = factorString.substring(i+1);
-    
-                                // preventing inputs like (a+b/c) => a+b/c => a+b & c
-                                if (this.parseTermStrings(tempNum).length === 1 && this.parseTermStrings(tempDenom).length === 1) {
-                                    num = tempNum;
-                                    denom = tempDenom;
-                                    found = true;
-                                }
+        [...factorString].forEach((c, i) => {
+            if (!found) {
+                switch(c) {
+                    case '[':
+                        bracketCt++;
+                        break;
+                    case ']':
+                        bracketCt--;
+                        break;
+                    case '(':
+                        parenthCt++;
+                        break;
+                    case ')':
+                        parenthCt--;
+                        break;
+                    case '/':
+                        if (bracketCt === 0 && parenthCt === 0) {
+                            const tempNum = factorString.substring(0, i);
+                            const tempDenom = factorString.substring(i+1);
+
+                            // preventing inputs like (a+b/c) => a+b/c => a+b & c
+                            if (this.parseTermStrings(tempNum).length === 1 && this.parseTermStrings(tempDenom).length === 1) {
+                                num = tempNum;
+                                denom = tempDenom;
+                                found = true;
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
-            })
-        }
+            }
+        });
 
         return {
             numerator: num,
