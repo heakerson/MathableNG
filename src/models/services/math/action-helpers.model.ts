@@ -48,11 +48,11 @@ export class ActionHelpers {
     return Term.fromFactors(...newParentTermFactors);
   }
 
-  public static reduceChildren(
+  public static reduceRemoveChildren(
     action: ActionTypes,
     root: MathObject,
     childrenToReplaceFinder: (root: MathObject) => Context[],
-    replacementChildBuilder: (childToReplaceCtxs: Context[], parentCtx: Context) => MathObject,
+    replacementChildBuilder?: (childToReplaceCtxs: Context[], parentCtx: Context) => MathObject,
     previousChildHighlightsBuilder?: (childToReplaceCtxs: Context[], parentCtx: Context) => MathObject[]
   ): ChangeContext[]
   {
@@ -62,10 +62,10 @@ export class ActionHelpers {
       const parentCtx = (allChildrenCtxs.map(c => c.parentContext).filter(c => !!c) as Context[])[0];
 
       if (parentCtx) {
-        const replacementChild = replacementChildBuilder(allChildrenCtxs, parentCtx);
+        const replacementChild = replacementChildBuilder ? replacementChildBuilder(allChildrenCtxs, parentCtx) : null;
         const newParent = ActionHelpers.buildParentForReducingChildren(parentCtx, allChildrenCtxs, replacementChild);
         const newMo = root.replace(parentCtx.target, newParent);
-        const newHighlightObjects = [newMo.getObjectAtPosition(allChildrenCtxs[0].position) as MathObject];
+        const newHighlightObjects = replacementChildBuilder ? [newMo.getObjectAtPosition(allChildrenCtxs[0].position) as MathObject].filter(o => !!o) : [];
     
         return [
           new ChangeContext({
@@ -82,10 +82,10 @@ export class ActionHelpers {
     return [];
   }
 
-  private static buildParentForReducingChildren(parentCtx: Context, childrenToReplaceCtxs: Context[], newChild: MathObject): MathObject {
+  private static buildParentForReducingChildren(parentCtx: Context, childrenToReplaceCtxs: Context[], newChild: MathObject | null): MathObject {
     const parent = parentCtx.target;
     const removedChildren = parent.children.filter(t => !childrenToReplaceCtxs.find(c => c.target.id === t.id))
-    const newChildren = ActionHelpers.insert(childrenToReplaceCtxs[0].position.index, removedChildren, [newChild]);
+    const newChildren = ActionHelpers.insert(childrenToReplaceCtxs[0].position.index, removedChildren, newChild ? [newChild] : []);
 
     switch (parent.constructor) {
       case Expression:
