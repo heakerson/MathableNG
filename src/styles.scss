@@ -2,3 +2,39 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  @extend .flex;
+
+  flex-direction: row;
+}
+
+.flex-column {
+  @extend .flex;
+
+  flex-direction: column;
+}
+
+.flex-justify-between {
+  justify-content: space-between;
+}
+
+.flex-justify-around {
+  justify-content: space-around;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.flex-grow {
+  flex: 1 1 100%;
+}

@@ -1,0 +1,16 @@
+.header-container {
+  background-color: fuchsia;
+  padding: 1em 0;
+
+  .header-link {
+    color: white;
+    padding: 0 1em;
+    font-size: 1.5em;
+
+    &:hover {
+      cursor: pointer;
+      font-weight: bold;
+      color: black;
+    }
+  }
+}
