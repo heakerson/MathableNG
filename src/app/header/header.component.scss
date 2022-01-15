@@ -1,5 +1,7 @@
+@import '../../styles/variables.scss';
+
 .header-container {
-  background-color: fuchsia;
+  background-color: $primary;
   padding: 1em 0;
 
   .header-link {
