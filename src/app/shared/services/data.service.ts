@@ -6,4 +6,8 @@ import { Injectable } from '@angular/core';
 export class DataService {
 
   constructor() { }
+
+  loadData(): void {
+    console.log('LOAD DATA!');
+  }
 }
