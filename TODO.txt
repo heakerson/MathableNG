@@ -1,11 +1,12 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Create header with link to testing - try to only display testing when in dev mode
-- Starting to get the feeling that I SHOULD force exponents and num/denoms to be expressions
+    - Figure out how to load and save file data
+    - Create auth guard for dev vs prod for testing path
+        - https://stackoverflow.com/questions/54650746/angular-how-do-you-create-specific-routes-only-in-development-mode
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
 - maybe combine the multiplication/addition/subtraction/zero factors/zero terms operators in to one?
-- inside services, create a 'Core' services and move the factory/error-handler/string formatter in to it
+- Starting to get the feeling that I SHOULD force exponents and num/denoms to be expressions
 - Create tests for new EMPTY_PARAMETER function errors - USE STASH
     - Maybe only check for this error in the Factory class since that's the only place it might show up? The rest will be caught through constructor inputs
     - Create another test to make sure there aren't EXTRA parameters or not ENOUGH parameters
