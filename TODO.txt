@@ -1,6 +1,8 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Figure out how to load and save file data
+    - Get a basic create/update working
+        - think about how I want to partition this stuff - if at all
+    - Get a get working
     - Create auth guard for dev vs prod for testing path
         - https://stackoverflow.com/questions/54650746/angular-how-do-you-create-specific-routes-only-in-development-mode
 - Add new operations!
