@@ -1,6 +1,6 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Get a super basic api endpoint working
+    - Create repo for general api
     - Decide how best to set up my data base
         - Have two tables with different types of data? Like a simple one with JUST primary keys and another for better indexing?
         - Maybe each app that uses it has an app id and then an indexing id?

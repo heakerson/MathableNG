@@ -13,8 +13,9 @@ export class DataService {
     const key = 'vu9z73ldvk';
     const region = 'us-east-2';
     const stage = 'dev';
-    const testId = 'wow';
-    const baseUrl = `https://${key}.execute-api.${region}.amazonaws.com/${stage}/getById/${testId}`;
+    const partitionKey = 'partition';
+    const sortKey = 'sort';
+    const baseUrl = `https://${key}.execute-api.${region}.amazonaws.com/${stage}/getByCompositeKey/${partitionKey}/${sortKey}`;
   
     this.http.get(baseUrl).subscribe(respone => {
       console.log('RESPONSE', respone);
