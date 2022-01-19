@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,10 @@ export class DataService {
     const stage = 'dev';
     const partitionKey = 'partition';
     const sortKey = 'sort';
-    const baseUrl = `https://${key}.execute-api.${region}.amazonaws.com/${stage}/getByCompositeKey/${partitionKey}/${sortKey}`;
+    const baseUrl = `https://${key}.execute-api.${region}.amazonaws.com/${stage}/getByCompositeKey/${partitionKey}`;
+    const params = new HttpParams().set('sortKey', sortKey);
   
-    this.http.get(baseUrl).subscribe(respone => {
+    this.http.get(baseUrl, { params }).subscribe(respone => {
       console.log('RESPONSE', respone);
     })
   }
