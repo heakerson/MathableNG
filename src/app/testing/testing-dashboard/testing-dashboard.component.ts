@@ -14,6 +14,7 @@ export class TestingDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.ds.loadData();
+    this.ds.createItem();
   }
 
 }

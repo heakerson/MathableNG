@@ -1,12 +1,11 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Create repo for general api
     - Get a basic create/update working
-        - think about how I want to partition this stuff - if at all
     - Get a basic delete working
     - Look in to basic authentication
     - Create auth guard for dev vs prod for testing path
         - https://stackoverflow.com/questions/54650746/angular-how-do-you-create-specific-routes-only-in-development-mode
+- add comments to each endpoint describing the route and any expections like required fields
 - api gateway has the query param labeled as partition key when it's actually the sort key
 - Probably find the serverless yml setting that makes sure the dynamo table isn't deleted
 - Add new operations!
