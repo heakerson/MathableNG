@@ -1,5 +1,8 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
+    - Test ALL logic branches in the get endpoint - seems like the error scenarios aren't all working?
+    - Probably swap to using query params for the sort key?
+    - Get the data to come back locally AND in dev
     - Create repo for general api
     - Decide how best to set up my data base
         - Have two tables with different types of data? Like a simple one with JUST primary keys and another for better indexing?

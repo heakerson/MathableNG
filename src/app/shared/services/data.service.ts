@@ -10,7 +10,7 @@ export class DataService {
 
   loadData(): void {
     console.log('LOADING DATA!');
-    const key = 'f7tolntfn4';
+    const key = 'orgvj9dk93';
     const region = 'us-east-2';
     const stage = 'dev';
     const partitionKey = 'partition';
