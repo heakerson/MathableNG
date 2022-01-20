@@ -1,4 +1,26 @@
 <div>
-  <p>testing-dashboard works!</p>
-  <button mat-raised-button color="accent">Accent</button>
+  <form [formGroup]="form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Test Input</mat-label>
+      <input formControlName="input" matInput placeholder="Enter test Input">
+      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+    </mat-form-field>
+
+    <button (click)="runTest()" mat-raised-button color="primary">Run Test</button>
+
+  </form>
+
+  <div class="solution-container">
+    <div class="solution-final">FINAL: {{solution?.final?.toString()}}</div>
+
+    <div *ngIf="solution" class="solution-step-list">
+      <div class="solution-step">
+        <div>{{mo.toString()}}</div>
+      </div>
+      <div class="solution-step" *ngFor="let change of solution.changes">
+        <div>{{change.newMathObject.toString()}}</div>
+      </div>
+    </div>
+  </div>
 </div>

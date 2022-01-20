@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Test } from '@testing/models/test.model';
 import { TestDataService } from '@testing/services/test-data.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { MathObject } from 'src/models/math-object/math-object.model';
+import { Factory } from 'src/models/services/core/factory.service';
+import { Mathable, Solution } from 'src/models/services/math/mathable.model';
 
 @Component({
   selector: 'app-testing-dashboard',
@@ -9,7 +14,14 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 })
 export class TestingDashboardComponent implements OnInit, OnDestroy {
 
-  public destroyed$ = new Subject();
+  destroyed$ = new Subject();
+  tests: Test[] = [];
+  mo!: MathObject;
+  solution!: Solution;
+
+  form: FormGroup = new FormGroup({
+    input: new FormControl('')
+  });
 
   constructor(
     private dataService: TestDataService
@@ -18,17 +30,16 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataService.loadData();
 
-    this.dataService.testConfig$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((config) => console.log('TEST CONFIG!', config))
-
-    this.dataService.testPages$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((pages) => console.log('PAGES!', pages))
-
     this.dataService.tests$
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((tests) => console.log('TESTS!', tests))
+      .subscribe((tests) => this.tests = tests);
+  }
+
+  runTest(): void {
+    const inputControl = this.form.get('input') as FormControl;
+    this.mo = Factory.buildFactor(inputControl.value);
+    this.solution = Mathable.simplify(this.mo);
+    console.log('solution', this.solution);
   }
 
   ngOnDestroy(): void {

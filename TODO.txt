@@ -1,19 +1,10 @@
 LEFT OFF:
 - TEST THE CONSTRUCTORS AND FUNCTIONS I JUST CREATED
 - Create testing application - sepearate angular module
-    - Decide on the structure of the test data and load it
-        - test side
-            - I think tests should be part of 'pages' so no one object gets to big - dynamodb record limits are 400kb
-            - configuration
-                - objectType
-                - test page size
-            - page
-                - objectType
-                - tests
-            - test
-                - objectType
-                - input
-                - solution object - will I need to create a special function for this?
+    - start creating UI for testing
+    - Create a static IsValidInput function somewhere and use it to update the appearance of the input and enable/disable a testing button
+    - create an updating status for when http requests are still out
+    - add some kind of popup for when http requests fail
     - make sure the tests are NOT updated in dev - ONLY LOCALLY
 - Decide on the structure of the main app data and load it
 - Add new operations!
