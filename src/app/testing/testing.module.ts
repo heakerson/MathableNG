@@ -4,6 +4,7 @@ import { TestingDashboardComponent } from './testing-dashboard/testing-dashboard
 import { MaterialModule } from '../material/material.module';
 import { TestingRoutingModule } from './testing-routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { TestDataService } from './services/test-data.service';
 
 
 
@@ -19,6 +20,9 @@ import { SharedModule } from '../shared/shared.module';
   ],
   exports: [
     TestingDashboardComponent
+  ],
+  providers: [
+    TestDataService
   ]
 })
 export class TestingModule { }

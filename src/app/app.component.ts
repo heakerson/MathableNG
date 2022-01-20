@@ -25,15 +25,15 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
-    const solution = Mathable.simplify(mo);
-    console.log(`${mo.toString()} ====== `);
+    // const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
+    // const solution = Mathable.simplify(mo);
+    // console.log(`${mo.toString()} ====== `);
 
-    solution.changes.forEach(c => {
-      console.log('   ', c.newMathObject.toString());
-    });
+    // solution.changes.forEach(c => {
+    //   console.log('   ', c.newMathObject.toString());
+    // });
 
-    console.log(`${solution.final.toString()} ====== STEP COUNT: ${solution.changes.length} `);
+    // console.log(`${solution.final.toString()} ====== STEP COUNT: ${solution.changes.length} `);
 
 
     // const sevenCtx = mo.find(Integer, (i: Integer) => i.value === 7);

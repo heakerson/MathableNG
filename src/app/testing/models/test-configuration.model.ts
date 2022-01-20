@@ -9,7 +9,7 @@ export class TestConfiguration extends BaseAppObject {
     super(props);
   }
 
-  public init(partitionKey: string): TestConfiguration {
+  public static init(partitionKey: string): TestConfiguration {
     return new TestConfiguration({ partitionKey })
   }
 

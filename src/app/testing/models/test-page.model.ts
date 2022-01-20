@@ -11,7 +11,7 @@ export class TestPage extends BaseAppObject {
     this.tests = props.tests?.map(t => new Test(t)) || [];
   }
 
-  public init(partitionKey: string, editable: Partial<EditablePage>): TestPage {
+  public static init(partitionKey: string, editable: Partial<EditablePage>): TestPage {
     return new TestPage({ partitionKey, ...editable })
   }
 
