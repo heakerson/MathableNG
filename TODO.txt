@@ -1,13 +1,20 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Get a basic create/update working
-    - Get a basic delete working
-    - Look in to basic authentication
-    - Create auth guard for dev vs prod for testing path
-        - https://stackoverflow.com/questions/54650746/angular-how-do-you-create-specific-routes-only-in-development-mode
-- add comments to each endpoint describing the route and any expections like required fields
-- api gateway has the query param labeled as partition key when it's actually the sort key
-- Probably find the serverless yml setting that makes sure the dynamo table isn't deleted
+    - Decide on the structure of the test data and load it
+        - test side
+            - I think tests should be part of 'pages' so no one object gets to big - dynamodb record limits are 400kb
+            - configuration
+                - objectType
+                - test page size
+            - page
+                - objectType
+                - tests
+            - test
+                - objectType
+                - input
+                - solution object - will I need to create a special function for this?
+    - make sure the tests are NOT updated in dev - ONLY LOCALLY
+- Decide on the structure of the main app data and load it
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing
 - maybe combine the multiplication/addition/subtraction/zero factors/zero terms operators in to one?
