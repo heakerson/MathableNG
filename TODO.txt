@@ -1,4 +1,5 @@
 LEFT OFF:
+- TEST THE CONSTRUCTORS AND FUNCTIONS I JUST CREATED
 - Create testing application - sepearate angular module
     - Decide on the structure of the test data and load it
         - test side

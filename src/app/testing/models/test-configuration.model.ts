@@ -8,4 +8,16 @@ export class TestConfiguration extends BaseAppObject {
   constructor(props: Partial<TestConfiguration>) {
     super(props);
   }
+
+  public init(partitionKey: string): TestConfiguration {
+    return new TestConfiguration({ partitionKey })
+  }
+
+  public edit(editable: Partial<EditableConfig>): TestConfiguration {
+    return new TestConfiguration({...this, ...editable});
+  }
+}
+
+export class EditableConfig {
+  testsPerPage!: number;
 }
