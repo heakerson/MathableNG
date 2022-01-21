@@ -1,7 +1,9 @@
-LEFT OFF:
-- TEST THE CONSTRUCTORS AND FUNCTIONS I JUST CREATED
+LEFT OFF: FINISH THE toString and fromString functions
 - Create testing application - sepearate angular module
-    - start creating UI for testing
+    - On SOLUTION/CHANGE object
+        - toString function
+        - static fromString
+        - TEST THIS??
     - Create a static IsValidInput function somewhere and use it to update the appearance of the input and enable/disable a testing button
     - create an updating status for when http requests are still out
     - add some kind of popup for when http requests fail

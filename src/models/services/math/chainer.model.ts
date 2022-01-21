@@ -1,5 +1,7 @@
 import { MathObject } from "src/models/math-object/math-object.model";
+import { Factory } from "../core/factory.service";
 import { ActionTypes } from "./actions.model";
+import { Position } from '../../search/position.model';
 
 export class Chainer {
 
@@ -55,4 +57,42 @@ export class ChangeContext {
     constructor(props: Partial<ChangeContext>) {
         Object.assign(this, props);
     }
+
+    toString(): string {
+        const serializable = {
+            previousMathObjectString: this.previousMathObject.toString(),
+            newMathObjectString: this.newMathObject.toString(),
+            // previousHighlightObjectPositions: this.previousHighlightObjects.map(mo => this.previousMathObject)
+        } as SerializableChangeContext;
+
+        return JSON.stringify(serializable);
+    }
+
+    public static fromString(serialized: string): ChangeContext {
+        const serializable: SerializableChangeContext = JSON.parse(serialized);
+        const previousMathObject = Factory.buildFactor(serializable.previousMathObjectString);
+        const newMathObject = Factory.buildFactor(serializable.newMathObjectString);
+
+        return new ChangeContext({
+            previousMathObject,
+            newMathObject,
+            previousHighlightObjects: serializable.previousHighlightObjectPositions.map(p => {
+                const position = new Position(p);
+                return previousMathObject.getObjectAtPosition(position) as MathObject;
+            }),
+            newHighlightObjects: serializable.newHighlightObjectPositions.map(p => {
+                const position = new Position(p);
+                return newMathObject.getObjectAtPosition(position) as MathObject;
+            }),
+            action: serializable.action
+        });
+    }
+}
+
+export class SerializableChangeContext {
+    public previousMathObjectString!: string;
+    public newMathObjectString!: string;
+    public previousHighlightObjectPositions: number[][] = [];
+    public newHighlightObjectPositions: number[][] = [];
+    public action!: ActionTypes;
 }
