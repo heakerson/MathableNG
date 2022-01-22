@@ -12,36 +12,48 @@ export class ChangeContext {
   public action!: ActionTypes;
 
   constructor(props: Partial<ChangeContext>) {
-      Object.assign(this, props);
+    Object.assign(this, props);
   }
 
-  toString(): string {
-      const serializable = {
-          previousMathObjectString: this.previousMathObject.toString(),
-          newMathObjectString: this.newMathObject.toString(),
-          // previousHighlightObjectPositions: this.previousHighlightObjects.map(mo => this.previousMathObject)
-      } as SerializableChangeContext;
+  public toSerializable(): SerializableChangeContext {
+    return {
+      previousMathObjectString: this.previousMathObject.toString(),
+      newMathObjectString: this.newMathObject.toString(),
+      previousHighlightObjectPositions: this.previousHighlightObjects.map(po => this.previousMathObject.getObjectById(po.id).position.indexPath),
+      newHighlightObjectPositions: this.newHighlightObjects.map(no => this.newMathObject.getObjectById(no.id).position.indexPath),
+      action: this.action
+    } as SerializableChangeContext;
+  }
 
-      return JSON.stringify(serializable);
+  public equals(anotherChangeContext: ChangeContext): boolean {
+    return this.toString() === anotherChangeContext.toString();
+  }
+
+  public toString(): string {
+    return JSON.stringify(this.toSerializable());
+  }
+
+  public static fromSerializable(serializable: SerializableChangeContext): ChangeContext {
+    const previousMathObject = Factory.buildFactor(serializable.previousMathObjectString);
+    const newMathObject = Factory.buildFactor(serializable.newMathObjectString);
+
+    return new ChangeContext({
+      previousMathObject,
+      newMathObject,
+      previousHighlightObjects: serializable.previousHighlightObjectPositions.map(p => {
+        const position = new Position(p);
+        return previousMathObject.getObjectAtPosition(position) as MathObject;
+      }),
+      newHighlightObjects: serializable.newHighlightObjectPositions.map(p => {
+        const position = new Position(p);
+        return newMathObject.getObjectAtPosition(position) as MathObject;
+      }),
+      action: serializable.action
+    });
   }
 
   public static fromString(serialized: string): ChangeContext {
-      const serializable: SerializableChangeContext = JSON.parse(serialized);
-      const previousMathObject = Factory.buildFactor(serializable.previousMathObjectString);
-      const newMathObject = Factory.buildFactor(serializable.newMathObjectString);
-
-      return new ChangeContext({
-          previousMathObject,
-          newMathObject,
-          previousHighlightObjects: serializable.previousHighlightObjectPositions.map(p => {
-              const position = new Position(p);
-              return previousMathObject.getObjectAtPosition(position) as MathObject;
-          }),
-          newHighlightObjects: serializable.newHighlightObjectPositions.map(p => {
-              const position = new Position(p);
-              return newMathObject.getObjectAtPosition(position) as MathObject;
-          }),
-          action: serializable.action
-      });
+    const serializable: SerializableChangeContext = JSON.parse(serialized);
+    return ChangeContext.fromSerializable(serializable);
   }
 }
