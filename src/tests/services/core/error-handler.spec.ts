@@ -155,6 +155,36 @@ describe('ErrorHandler', () => {
         });
     });
 
+    describe('endsWithOperators', () => {
+        const inputs: { input: string, expectedResult: string | null }[] = [
+            { input: ' a +-b=c--d', expectedResult: null },
+            { input: '1+(2)=3   ', expectedResult: null },
+            { input: 'x^-y', expectedResult: null },
+            { input: '--x*-y', expectedResult: null },
+            { input: 'x^-(y)', expectedResult: null },
+            { input: 'a+b^(x)<=c/-d', expectedResult: null },
+            { input: 'x-', expectedResult: '-' },
+            { input: '(x)-', expectedResult: '-' },
+            { input: 'x-', expectedResult: '-' },
+            { input: 'x/', expectedResult: '/' },
+            { input: 'x*', expectedResult: '*' },
+            { input: 'x^', expectedResult: '^' },
+            { input: 'x^*', expectedResult: '^*' },
+            { input: 'x--', expectedResult: '--' },
+            { input: '7***', expectedResult: '***' },
+            { input: '7**/', expectedResult: '**/' },
+        ];
+
+        inputs.forEach((test) => {
+            it(`Should return ${test.expectedResult} for '${test.input}'`, () => {
+                const result = ErrorHandler.endsWithOperators(test.input);
+                    // console.log('INPUT', test.input);
+                    // console.log('   RESULT', result);
+                expect(result).toEqual(test.expectedResult);
+            });
+        });
+    });
+
     describe('tooManyOperators', () => {
         const inputs: { input: string, expectedResult: string | null }[] = [
             { input: ' a +-b=c--d', expectedResult: null },

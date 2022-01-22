@@ -4,6 +4,13 @@ export class ErrorHandler {
 
     public static checkBaseChildErrors(inputWhitespaceRemoved: string, objectName: string, customInputString: string = ''): void {
         const inputDisplayMessage = !!customInputString ? customInputString : inputWhitespaceRemoved;
+
+        const endsWithOperators = this.endsWithOperators(inputWhitespaceRemoved);
+
+        if (endsWithOperators) {
+            this.throwError(ErrorCodes.ENDS_WITH_OPERATORS, objectName, inputDisplayMessage, `Ends With Operator(s): '${endsWithOperators}'`);
+        }
+
         const operatorError = this.tooManyOperators(inputWhitespaceRemoved);
 
         if (operatorError) {
@@ -171,6 +178,19 @@ export class ErrorHandler {
         return isMissingFunctionName;
     }
 
+    public static endsWithOperators(input: string): string | null {
+        const endingOperatorChars = [];
+        const reverseInputChars = [...input].reverse();
+        let index = 0;
+
+        while (reverseInputChars && reverseInputChars[index] && StringFormatter.operators.includes(reverseInputChars[index])) {
+            endingOperatorChars.push(reverseInputChars[index]);
+            index++;
+        }
+
+        return endingOperatorChars.length ? endingOperatorChars.reverse().join('') : null;
+    }
+
     public static tooManyOperators(input: string): string | null {
         let operatorString: string = '';
         let foundError = false;
@@ -268,4 +288,6 @@ export class ErrorCodes {
             NOT_AN_INTEGER: 16
         }
     }
+
+    public static readonly ENDS_WITH_OPERATORS = 17;
 }
