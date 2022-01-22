@@ -19,6 +19,7 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
   tests: Test[] = [];
   mo!: MathObject;
   solution!: Solution;
+  valid = false;
 
   form: FormGroup = new FormGroup({
     input: new FormControl('')
@@ -34,13 +35,26 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
     this.dataService.tests$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((tests) => this.tests = tests);
+
+    this.form.valueChanges
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(v => this.checkValidity());
   }
 
   runTest(): void {
     const inputControl = this.form.get('input') as FormControl;
-    this.mo = Factory.buildFactor(inputControl.value);
+    this.mo = Factory.buildMathObject(inputControl.value);
     this.solution = Mathable.simplify(this.mo);
-    console.log('solution', this.solution);
+  }
+
+  checkValidity(): void {
+    try {
+      const inputControl = this.form.get('input') as FormControl;
+      Factory.buildMathObject(inputControl.value);
+      this.valid = true;
+    } catch {
+      this.valid = false;
+    }
   }
 
   ngOnDestroy(): void {

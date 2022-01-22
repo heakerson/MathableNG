@@ -4,10 +4,15 @@
     <mat-form-field appearance="outline">
       <mat-label>Test Input</mat-label>
       <input formControlName="input" matInput placeholder="Enter test Input">
-      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
     </mat-form-field>
 
-    <button (click)="runTest()" mat-raised-button color="primary">Run Test</button>
+    <button (click)="runTest()" mat-raised-button color="primary" [disabled]="!valid">
+      <div class="flex-row flex-align-center run-test-button-contents">
+        <i *ngIf="valid; else invalid" class="fas fa-check-circle fa-lg"></i>
+        <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
+        <div>Run Test</div>
+      </div>
+    </button>
 
   </form>
 
