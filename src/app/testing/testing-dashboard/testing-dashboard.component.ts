@@ -5,7 +5,8 @@ import { TestDataService } from '@testing/services/test-data.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Factory } from 'src/models/services/core/factory.service';
-import { Mathable, Solution } from 'src/models/services/math/mathable.model';
+import { Mathable } from 'src/models/services/math/mathable.model';
+import { Solution } from 'src/models/services/math/solution/solution.model';
 
 @Component({
   selector: 'app-testing-dashboard',

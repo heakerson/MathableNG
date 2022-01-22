@@ -4,7 +4,7 @@ import { Rational } from "src/models/math-object/factor/rational.model";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Term } from "src/models/math-object/term.model";
 import { Actions, ActionTypes } from "src/models/services/math/actions.model";
-import { ChangeContext } from "src/models/services/math/chainer.model";
+import { ChangeContext } from "src/models/services/math/solution/change-context.model";
 
 export class ActionTest {
     mo!: MathObject;

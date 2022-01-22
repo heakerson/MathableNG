@@ -4,7 +4,7 @@ import { MathObject } from "src/models/math-object/math-object.model";
 import { Term } from "src/models/math-object/term.model";
 import { Context } from "src/models/search/context.model";
 import { ActionTypes } from "./actions.model";
-import { ChangeContext } from "./chainer.model";
+import { ChangeContext } from "./solution/change-context.model";
 
 export class ActionHelpers {
 

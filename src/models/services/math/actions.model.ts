@@ -7,9 +7,10 @@ import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Context } from 'src/models/search/context.model';
 import { Factory } from 'src/models/services/core/factory.service';
-import { Chainer, ChangeContext } from './chainer.model';
+import { Chainer } from './chainer.model';
 import { ActionHelpers } from './action-helpers.model';
 import { Constant } from 'src/models/math-object/factor/number/contant/constant.model';
+import { ChangeContext } from './solution/change-context.model';
 
 export class Actions {
 
