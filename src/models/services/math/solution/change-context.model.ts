@@ -19,6 +19,8 @@ export class ChangeContext {
     return {
       previousMathObjectString: this.previousMathObject.toString(),
       newMathObjectString: this.newMathObject.toString(),
+      previousMathObjectType: this.previousMathObject.constructor.name,
+      newMathObjectType: this.newMathObject.constructor.name,
       previousHighlightObjectPositions: this.previousHighlightObjects.map(po => this.previousMathObject.getObjectById(po.id).position.indexPath),
       newHighlightObjectPositions: this.newHighlightObjects.map(no => this.newMathObject.getObjectById(no.id).position.indexPath),
       action: this.action
@@ -34,8 +36,8 @@ export class ChangeContext {
   }
 
   public static fromSerializable(serializable: SerializableChangeContext): ChangeContext {
-    const previousMathObject = Factory.buildFactor(serializable.previousMathObjectString);
-    const newMathObject = Factory.buildFactor(serializable.newMathObjectString);
+    const previousMathObject = Factory.buildMathObject(serializable.previousMathObjectType, serializable.previousMathObjectString);
+    const newMathObject = Factory.buildMathObject(serializable.newMathObjectType, serializable.newMathObjectString);
 
     return new ChangeContext({
       previousMathObject,

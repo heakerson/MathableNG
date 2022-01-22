@@ -17,8 +17,19 @@ import { Sin } from "../../math-object/factor/functions/trig/sin.model";
 import { Tan } from "../../math-object/factor/functions/trig/tan.model";
 import { Variable } from "../../math-object/factor/variable.model";
 import { StringFormatter } from "./string-formatter.service";
+import { MathObject } from "src/models/math-object/math-object.model";
+import { Term } from "src/models/math-object/term.model";
 
 export class Factory {
+
+    public static buildMathObject(type: string, input: string): MathObject {
+        switch (type) {
+            case 'Term':
+                return new Term(input);
+            default:
+                return this.buildFactor(input);
+        }
+    }
 
     public static buildFactor(input: string): Factor {
         const multipleTerms = StringFormatter.parseTermStrings(input).length > 1;
