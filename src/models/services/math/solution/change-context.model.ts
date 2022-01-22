@@ -36,8 +36,8 @@ export class ChangeContext {
   }
 
   public static fromSerializable(serializable: SerializableChangeContext): ChangeContext {
-    const previousMathObject = Factory.buildMathObject(serializable.previousMathObjectType, serializable.previousMathObjectString);
-    const newMathObject = Factory.buildMathObject(serializable.newMathObjectType, serializable.newMathObjectString);
+    const previousMathObject = Factory.buildMathObject(serializable.previousMathObjectString, serializable.previousMathObjectType);
+    const newMathObject = Factory.buildMathObject(serializable.newMathObjectString, serializable.newMathObjectType);
 
     return new ChangeContext({
       previousMathObject,

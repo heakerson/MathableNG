@@ -19,13 +19,16 @@ import { Variable } from "../../math-object/factor/variable.model";
 import { StringFormatter } from "./string-formatter.service";
 import { MathObject } from "src/models/math-object/math-object.model";
 import { Term } from "src/models/math-object/term.model";
+import { Equation } from "src/models/math-object/equation.model";
 
 export class Factory {
 
-    public static buildMathObject(type: string, input: string): MathObject {
+    public static buildMathObject(input: string, type: string = 'Expression'): MathObject {
         switch (type) {
             case 'Term':
                 return new Term(input);
+            case 'Equation':
+                return new Equation(input);
             default:
                 return this.buildFactor(input);
         }
