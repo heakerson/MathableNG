@@ -56,6 +56,10 @@ export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
     { input: '(a-b)*', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
     { input: '(a-b*)', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
     { input: '(a-b-)', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '(-6*)', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '8@', errorCode: ErrorCodes.Number.NOT_A_NUMBER },
+    { input: '7*9--', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '7$*8', errorCode: ErrorCodes.Number.NOT_A_NUMBER },
 ];
 
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(

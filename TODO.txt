@@ -1,16 +1,6 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Add constructor error tests for all mos ESPECIALLY INTEGERS AND TERMS AND EXPRESSIONS to check for ending with operators
-        - I might need to add a special expression test for ending with an operator or maybe in term??
-        - Add tests for ending expression with incorrect signs. VALID:
-            7*9--
-            -6*****
-            (8-)
-            (-6*)
-            (6--)
-            8@ => integers seem to be allowing any kind of characters as long as it starts with an integer
-            7=====
-            7=7
+    - Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
     - create an updating status for when http requests are still out
     - add some kind of popup for when http requests fail
     - make sure the tests are NOT updated in dev - ONLY LOCALLY

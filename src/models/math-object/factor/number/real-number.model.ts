@@ -25,7 +25,7 @@ export abstract class RealNumber extends Factor {
     protected override checkCustomFormattingErrors(): void {
         const parsedValue = Number.parseFloat(this.inputWhitespaceRemoved);
 
-        if (isNaN(parsedValue)) {
+        if (isNaN(parsedValue) || isNaN(this.inputWhitespaceRemoved as unknown as number)) {
             ErrorHandler.throwError(ErrorCodes.Number.NOT_A_NUMBER, this.constructor.name, this.inputWhitespaceRemoved, `Must be a real number`);
         }
     }
