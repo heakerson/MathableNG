@@ -1,23 +1,34 @@
 <div>
-  <form [formGroup]="form">
+  <form [formGroup]="form" class="flex-column">
 
     <mat-form-field appearance="outline">
       <mat-label>Test Input</mat-label>
       <input formControlName="input" matInput placeholder="Enter test Input">
     </mat-form-field>
 
-    <button (click)="runTest()" mat-raised-button color="primary" [disabled]="!valid">
-      <div class="flex-row flex-align-center run-test-button-contents">
-        <i *ngIf="valid; else invalid" class="fas fa-check-circle fa-lg"></i>
-        <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
-        <div>Run Test</div>
-      </div>
-    </button>
+    <div class="button-container flex-row">
+
+      <button (click)="runTest()" mat-raised-button color="primary" [disabled]="!valid" class="mr-1">
+        <div class="flex-row flex-align-center run-test-button-contents">
+          <i *ngIf="valid; else invalid" class="fas fa-check-circle fa-lg"></i>
+          <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
+          <div>Run Test</div>
+        </div>
+      </button>
+
+      <button (click)="saveTest()" mat-raised-button color="accent" [disabled]="!solution">
+        <div class="flex-row flex-align-center run-test-button-contents">
+          <i *ngIf="solution; else invalid" class="fas fa-check-circle fa-lg"></i>
+          <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
+          <div>Save Test</div>
+        </div>
+      </button>
+    </div>
 
   </form>
 
   <div class="solution-container">
-    <div class="solution-final">FINAL: {{solution?.final?.toString()}}</div>
+    <div class="solution-final mt-1">FINAL: {{solution?.final?.toString()}}</div>
 
     <div *ngIf="solution" class="solution-step-list">
       <div class="solution-step">
@@ -26,6 +37,15 @@
       <div class="solution-step" *ngFor="let change of solution.changes">
         <div>{{change.newMathObject.toString()}}</div>
       </div>
+    </div>
+  </div>
+
+  <div class="test-table-container mt-2">
+    <h3>TESTS</h3>
+    <div *ngFor="let test of tests" class="flex-row test-row">
+      <div class="cell">INPUT: {{test.input}}</div>
+      <div class="cell">FINAL: {{test.final}}</div>
+      <div class="cell">COUNT: {{test.count}}</div>
     </div>
   </div>
 </div>
