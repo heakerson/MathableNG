@@ -86,7 +86,7 @@ describe('Power', () => {
                 { input: '^-b', errorCode: ErrorCodes.Power.MISSING_BASE_OR_EXPONENT },
             ]
 
-            const tests = errorTests.map(e => new FactorConstTest({ input: e.input, children: [], toString: '' }));
+            const tests = errorTests.map(e => new FactorConstTest({ input: e.input, children: [], toString: '', errorCode: e.errorCode as number }));
             const baseTestsBaseFactor = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `${e.input}^x`, children: [], toString: '' }));
             const baseTestsExpFactor = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `x^${e.input}`, children: [], toString: '' }));
 

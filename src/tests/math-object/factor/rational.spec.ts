@@ -78,7 +78,7 @@ describe('Rational', () => {
                 { input: '/-b', errorCode: ErrorCodes.Rational.MISSING_NUM_OR_DENOM },
             ]
 
-            const tests = errorTests.map(e => new FactorConstTest({ input: e.input, children: [], toString: '' }));
+            const tests = errorTests.map(e => new FactorConstTest({ input: e.input, children: [], toString: '', errorCode: e.errorCode as number }));
             const baseTestsNum = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `${e.input}/x`, children: [], toString: '' }));
             const baseTestsDemom = baseMathObjectErrorTests.map(e => new FactorConstTest({ input: `x/${e.input}`, children: [], toString: '' }));
 
