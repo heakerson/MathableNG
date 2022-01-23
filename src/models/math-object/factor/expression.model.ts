@@ -153,5 +153,7 @@ export class Expression extends Factor {
 
     protected override checkCustomFormattingErrors(): void {
         ErrorHandler.checkBaseChildErrors(this.inputWhitespaceRemoved, this.constructor.name);
+        const removedParenth = StringFormatter.stripSurroundingParenthesis(this.inputWhitespaceRemoved);
+        ErrorHandler.checkBaseChildErrors(removedParenth, this.constructor.name);
     }
 }

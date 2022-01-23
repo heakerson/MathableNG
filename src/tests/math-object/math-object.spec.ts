@@ -54,6 +54,8 @@ export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
     { input: 'x*sin[x]/', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
     { input: 'x*sin[x]--', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
     { input: '(a-b)*', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '(a-b*)', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '(a-b-)', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
 ];
 
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(

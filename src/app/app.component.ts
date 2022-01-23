@@ -25,7 +25,8 @@ export class AppComponent implements OnInit {
   title = 'MathableNG';
 
   ngOnInit(): void {
-    const mo = new Term('a-');
+    const mo = new Expression('(a-b*)');
+    console.log(mo);
     // const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
     // const solution = Mathable.simplify(mo);
     // console.log(`${mo.toString()} ====== `);
