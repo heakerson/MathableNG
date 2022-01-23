@@ -18,7 +18,7 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject();
   tests: Test[] = [];
   mo!: MathObject;
-  solution!: Solution;
+  solution!: Solution | null;
   valid = false;
 
   form: FormGroup = new FormGroup({
@@ -50,12 +50,16 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
   saveTest(): void {
     const newTest = Test.init({
       input: (this.form.get('input') as FormControl).value,
-      solutionString: this.solution.toString(),
-      count: this.solution.changes ? this.solution.changes.length : 0,
-      final: this.solution.final.toString()
+      solutionString: this.solution?.toString(),
+      count: this.solution?.changes ? this.solution.changes.length : 0,
+      final: this.solution?.final.toString()
     });
 
     this.dataService.addNewTest(newTest);
+  }
+
+  clearSolution(): void {
+    this.solution = null;
   }
 
   checkValidity(): void {
