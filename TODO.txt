@@ -1,13 +1,12 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create an updating status for when http requests are still out
-    - add some kind of popup for when http requests fail
-    - make sure the tests are NOT updated in dev - ONLY LOCALLY
     - get the basic run tests/add/delete/update functionality working
+    - make sure the tests are NOT updated in dev - ONLY LOCALLY
     - create a component for displaying a single mathObject - for now, this can be really simple
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
     - create a component for viewing a solution using the previous component
         - should this component also compare solutions? For when a test fails? Or should I have a different component for that?
+    - Should I move some of the more basic api functions to the shared data service??
 - Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
 - Decide on the structure of the main app data and load it
 - Add new operations!

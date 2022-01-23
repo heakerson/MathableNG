@@ -8,6 +8,7 @@ import { ReplaySubject } from 'rxjs';
 import { TestPage } from '@testing/models/test-page.model';
 import { Test } from '@testing/models/test.model';
 import { DataService } from '@shared/services/data.service';
+import { ModalService } from '@shared/services/modal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,8 @@ export class TestDataService {
 
   constructor(
     private http: HttpClient,
-    private dataService: DataService
+    private dataService: DataService,
+    private modalService: ModalService
   ) {
     this.testPages$.subscribe(pages => {
       this.testPages = pages || [];
@@ -65,6 +67,7 @@ export class TestDataService {
       },
       (error) => {
         this.dataService.setLoadingStatus(false);
+        this.modalService.openErrorModal(`Loading Test Data Failed: ${error}`);
       });
 }
 
@@ -78,6 +81,7 @@ export class TestDataService {
       },
       (error) => {
         this.dataService.setUpdatingStatus(false);
+        this.modalService.openErrorModal(`Adding New Test Page Failed: ${error}`);
       }
     );
   }
@@ -107,6 +111,7 @@ export class TestDataService {
       },
       (error) => {
         this.dataService.setUpdatingStatus(false);
+        this.modalService.openErrorModal(`Updating Test Data Failed: ${error}`);
       }
     );
   }
@@ -130,6 +135,7 @@ export class TestDataService {
       },
       (error) => {
         this.dataService.setUpdatingStatus(false);
+        this.modalService.openErrorModal(`Deleting Test Data Failed: ${error}`);
       }
     )
   }
@@ -148,7 +154,7 @@ export class TestDataService {
         this.dataService.setUpdatingStatus(false);
       } else {
         this.dataService.setUpdatingStatus(false);
-        throw new Error('COULD NOT FIND TEST PARENT TO UPDATE');
+        this.modalService.openErrorModal(`COULD NOT FIND TEST PARENT TO UPDATE`);
       }
     });
 
@@ -179,7 +185,7 @@ export class TestDataService {
       this.updateObjects([newPage]);
     } else {
       this.dataService.setUpdatingStatus(false);
-      throw new Error('COULD NOT FIND TEST PARENT TO DELETE TEST FROM');
+      this.modalService.openErrorModal(`COULD NOT FIND TEST PARENT TO DELETE TEST FROM`);
     }
   }
 
@@ -188,7 +194,9 @@ export class TestDataService {
 
     this.http.post(this.config.createUrl(), initObject).subscribe(
       (response) => this.testConfig$.next(new TestConfiguration(response)),
-      (error) => {}
+      (error) => {
+        this.modalService.openErrorModal(`Could Not Initialize Config: ${error}`);
+      }
     )
   }
 }
