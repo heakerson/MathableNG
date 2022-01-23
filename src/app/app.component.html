@@ -1,5 +1,6 @@
 <div>
   <app-header></app-header>
+  <mat-progress-bar *ngIf="(loadingData$ | async) || (updatingData$ | async)" mode="indeterminate"></mat-progress-bar>
   <div class="app-contents">
     <router-outlet></router-outlet>
   </div>

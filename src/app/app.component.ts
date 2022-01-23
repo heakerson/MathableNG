@@ -15,6 +15,8 @@ import { Factory } from 'src/models/services/core/factory.service';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Mathable } from 'src/models/services/math/mathable.model';
 import { Position } from 'src/models/search/position.model';
+import { DataService } from '@shared/services/data.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,10 +25,19 @@ import { Position } from 'src/models/search/position.model';
 })
 export class AppComponent implements OnInit {
   title = 'MathableNG';
+  public updatingData$ = new Observable<boolean>();
+  public loadingData$ = new Observable<boolean>();
+
+  constructor(
+    private dataService: DataService
+  ) {}
 
   ngOnInit(): void {
-    const mo = new Expression('(a-b*)');
-    console.log(mo);
+    this.loadingData$ = this.dataService.loadingData$;
+    this.updatingData$ = this.dataService.updatingData$;
+
+    // const mo = new Expression('(a-b*)');
+    // console.log(mo);
     // const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
     // const solution = Mathable.simplify(mo);
     // console.log(`${mo.toString()} ====== `);

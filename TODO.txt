@@ -1,6 +1,5 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
     - create an updating status for when http requests are still out
     - add some kind of popup for when http requests fail
     - make sure the tests are NOT updated in dev - ONLY LOCALLY
@@ -9,6 +8,7 @@ LEFT OFF:
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
     - create a component for viewing a solution using the previous component
         - should this component also compare solutions? For when a test fails? Or should I have a different component for that?
+- Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
 - Decide on the structure of the main app data and load it
 - Add new operations!
     - Try to find old app and see what order I did things in and what I'm missing

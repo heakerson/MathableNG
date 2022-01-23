@@ -7,6 +7,7 @@ import { TestConfiguration } from '@testing/models/test-configuration.model';
 import { ReplaySubject } from 'rxjs';
 import { TestPage } from '@testing/models/test-page.model';
 import { Test } from '@testing/models/test.model';
+import { DataService } from '@shared/services/data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,10 @@ export class TestDataService {
   public testPages: TestPage[] = [];
   public testConfig!: TestConfiguration;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private dataService: DataService
+  ) {
     this.testPages$.subscribe(pages => {
       this.testPages = pages || [];
 
@@ -38,32 +42,49 @@ export class TestDataService {
   }
 
   loadData(): void {
-    this.http.get<BaseAppObject[]>(this.config.getUrl(this.PARTITION_KEY)).subscribe((data: BaseAppObject[]) => {
-      const testConfig = data.find((d) => d.objectType === TestingObjectType.TestConfiguration) as TestConfiguration;
-      const pages = data.filter(d => d.objectType === TestingObjectType.Page) as TestPage[];
+    this.dataService.setLoadingStatus(true);
 
-      if (!testConfig) {
-        this.initConfig();
-      } else {
-        this.testConfig$.next(new TestConfiguration(testConfig));
-      }
+    this.http.get<BaseAppObject[]>(this.config.getUrl(this.PARTITION_KEY)).subscribe(
+      (data: BaseAppObject[]) => {
+        const testConfig = data.find((d) => d.objectType === TestingObjectType.TestConfiguration) as TestConfiguration;
+        const pages = data.filter(d => d.objectType === TestingObjectType.Page) as TestPage[];
 
-      if (!pages || !pages.length) {
-        this.addNewPage();
-      } else {
-        this.testPages$.next(pages.map(p => new TestPage(p)));
-      }
-    });
-  }
+        if (!testConfig) {
+          this.initConfig();
+        } else {
+          this.testConfig$.next(new TestConfiguration(testConfig));
+        }
+
+        if (!pages || !pages.length) {
+          this.addNewPage();
+        } else {
+          this.testPages$.next(pages.map(p => new TestPage(p)));
+        }
+
+        this.dataService.setLoadingStatus(false);
+      },
+      (error) => {
+        this.dataService.setLoadingStatus(false);
+      });
+}
 
   addNewPage(initPage: TestPage = TestPage.init(this.PARTITION_KEY, { tests: [] })): void {
+    this.dataService.setUpdatingStatus(true);
+
     this.http.post<TestPage>(this.config.createUrl(), initPage).subscribe(
-      (response) => this.testPages$.next([...this.testPages, new TestPage(response)]),
-      (error) => {}
+      (response) => {
+        this.testPages$.next([...this.testPages, new TestPage(response)]);
+        this.dataService.setUpdatingStatus(false);
+      },
+      (error) => {
+        this.dataService.setUpdatingStatus(false);
+      }
     );
   }
 
   updateObjects(objectsToUpdate: BaseAppObject[]): void {
+    this.dataService.setUpdatingStatus(true);
+
     this.http.post<BaseAppObject[]>(this.config.updateUrl(), { items: objectsToUpdate }).subscribe(
       (response: BaseAppObject[]) => {
         const testConfig = response.find((d) => d.objectType === TestingObjectType.TestConfiguration) as TestConfiguration;
@@ -81,12 +102,18 @@ export class TestDataService {
 
           this.testPages$.next(newList);
         }
+
+        this.dataService.setUpdatingStatus(false);
       },
-      (error) => {}
+      (error) => {
+        this.dataService.setUpdatingStatus(false);
+      }
     );
   }
 
   deleteObjects(objectsToUpdate: BaseAppObject[]): void {
+    this.dataService.setUpdatingStatus(true);
+
     const deleteKeys = objectsToUpdate.map(o => {
       return { partitionKey: o.partitionKey, sortKey: o.sortKey };
     });
@@ -98,12 +125,17 @@ export class TestDataService {
         if (this.testPages.length !== newPages.length) {
           this.testPages$.next(newPages);
         }
+
+        this.dataService.setUpdatingStatus(false);
       },
-      (error) => {}
+      (error) => {
+        this.dataService.setUpdatingStatus(false);
+      }
     )
   }
 
   updateTests(updatedTests: Test[]): void {
+    this.dataService.setUpdatingStatus(true);
     let allParentPages = this.testPages.filter(p => p.tests.some(t => !!updatedTests.find(updatedT => updatedT.id === t.id)));
 
     updatedTests.forEach(updatedTest => {
@@ -113,7 +145,9 @@ export class TestDataService {
         const newTestList = parentPage.tests.map(t => t.id === updatedTest.id ? updatedTest : t);
         const updatedPage = parentPage.edit({ tests: newTestList });
         allParentPages = allParentPages.map(p => updatedPage.id === p.id ? updatedPage : p);
+        this.dataService.setUpdatingStatus(false);
       } else {
+        this.dataService.setUpdatingStatus(false);
         throw new Error('COULD NOT FIND TEST PARENT TO UPDATE');
       }
     });
@@ -124,6 +158,7 @@ export class TestDataService {
   }
 
   addNewTest(newTest: Test): void {
+    this.dataService.setUpdatingStatus(true);
     const page = this.testPages.find(p => p.tests.length < this.testConfig.testsPerPage);
 
     if (page) {
@@ -136,12 +171,14 @@ export class TestDataService {
   }
 
   deleteTest(testToDelete: Test): void {
+    this.dataService.setUpdatingStatus(true);
     const page = this.testPages.find(p => p.tests.length < this.testConfig.testsPerPage);
 
     if (page) {
       const newPage = page.edit({ tests: page.tests.filter(t => t.id !== testToDelete.id) });
       this.updateObjects([newPage]);
     } else {
+      this.dataService.setUpdatingStatus(false);
       throw new Error('COULD NOT FIND TEST PARENT TO DELETE TEST FROM');
     }
   }
