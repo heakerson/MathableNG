@@ -40,12 +40,7 @@
     </div>
   </div>
 
-  <div class="test-table-container mt-2">
-    <h3>TESTS</h3>
-    <div *ngFor="let test of tests" class="flex-row test-row">
-      <div class="cell">INPUT: {{test.input}}</div>
-      <div class="cell">FINAL: {{test.final}}</div>
-      <div class="cell">COUNT: {{test.count}}</div>
-    </div>
+  <div class="mt-1">
+    <app-tests-table [tests]="tests" class="mt-1"></app-tests-table>
   </div>
 </div>

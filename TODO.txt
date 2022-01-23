@@ -1,9 +1,9 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create tests table component
     - create a solution component
         - display this below in the input
         - also have a view button in the table
+    - I think I should be able to save a test without storing the solution
     - create the run tests functionality
         - if the new solutionstring does NOT equal the previous one, STORE that in a new field
         - add a lastRun field and a lastUpdated field

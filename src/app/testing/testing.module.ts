@@ -5,12 +5,14 @@ import { MaterialModule } from '../material/material.module';
 import { TestingRoutingModule } from './testing-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { TestDataService } from './services/test-data.service';
+import { TestsTableComponent } from './tests-table/tests-table.component';
 
 
 
 @NgModule({
   declarations: [
-    TestingDashboardComponent
+    TestingDashboardComponent,
+    TestsTableComponent
   ],
   imports: [
     CommonModule,
