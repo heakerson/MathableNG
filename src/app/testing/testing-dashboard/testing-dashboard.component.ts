@@ -47,12 +47,12 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
     this.solution = Mathable.simplify(this.mo);
   }
 
-  saveTest(): void {
+  saveTest(includeSolution: boolean): void {
     const newTest = Test.init({
       input: (this.form.get('input') as FormControl).value,
-      solutionString: this.solution?.toString(),
-      count: this.solution?.changes ? this.solution.changes.length : 0,
-      final: this.solution?.final.toString()
+      solutionString: includeSolution ? this.solution?.toString() : '',
+      count: includeSolution ? (this.solution?.changes ? this.solution.changes.length : 0) : 0,
+      final: includeSolution ? this.solution?.final.toString() : ''
     });
 
     this.dataService.addNewTest(newTest);

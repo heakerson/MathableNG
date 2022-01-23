@@ -16,11 +16,19 @@
         </div>
       </button>
 
-      <button (click)="saveTest()" mat-raised-button color="accent" [disabled]="!solution" class="mr-1">
+      <button (click)="saveTest(true)" mat-raised-button color="accent" [disabled]="!solution" class="mr-1">
         <div class="flex-row flex-align-center run-test-button-contents">
           <i *ngIf="solution; else invalid" class="fas fa-check-circle fa-lg"></i>
           <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
           <div>Save Test</div>
+        </div>
+      </button>
+
+      <button (click)="saveTest(false)" mat-stroked-button color="accent" [disabled]="!valid" class="mr-1">
+        <div class="flex-row flex-align-center run-test-button-contents">
+          <i *ngIf="solution; else invalid" class="fas fa-check-circle fa-lg"></i>
+          <ng-template #invalid><i class="fas fa-times-circle fa-lg"></i></ng-template>
+          <div>Save Test W/O Solution</div>
         </div>
       </button>
 

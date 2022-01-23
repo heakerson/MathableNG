@@ -1,12 +1,13 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create a solution component
-        - display this below in the input
-        - also have a view button in the table
-    - I think I should be able to save a test without storing the solution
+    - fix 0 step solutions!
+    - why is the loading/updating indicator not working?
+    - should I clear the solution when new input is entered?
     - create the run tests functionality
         - if the new solutionstring does NOT equal the previous one, STORE that in a new field
         - add a lastRun field and a lastUpdated field
+    - make the solutions in the table viewable
+        - expandable rows or a modal??
     - add a delete test functionality
     - don't allow saving of a test if it's a duplicate input - display this somehwere
     - add the update test functionality for failing tests 
