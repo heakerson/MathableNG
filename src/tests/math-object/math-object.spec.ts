@@ -50,6 +50,10 @@ export const baseMathObjectErrorTests: { input: string, errorCode: number}[] = [
     { input: 'ln[]', errorCode: ErrorCodes.EMPTY_BRACKETS },
     { input: '[]', errorCode: ErrorCodes.MISSING_FN_NAME },
     { input: 'a*[]', errorCode: ErrorCodes.MISSING_FN_NAME },
+    { input: '6-', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: 'x*sin[x]/', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: 'x*sin[x]--', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
+    { input: '(a-b)*', errorCode: ErrorCodes.ENDS_WITH_OPERATORS },
 ];
 
 export function mathObjectConstructorErrorTests<TMathObject extends MathObject, TTest extends MathObjectConstTest>(

@@ -65,13 +65,15 @@ describe('Variable', () => {
                 { input: '-/b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: '+-b', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: '--PI', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: 'x*', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
+                { input: 'x--', errorCode: ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT },
                 { input: 'PI', errorCode: ErrorCodes.Variable.RESERVED_NAME },
                 { input: '+PI', errorCode: ErrorCodes.Variable.RESERVED_NAME },
                 { input: 'E', errorCode: ErrorCodes.Variable.RESERVED_NAME },
-                { input: '-E', errorCode: ErrorCodes.Variable.RESERVED_NAME },
+                { input: '-E', errorCode: ErrorCodes.Variable.RESERVED_NAME }
             ]
 
-            const tests = errorTests.map(e => new VariableConstTest({ input: e.input, children: [], toString: '' }));
+            const tests = errorTests.map(e => new VariableConstTest({ input: e.input, children: [], toString: '', errorCode: e.errorCode as number }));
 
             mathObjectConstructorErrorTests('STANDARD Constructor', tests, standardBuilder);
         });

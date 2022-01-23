@@ -27,7 +27,7 @@ export class Variable extends Factor {
         }
 
         if (!removedSign.match(/^[a-zA-Z0-9_]+$/)) {
-            ErrorHandler.throwError(ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT, this.constructor.name, this.inputWhitespaceRemoved, `Variable names are only alphanumeric and a single +/- sign`);
+            ErrorHandler.throwError(ErrorCodes.Variable.NON_ALPHA_NUMERIC_INPUT, this.constructor.name, this.inputWhitespaceRemoved, `Variable names are only alphanumeric and an optional single +/- sign prefix`);
         }
 
         Object.keys(Constants).forEach(c => {
