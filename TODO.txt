@@ -1,9 +1,5 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create the run tests functionality
-        - do I want to automatically save? 
-        - if the new solutionstring does NOT equal the previous one, STORE that in a new field
-        - add a lastRun field and a lastUpdated field
     - make the solutions in the table viewable
         - expandable rows or a modal??
     - don't allow saving of a test if it's a duplicate input - display this somehwere

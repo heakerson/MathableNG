@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TestStatus } from '@testing/models/test-status.model';
 import { Test } from '@testing/models/test.model';
 import { TestDataService } from '@testing/services/test-data.service';
 
@@ -16,13 +17,33 @@ export class TestsTableComponent implements OnInit {
     this.dataSource = tests || [];
   }
 
-  displayedColumns: string[] = ['input', 'final', 'count', 'created', 'menu' ];
+  displayedColumns: string[] = ['input', 'status', 'final', 'count', 'updatad', 'created', 'menu' ];
 
   constructor(
     private testDataService: TestDataService
   ) { }
 
   ngOnInit(): void {
+  }
+
+  getStatusStyling(status: TestStatus): any {
+    switch (status) {
+      case TestStatus.Pass:
+        return {
+          color: 'limegreen',
+          'font-weight': 'bold'
+        };
+      case TestStatus.Fail:
+        return {
+          color: 'red',
+          'font-weight': 'bold'
+        };
+      case TestStatus.NeedsApproval:
+        return {
+          color: 'orange',
+          'font-weight': 'bold'
+        };
+    }
   }
 
   deleteTest(test: Test): void {
