@@ -70,6 +70,8 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
     } catch {
       this.valid = false;
     }
+
+    this.solution = null;
   }
 
   ngOnDestroy(): void {

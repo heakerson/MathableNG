@@ -1,6 +1,5 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - should I clear the solution when new input is entered?
     - create the run tests functionality
         - if the new solutionstring does NOT equal the previous one, STORE that in a new field
         - add a lastRun field and a lastUpdated field
