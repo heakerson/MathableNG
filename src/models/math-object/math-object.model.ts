@@ -156,6 +156,10 @@ export abstract class MathObject {
         return null;
     }
 
+    public getContext(root: MathObject): Context | null {
+        return root.find(MathObject, (mo) => mo.id === this.id);
+    }
+
     public toString(): string {
         return this.formattedInput;
     }

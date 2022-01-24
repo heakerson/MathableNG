@@ -1,3 +1,39 @@
-<div *ngIf="context">
-  <div>{{this.context.target}}</div>
+<div *ngIf="context" class="flex-row flex-align-center">
+  <div [ngSwitch]="mathObjectType" class="flex-row flex-align-center">
+
+    <div *ngSwitchCase="'Rational'" class="flex-row flex-align-center">
+      <div *ngIf="!isPositive(mathObject)">&nbsp;&nbsp;-&nbsp;&nbsp;</div>
+      <div class="flex-column flex-align-center">
+        <app-math-object [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
+        <div class="rational-divider"></div>
+        <app-math-object [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'Expression'" class="flex-row flex-align-center">
+
+      <div class="expression-sign" *ngIf="!isPositive(mathObject)">
+        <div *ngIf="!isFirst">&nbsp;&nbsp;</div>
+        <div>-</div>
+        <div *ngIf="!isFirst">&nbsp;&nbsp;</div></div>
+      <div *ngIf="!isRoot">(&nbsp;</div>
+
+      <ng-container *ngFor="let term of mathObject.children; let i = index">
+        <div *ngIf="isPositive(term) && i !== 0">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
+        <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
+      </ng-container>
+      <div *ngIf="!isRoot">&nbsp;)</div>
+    </div>
+
+    <div *ngSwitchCase="'Term'" class="flex-row flex-align-center">
+      <ng-container *ngFor="let factor of mathObject.children; let i = index">
+        <div *ngIf="i !== 0"> * </div>
+        <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
+      </ng-container>
+    </div>
+
+    <div *ngSwitchCase="'Power'">{{this.context.target}}</div>
+    
+    <div *ngSwitchDefault>{{this.context.target}}</div>
+  </div>
 </div>

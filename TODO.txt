@@ -1,7 +1,7 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create a component for displaying a single mathObject - for now, this can be really simple
-        - pass in a CONTEXT object - not the object itself
+    - create a component for displaying a single mathObject
+        - FIGURE OUT NEGATIVE EXPRESSIONS AND HOW TO PLACE THE - SYMBOL
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
     - create a panel on the right and add the ability to store test inputs and run them
         - also just store the last n distinct tests - n is configurable
@@ -12,6 +12,7 @@ LEFT OFF:
     - Should I move some of the more basic api functions to the shared data service??
     - don't allow saving of a test if it's a duplicate input - display this somehwere
     - make sure the tests are NOT updated in dev - ONLY LOCALLY
+- add tests for getContext in MathObject
 - Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
 - Decide on the structure of the main app data and load it
 - Add new operations!
