@@ -178,7 +178,7 @@ export class TestDataService {
 
   deleteTest(testToDelete: Test): void {
     this.dataService.setUpdatingStatus(true);
-    const page = this.testPages.find(p => p.tests.length < this.testConfig.testsPerPage);
+    const page = this.testPages.find(p => p.tests.find(t => t.id === testToDelete.id));
 
     if (page) {
       const newPage = page.edit({ tests: page.tests.filter(t => t.id !== testToDelete.id) });

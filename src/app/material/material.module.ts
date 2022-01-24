@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule,
     MatProgressBarModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule
   ]
 })
 export class MaterialModule { }
