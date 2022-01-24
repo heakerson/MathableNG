@@ -26,13 +26,13 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private dataService: TestDataService
+    private testDataService: TestDataService
   ) { }
 
   ngOnInit(): void {
-    this.dataService.loadData();
+    this.testDataService.loadData();
 
-    this.dataService.tests$
+    this.testDataService.tests$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((tests) => this.tests = tests);
 
@@ -55,7 +55,7 @@ export class TestingDashboardComponent implements OnInit, OnDestroy {
       final: includeSolution ? this.solution?.final.toString() : ''
     });
 
-    this.dataService.addNewTest(newTest);
+    this.testDataService.addNewTest(newTest);
   }
 
   clearSolution(): void {

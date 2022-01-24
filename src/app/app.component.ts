@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Context } from 'src/models/search/context.model';
 import { Operators, Sign } from 'src/models/math-object/enums.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
@@ -16,14 +16,15 @@ import { MathObject } from 'src/models/math-object/math-object.model';
 import { Mathable } from 'src/models/services/math/mathable.model';
 import { Position } from 'src/models/search/position.model';
 import { DataService } from '@shared/services/data.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  destroyed$ = new Subject();
   title = 'MathableNG';
   public updatingData$ = new Observable<boolean>();
   public loadingData$ = new Observable<boolean>();
@@ -33,9 +34,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadingData$ = this.dataService.loadingData$;
-    this.updatingData$ = this.dataService.updatingData$;
-
     // const mo = new Expression('(a-b*)');
     // console.log(mo);
     // const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
@@ -57,6 +55,16 @@ export class AppComponent implements OnInit {
 
     //   console.log('FOUND 100?', newOneHundred);
     // }
+  }
+
+  ngAfterViewInit(): void {
+    this.loadingData$ = this.dataService.loadingData$;
+    this.updatingData$ = this.dataService.updatingData$;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(null);
+    this.destroyed$.complete();
   }
 
   replaceZeroTerms(mo: MathObject): MathObject {

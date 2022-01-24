@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from './services/data.service';
 import { HttpClientModule } from  '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
@@ -16,9 +15,6 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
   ],
   exports: [
     ReactiveFormsModule,
-  ],
-  providers: [
-    DataService
   ]
 })
 export class SharedModule { }
