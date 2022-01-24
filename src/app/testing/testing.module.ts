@@ -6,15 +6,13 @@ import { TestingRoutingModule } from './testing-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { TestDataService } from './services/test-data.service';
 import { TestsTableComponent } from './tests-table/tests-table.component';
-import { SolutionComponent } from './solution/solution.component';
 
 
 
 @NgModule({
   declarations: [
     TestingDashboardComponent,
-    TestsTableComponent,
-    SolutionComponent
+    TestsTableComponent
   ],
   imports: [
     CommonModule,
