@@ -48,6 +48,12 @@
   </div>
 
   <div class="mt-2">
+    <button (click)="runAllTests()" mat-raised-button color="primary" class="mt-1 mb-1">
+      <div class="flex-row flex-align-center run-test-button-contents">
+        <i class="fas fa-vial fa-lg"></i>
+        <div>Run All Tests</div>
+      </div>
+    </button>
     <app-tests-table [tests]="tests" class="mt-1"></app-tests-table>
   </div>
 </div>

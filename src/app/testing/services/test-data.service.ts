@@ -9,6 +9,8 @@ import { TestPage } from '@testing/models/test-page.model';
 import { Test } from '@testing/models/test.model';
 import { DataService } from '@shared/services/data.service';
 import { ModalService } from '@shared/services/modal.service';
+import { Factory } from 'src/models/services/core/factory.service';
+import { Mathable } from 'src/models/services/math/mathable.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +43,30 @@ export class TestDataService {
     });
 
     this.testConfig$.subscribe(config => this.testConfig = config);
+  }
+
+  runTests(tests: Test[]): void {
+    if (tests) {
+      this.dataService.setUpdatingStatus(true);
+      const testsToUpdate: Test[] = [];
+
+      tests.forEach(test => {
+        const { input, lastTestSolution } = test;
+        const mo = Factory.buildMathObject(input);
+        const newSolutionStr = Mathable.simplify(mo).toString();
+
+        if (!lastTestSolution || lastTestSolution !== newSolutionStr) {
+          const updatedTest = test.edit({ lastTestSolution: newSolutionStr, lastUpdated: new Date().toISOString() });
+          testsToUpdate.push(updatedTest);
+        }
+      });
+
+      if (testsToUpdate.length) {
+        this.updateTests(testsToUpdate);
+      } else {
+        this.dataService.setUpdatingStatus(false);
+      }
+    }
   }
 
   loadData(): void {

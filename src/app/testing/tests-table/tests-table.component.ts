@@ -16,7 +16,7 @@ export class TestsTableComponent implements OnInit {
     this.dataSource = tests || [];
   }
 
-  displayedColumns: string[] = ['input', 'final', 'count', 'menu'];
+  displayedColumns: string[] = ['input', 'final', 'count', 'created', 'menu' ];
 
   constructor(
     private testDataService: TestDataService

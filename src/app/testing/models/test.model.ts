@@ -6,9 +6,16 @@ export class Test {
   readonly solutionString: string = '';
   readonly count: number = 0;
   readonly final: string = '';
+  readonly lastTestSolution!: string;
+  readonly lastUpdated!: string;
+  readonly created!: string;
 
   public get Solution(): Solution {
     return Solution.fromString(this.solutionString);
+  }
+
+  public get formattedCreatedDate(): string {
+    return new Date(this.created).toLocaleDateString();
   }
 
   constructor(props: Partial<Test>) {
@@ -16,7 +23,7 @@ export class Test {
   }
 
   public static init(editable: Partial<EditableTest>): Test {
-    return new Test({...editable});
+    return new Test({...editable, created: new Date().toISOString() });
   }
 
   public edit(editable: Partial<EditableTest>): Test {
@@ -29,4 +36,6 @@ export class EditableTest {
   solutionString: string = '';
   count: number = 0;
   final: string = '';
+  lastTestSolution!: string;
+  lastUpdated!: string;
 }

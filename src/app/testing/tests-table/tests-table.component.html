@@ -21,6 +21,11 @@
     <td mat-cell *matCellDef="let element" class="cell"> {{element.solutionString ? element.count : '-'}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="created">
+    <th mat-header-cell *matHeaderCellDef> Created </th>
+    <td mat-cell *matCellDef="let element" class="cell"> {{element.created ? element.formattedCreatedDate : '-'}} </td>
+  </ng-container>
+
     <!-- Weight Column -->
     <ng-container matColumnDef="menu">
       <th mat-header-cell *matHeaderCellDef> </th>
