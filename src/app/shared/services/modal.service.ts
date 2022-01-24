@@ -22,6 +22,5 @@ export class ModalService {
   openSolutionModal(solution: Solution): void {
     const ref = this.dialog.open(SolutionComponent);
     ref.componentInstance.solution = solution;
-    ref.componentInstance.mathObject = solution.start;
   }
 }

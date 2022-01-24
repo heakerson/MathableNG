@@ -3,7 +3,7 @@
 
   <div *ngIf="solution" class="solution-step-list">
     <div class="solution-step">
-      <div>{{mathObject.toString()}}</div>
+      <div>{{solution.start.toString()}}</div>
     </div>
     <div class="solution-step" *ngFor="let change of solution.changes">
       <div>{{change.newMathObject.toString()}}</div>

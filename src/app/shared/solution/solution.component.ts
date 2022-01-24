@@ -12,9 +12,6 @@ export class SolutionComponent implements OnInit {
   @Input()
   solution!: Solution;
 
-  @Input()
-  mathObject!: MathObject;
-
   constructor() { }
 
   ngOnInit(): void {
