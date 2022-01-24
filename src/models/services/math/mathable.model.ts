@@ -13,6 +13,6 @@ export class Mathable {
       Actions.constantAdditionSubtraction
     ]);
 
-    return new Solution({ changes });
+    return new Solution({ start: mo, changes });
   }
 }

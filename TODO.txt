@@ -1,6 +1,5 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - fix 0 step solutions!
     - why is the loading/updating indicator not working?
     - should I clear the solution when new input is entered?
     - create the run tests functionality

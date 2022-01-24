@@ -1,12 +1,18 @@
 import { MathObject } from "src/models/math-object/math-object.model";
+import { Factory } from "../../core/factory.service";
 import { ChangeContext } from "./change-context.model";
 import { SerializableSolution } from "./serializable-solution.model";
 
 export class Solution {
   changes!: ChangeContext[];
+  start!: MathObject;
 
   get final(): MathObject {
-    return this.changes[this.changes.length - 1].newMathObject;
+    if (this.changes?.length) {
+      return this.changes[this.changes.length - 1]?.newMathObject;
+    }
+
+    return this.start;
   }
 
   constructor(props: Partial<Solution>) {
@@ -24,13 +30,16 @@ export class Solution {
 
   public static fromSerializable(serializable: SerializableSolution): Solution {
     return new Solution({
-      changes: serializable.changes.map(c => ChangeContext.fromSerializable(c))
+      changes: serializable.changes.map(c => ChangeContext.fromSerializable(c)),
+      start: Factory.buildMathObject(serializable.start, serializable.startType)
     })
   }
 
   public toSerializable(): SerializableSolution {
     return {
-      changes: this.changes.map(c => c.toSerializable())
+      changes: this.changes.map(c => c.toSerializable()),
+      start: this.start.toString(),
+      startType: this.start.constructor.name
     };
   }
 

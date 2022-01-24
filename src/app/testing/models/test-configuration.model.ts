@@ -10,7 +10,7 @@ export class TestConfiguration extends BaseAppObject {
   }
 
   public static init(partitionKey: string): TestConfiguration {
-    return new TestConfiguration({ partitionKey })
+    return new TestConfiguration({ partitionKey });
   }
 
   public edit(editable: Partial<EditableConfig>): TestConfiguration {

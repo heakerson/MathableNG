@@ -190,7 +190,9 @@ export class TestDataService {
   }
 
   private initConfig(): void {
-    const initObject = TestConfiguration.init(this.PARTITION_KEY);
+    const initObject = TestConfiguration
+      .init(this.PARTITION_KEY)
+      .edit({ testsPerPage: 10 });
 
     this.http.post(this.config.createUrl(), initObject).subscribe(
       (response) => this.testConfig$.next(new TestConfiguration(response)),
