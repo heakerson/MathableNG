@@ -1,12 +1,8 @@
-<div class="solution-container">
-  <div class="solution-final mt-1">FINAL: {{solution?.final?.toString()}}</div>
-
-  <div *ngIf="solution" class="solution-step-list">
-    <div class="solution-step">
-      <div>{{solution.start.toString()}}</div>
-    </div>
-    <div class="solution-step" *ngFor="let change of solution.changes">
-      <div>{{change.newMathObject.toString()}}</div>
-    </div>
+<div *ngIf="solution" class="solution-container">
+  <div class="solution-step">
+    <app-math-object [context]="getStartContext()"></app-math-object>
+  </div>
+  <div class="solution-step ml-1" *ngFor="let change of solution.changes">
+    <app-math-object [context]="getMoContext(change)" [changeContext]="change"></app-math-object>
   </div>
 </div>
