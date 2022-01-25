@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Sign } from 'src/models/math-object/enums.model';
+import { Operators, Sign } from 'src/models/math-object/enums.model';
 import { MathObject } from 'src/models/math-object/math-object.model';
 import { Term } from 'src/models/math-object/term.model';
 import { Context } from 'src/models/search/context.model';
@@ -43,6 +43,23 @@ export class MathObjectComponent implements OnInit {
 
   get isRoot(): boolean {
     return this.context.isRoot;
+  }
+
+  get additionalOpString(): string {
+    if (this.mathObject instanceof Term && this.context.parentContext) {
+      const parent = this.context.parent;
+
+      if (parent instanceof Expression) {
+        const termIndex = this.context.position.index;
+        const op = parent.getAdditionalOperatorForIndex(termIndex);
+
+        if (op !== Operators.None) {
+          return ` ${op} `;
+        }
+      }
+    }
+
+    return '';
   }
 
   constructor() { }

@@ -91,7 +91,7 @@ export class Expression extends Factor {
         return new Expression(this.toString());
     }
 
-    protected getAdditionalOperatorForIndex(index: number): Operators {
+    public getAdditionalOperatorForIndex(index: number): Operators {
         const additionalOperator = this.additionalOperators.find(ao => ao.termIndex === index);
 
         if (additionalOperator) {

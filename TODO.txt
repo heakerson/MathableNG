@@ -1,7 +1,8 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
-        - Figure out how to display additional operators
+        - Disply negative factors correctly a-b-c should have spaces
+        - Figure what's happening to additional operators after the first step
         - Display powers
         - Display functions
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object

@@ -31,6 +31,13 @@
 
     <!-- TERM -->
     <div *ngSwitchCase="'Term'" class="flex-row flex-align-center">
+
+      <div class="flex-row flex-align-center">
+        <div *ngIf="additionalOpString">&nbsp;&nbsp;</div>
+        <div>{{additionalOpString}}</div>
+        <div *ngIf="additionalOpString">&nbsp;&nbsp;</div>
+      </div>
+
       <ng-container *ngFor="let factor of mathObject.children; let i = index">
         <div *ngIf="i !== 0"> * </div>
         <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
