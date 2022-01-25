@@ -17,15 +17,15 @@
       <div class="expression-sign flex-row" *ngIf="!isPositive(mathObject)">
         <div *ngIf="isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
+        <div *ngIf="isFirstSibling && !inFirstTerm && !isRoot">&nbsp;&nbsp;</div>
       </div>
 
-      <div *ngIf="!isRoot">(&nbsp;</div>
+      <div *ngIf="!isRoot || !isPositive(mathObject)">(&nbsp;</div>
       <ng-container *ngFor="let term of mathObject.children; let i = index">
         <div *ngIf="isPositive(term) && i !== 0">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
         <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
-      <div *ngIf="!isRoot">&nbsp;)</div>
+      <div *ngIf="!isRoot || !isPositive(mathObject)">&nbsp;)</div>
 
     </div>
 
@@ -51,7 +51,7 @@
       <div *ngIf="isFirstSibling && !isPositive(mathObject); else positiveFactor" class="flex-row flex-align-center">
         <div *ngIf="!inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="!inFirstTerm">&nbsp;&nbsp;</div>
+        <div *ngIf="!inFirstTerm && !isRoot">&nbsp;&nbsp;</div>
         <div>{{flippedFactorStr}}</div>
       </div>
       <ng-template #positiveFactor>{{this.context.target}}</ng-template>

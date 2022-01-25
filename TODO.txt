@@ -1,8 +1,6 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
-        - Disply negative factors correctly a-b-c should have spaces
-        - Fix -(-a-b) && -a-b
         - Figure what's happening to additional operators after the first step
         - Display powers
         - Display functions
