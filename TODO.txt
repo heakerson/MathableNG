@@ -4,6 +4,7 @@ LEFT OFF:
         - Figure what's happening to additional operators after the first step
         - Display powers
         - Display functions
+        - Simplify the logic i'm using to get the context and change context? Maybe?
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
     - create a panel on the right and add the ability to store test inputs and run them
         - also just store the last n distinct tests - n is configurable
