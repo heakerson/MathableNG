@@ -5,6 +5,7 @@ import { Term } from 'src/models/math-object/term.model';
 import { Context } from 'src/models/search/context.model';
 import { ChangeContext } from 'src/models/services/math/solution/change-context.model';
 import { Factor } from 'src/models/math-object/factor/factor.model';
+import { Expression } from 'src/models/math-object/factor/expression.model';
 
 @Component({
   selector: 'app-math-object',
@@ -27,8 +28,17 @@ export class MathObjectComponent implements OnInit {
     return this.context.target.constructor.name;
   }
 
-  get isFirst(): boolean {
+  get isFirstSibling(): boolean {
     return this.context.position.index === 0;
+  }
+
+  get inFirstTerm(): boolean {
+    if (this.mathObject instanceof Factor) {
+      if (this.context.parent && this.context.parent instanceof Term) {
+        return this.context.parentContext?.position.index === 0;
+      }
+    }
+    return false;
   }
 
   get isRoot(): boolean {

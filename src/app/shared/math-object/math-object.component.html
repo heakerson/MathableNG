@@ -12,12 +12,13 @@
 
     <div *ngSwitchCase="'Expression'" class="flex-row flex-align-center">
 
-      <div class="expression-sign" *ngIf="!isPositive(mathObject)">
-        <div *ngIf="!isFirst">&nbsp;&nbsp;</div>
+      <div class="expression-sign flex-row" *ngIf="!isPositive(mathObject)">
+        <div *ngIf="isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="!isFirst">&nbsp;&nbsp;</div></div>
-      <div *ngIf="!isRoot">(&nbsp;</div>
+        <div *ngIf="isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
+      </div>
 
+      <div *ngIf="!isRoot">(&nbsp;</div>
       <ng-container *ngFor="let term of mathObject.children; let i = index">
         <div *ngIf="isPositive(term) && i !== 0">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
         <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
