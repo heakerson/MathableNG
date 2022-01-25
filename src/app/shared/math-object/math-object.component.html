@@ -39,7 +39,7 @@
       </div>
 
       <ng-container *ngFor="let factor of mathObject.children; let i = index">
-        <div *ngIf="i !== 0"> * </div>
+        <i *ngIf="i !== 0" class="fas fa-asterisk"></i>
         <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
     </div>
