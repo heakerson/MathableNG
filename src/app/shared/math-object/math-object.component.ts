@@ -62,6 +62,14 @@ export class MathObjectComponent implements OnInit {
     return '';
   }
 
+  get flippedFactorStr(): string {
+    if (this.mathObject instanceof Factor) {
+      return this.mathObject.flipSign().toString();
+    }
+
+    return '';
+  }
+
   constructor() { }
 
   getChild(index: number): MathObject {

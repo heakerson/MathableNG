@@ -32,10 +32,10 @@
     <!-- TERM -->
     <div *ngSwitchCase="'Term'" class="flex-row flex-align-center">
 
+      <!-- ADDITIONAL OPERATOR -->
       <div class="flex-row flex-align-center">
         <div *ngIf="additionalOpString">&nbsp;&nbsp;</div>
         <div>{{additionalOpString}}</div>
-        <div *ngIf="additionalOpString">&nbsp;&nbsp;</div>
       </div>
 
       <ng-container *ngFor="let factor of mathObject.children; let i = index">
@@ -46,6 +46,15 @@
 
     <div *ngSwitchCase="'Power'">{{this.context.target}}</div>
     
-    <div *ngSwitchDefault>{{this.context.target}}</div>
+    <!-- BASIC FACTORS -->
+    <div *ngSwitchDefault class="flex-row flex-align-center">
+      <div *ngIf="isFirstSibling && !isPositive(mathObject); else positiveFactor" class="flex-row flex-align-center">
+        <div *ngIf="!inFirstTerm">&nbsp;&nbsp;</div>
+        <div>-</div>
+        <div *ngIf="!inFirstTerm">&nbsp;&nbsp;</div>
+        <div>{{flippedFactorStr}}</div>
+      </div>
+      <ng-template #positiveFactor>{{this.context.target}}</ng-template>
+    </div>
   </div>
 </div>
