@@ -1,6 +1,7 @@
 <div *ngIf="context" class="flex-row flex-align-center">
   <div [ngSwitch]="mathObjectType" class="flex-row flex-align-center">
 
+    <!-- RATIONAL -->
     <div *ngSwitchCase="'Rational'" class="flex-row flex-align-center">
       <div *ngIf="!isPositive(mathObject)">&nbsp;&nbsp;-&nbsp;&nbsp;</div>
       <div class="flex-column flex-align-center">
@@ -10,6 +11,7 @@
       </div>
     </div>
 
+    <!-- EXPRESSION -->
     <div *ngSwitchCase="'Expression'" class="flex-row flex-align-center">
 
       <div class="expression-sign flex-row" *ngIf="!isPositive(mathObject)">
@@ -24,8 +26,10 @@
         <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
       <div *ngIf="!isRoot">&nbsp;)</div>
+
     </div>
 
+    <!-- TERM -->
     <div *ngSwitchCase="'Term'" class="flex-row flex-align-center">
       <ng-container *ngFor="let factor of mathObject.children; let i = index">
         <div *ngIf="i !== 0"> * </div>
