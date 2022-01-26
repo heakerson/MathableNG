@@ -18,6 +18,10 @@ export class Expression extends Factor {
         return this.termCount === 1;
     }
 
+    get additionalOps(): { termIndex: number, addtionalOperator: Operators }[] {
+        return this.additionalOperators;
+    }
+
     protected additionalOperators: { termIndex: number, addtionalOperator: Operators }[] = [];
 
     constructor(input: string) {

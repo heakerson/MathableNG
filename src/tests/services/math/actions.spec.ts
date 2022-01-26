@@ -39,6 +39,8 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Expression('a-3*0'), finalResult: '(a-0)', beforeHighlights: [['0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a-0*3'), finalResult: '(a-0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a+3*(b+c*0)*0'), finalResult: '(a+0)', beforeHighlights: [['0']], afterHighlights: [['0']], actions: [ ActionTypes.removeZeroFactor ] }),
+            new ActionTest({ mo: new Expression('a+-0*3'), finalResult: '(a+-0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
+            // new ActionTest({ mo: new Expression('a--0*3'), finalResult: '(a--0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
         ];
 
         actionTester('Turn any terms with zero factors to a zero', tests, Actions.removeZeroFactor);
@@ -58,6 +60,10 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0))))'), finalResult: '(a/(x+0*(b^(2))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2+0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            // new ActionTest({ mo: new Expression('a+-0'), finalResult: '(a)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Expression('a+-b-0'), finalResult: '(a+-b)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Term('-a--b+0'), finalResult: '(-a--b)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            // new ActionTest({ mo: new Term('0-a--b'), finalResult: '(-a--b)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
         ];
 
         actionTester('Remove the first zero term it finds', tests, Actions.removeZeroTerm);
@@ -83,6 +89,9 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('-2*x*-3'), finalResult: '6*x', beforeHighlights: [['-2', '-3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('-2*x*-3*(x*4*-2)'), finalResult: '-2*x*-3*(x*-8)', beforeHighlights: [['4', '-2']], afterHighlights: [['-8']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('-2*x*(-p*10.5*-6)*-3*(x*4*-2)'), finalResult: '-2*x*(-p*-63)*-3*(x*4*-2)', beforeHighlights: [['10.5', '-6']], afterHighlights: [['-63']], actions: [ActionTypes.constantMultiplication] }),
+            // new ActionTest({ mo: new Expression('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            // new ActionTest({ mo: new Term('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            // new ActionTest({ mo: new Term('-a+-b-2*3'), finalResult: '(-a+-b-6)', beforeHighlights: [['-2', '3']], afterHighlights: [['-6']], actions: [ActionTypes.constantAdditionSubtraction] }),
         ];
 
         actionTester('Remove the first constant multiplication found, child first', tests, Actions.constantMultiplication);
@@ -112,6 +121,9 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('-2+x-3'), finalResult: '(-5+x)', beforeHighlights: [['-2', '-3']], afterHighlights: [['-5']], actions: [ActionTypes.constantAdditionSubtraction] }),
             new ActionTest({ mo: new Term('-2-x-3+(x+4-2)'), finalResult: '(-2-x-3+(x+2))', beforeHighlights: [['4', '-2']], afterHighlights: [['2']], actions: [ActionTypes.constantAdditionSubtraction] }),
             new ActionTest({ mo: new Term('-2-x-(-p-10.5-6)-3+(x+4-2)'), finalResult: '(-2-x-(-p-16.5)-3+(x+4-2))', beforeHighlights: [['-10.5', '-6']], afterHighlights: [['-16.5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Expression('a--b+2+3'), finalResult: '(a--b+5)', beforeHighlights: [['2', '3']], afterHighlights: [['5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('a--b+2+3'), finalResult: '(a--b+5)', beforeHighlights: [['2', '3']], afterHighlights: [['5']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Term('-a--b-2+3'), finalResult: '(-a--b+1)', beforeHighlights: [['-2', '3']], afterHighlights: [['1']], actions: [ActionTypes.constantAdditionSubtraction] }),
         ];
 
         actionTester('Remove the first constant addition/subtraction found, child first', tests, Actions.constantAdditionSubtraction);
@@ -139,6 +151,9 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('a*-(b*c)'), finalResult: 'a*-1*b*c', steps: ['a*-1*(b*c)', 'a*-1*b*c'], beforeHighlights: [['-(b*c)'], ['(b*c)']], afterHighlights: [['-1', '(b*c)'], ['b', 'c']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthBasic]}),
             new ActionTest({ mo: new Term('sin[x-(a*b)]'), finalResult: 'sin[(x-1*a*b)]', steps: ['sin[(x-1*(a*b))]','sin[(x-1*a*b)]'], beforeHighlights: [['-(a*b)'], ['(a*b)']], afterHighlights: [['-1', '(a*b)'], ['a', 'b']], actions: [ActionTypes.expandNegativeFactor, ActionTypes.removeParenthBasic]}),
             new ActionTest({ mo: new Expression('(0)+13+((a+35)/d)'), finalResult: '(0+13+((a+35)/d))', beforeHighlights: [['(0)']], afterHighlights: [['0']], actions: [ActionTypes.removeParenthBasic]}),
+            new ActionTest({ mo: new Term('(x+-y)*(a*b)'), finalResult: '(x+-y)*a*b', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthBasic]}),
+            new ActionTest({ mo: new Term('(x--y)*(a*b)'), finalResult: '(x--y)*a*b', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthBasic]}),
+            new ActionTest({ mo: new Expression('-(x+-y)*(a*b)'), finalResult: '(-(x+-y)*a*b)', beforeHighlights: [['(a*b)']], afterHighlights: [['a', 'b']], actions: [ActionTypes.removeParenthBasic]}),
         ];
 
         actionTester('Remove first instance of a single term enclosed by (), child first', tests, Actions.removeParenthBasic);

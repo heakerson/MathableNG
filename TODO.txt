@@ -2,6 +2,7 @@ LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
         - Figure what's happening to additional operators after the first step
+        - Now that the -- and +- is fixed, why is running tests not ending in a failure?
         - Display powers
         - Display functions
         - Probably remove () from around numerators and denominators
@@ -17,6 +18,7 @@ LEFT OFF:
     - don't allow saving of a test if it's a duplicate input - display this somehwere
     - make sure the tests are NOT updated in dev - ONLY LOCALLY
 - add tests for getContext in MathObject
+- Create action for updating -- and +- situations
 - Go through all the unit tests and make sure I'm actually passing an error code! Or maybe edit the test itself to make sure there's a code??
 - Decide on the structure of the main app data and load it
 - Add new operations!

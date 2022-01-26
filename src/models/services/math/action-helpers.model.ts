@@ -89,7 +89,7 @@ export class ActionHelpers {
 
     switch (parent.constructor) {
       case Expression:
-        return Expression.fromTerms(newChildren as Term[], (parent as Expression).sign);
+        return Expression.fromTerms(newChildren as Term[], (parent as Expression).sign, (parent as Expression).additionalOps);
       case Term:
       default:
         return Term.fromFactors(...newChildren as Factor[])
