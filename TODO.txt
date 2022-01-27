@@ -1,7 +1,6 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
-        - Now that the -- and +- is fixed, why is running tests not ending in a failure?
         - Display powers
         - Display functions
         - Probably remove () from around numerators and denominators

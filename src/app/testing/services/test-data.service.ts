@@ -170,22 +170,19 @@ export class TestDataService {
     this.dataService.setUpdatingStatus(true);
     let allParentPages = this.testPages.filter(p => p.tests.some(t => !!updatedTests.find(updatedT => updatedT.id === t.id)));
 
-    updatedTests.forEach(updatedTest => {
-      const parentPage = this.testPages.find(p => p.tests.find(t => t.id === updatedTest.id));
+    const updatedPages = allParentPages.map(page => {
+      const newTestList = page.tests.map(t => {
+        const updated = updatedTests.find(ut => ut.id === t.id);
+        return updated || t;
+      });
 
-      if (parentPage) {
-        const newTestList = parentPage.tests.map(t => t.id === updatedTest.id ? updatedTest : t);
-        const updatedPage = parentPage.edit({ tests: newTestList });
-        allParentPages = allParentPages.map(p => updatedPage.id === p.id ? updatedPage : p);
-        this.dataService.setUpdatingStatus(false);
-      } else {
-        this.dataService.setUpdatingStatus(false);
-        this.modalService.openErrorModal(`COULD NOT FIND TEST PARENT TO UPDATE`);
-      }
+      return page.edit({ tests: newTestList });
     });
 
-    if (allParentPages.length) {
-      this.updateObjects(allParentPages);
+    if (updatedPages.length) {
+      this.updateObjects(updatedPages);
+    } else {
+      this.dataService.setUpdatingStatus(false);
     }
   }
 
