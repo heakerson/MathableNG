@@ -233,6 +233,8 @@ describe('Expression', () => {
             const extraOpsTests: FactorReplaceAndFlipSignTest[] = [
                 new FactorReplaceAndFlipSignTest({ input: 'a+-x', toStringBefore: '(a+-x)', toStringAfter: '(a+-z)' }),
                 new FactorReplaceAndFlipSignTest({ input: 'a--x', toStringBefore: '(a--x)', toStringAfter: '(a--z)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a+-b+x', toStringBefore: '(a+-b+x)', toStringAfter: '(a+-b-z)' }),
+                new FactorReplaceAndFlipSignTest({ input: 'a--b+x', toStringBefore: '(a--b+x)', toStringAfter: '(a--b-z)' }),
             ];
 
             mathObjectReplaceTests('STANDARD Constructor - Extra Ops', extraOpsTests, standardBuilder, replacement, extraOpFinder);

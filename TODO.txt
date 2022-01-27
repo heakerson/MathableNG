@@ -1,7 +1,6 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
-        - Add more tests for expression's replace child or replace or whatever it is - INCLUDE ADDITIONAL OPS IN VARIOUS PLACES
         - Now that the -- and +- is fixed, why is running tests not ending in a failure?
         - Display powers
         - Display functions
