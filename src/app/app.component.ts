@@ -36,13 +36,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // const mo = new Expression('(a-b*)');
     // console.log(mo);
-    // const mo = new Expression('(a*b*0) + 3*1 + ((a+0+5*7)/d) + f*0 + 2*5');
-    // const solution = Mathable.simplify(mo);
-    // console.log(`${mo.toString()} ====== `);
 
-    // solution.changes.forEach(c => {
-    //   console.log('   ', c.newMathObject.toString());
-    // });
+
+    const mo = new Term('a--b+2+3');
+    // const mo = new Term('a+-0');
+    const solution = Mathable.simplify(mo);
+    console.log(`${mo.toString()} ====== `);
+
+    solution.changes.forEach(c => {
+      console.log('   ', c.newMathObject.toString());
+    });
 
     // console.log(`${solution.final.toString()} ====== STEP COUNT: ${solution.changes.length} `);
 

@@ -6,6 +6,8 @@ import { Context } from 'src/models/search/context.model';
 import { ChangeContext } from 'src/models/services/math/solution/change-context.model';
 import { Factor } from 'src/models/math-object/factor/factor.model';
 import { Expression } from 'src/models/math-object/factor/expression.model';
+import { Function } from 'src/models/math-object/factor/functions/function.model';
+import { Log } from 'src/models/math-object/factor/functions/log/log.model';
 
 @Component({
   selector: 'app-math-object',
@@ -25,6 +27,12 @@ export class MathObjectComponent implements OnInit {
   }
 
   get mathObjectType(): string {
+    if (this.context.target instanceof Function) {
+      if (this.context.target instanceof Log) {
+        return 'Log';
+      }
+      return 'Function';
+    }
     return this.context.target.constructor.name;
   }
 
@@ -70,6 +78,22 @@ export class MathObjectComponent implements OnInit {
     return '';
   }
 
+  get functionStr(): string {
+    if (this.mathObject instanceof Function) {
+      return this.mathObject.functionString;
+    }
+
+    return '';
+  }
+
+  get isSubscript(): boolean {
+    if (this.context.parent && this.context.parent instanceof Log) {
+      return this.context.position.index === 1;
+    }
+
+    return false;
+  }
+
   constructor() { }
 
   getChild(index: number): MathObject {
@@ -90,4 +114,15 @@ export class MathObjectComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getCustomStyles(): any {
+    if (this.isSubscript) {
+      return {
+        'font-size': 'smaller'
+      }
+    } else {
+      return {
+        'font-size': '16px'
+      }
+    }
+  }
 }
