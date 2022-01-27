@@ -39,7 +39,8 @@ export class TestsTableComponent implements OnInit {
           color: 'limegreen',
           'font-weight': 'bold'
         };
-      case TestStatus.Fail:
+      case TestStatus.FailFinalSolution:
+      case TestStatus.FailStepCount:
         return {
           color: 'red',
           'font-weight': 'bold'

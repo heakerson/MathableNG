@@ -1,5 +1,6 @@
 export enum TestStatus {
   NeedsApproval = 'Needs Approval',
   Pass = 'Pass',
-  Fail = 'Fail'
+  FailFinalSolution = 'Fail: Final Solution',
+  FailStepCount = 'Fail: Step Count',
 }

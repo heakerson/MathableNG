@@ -17,7 +17,12 @@ export class Test {
     }
 
     if (this.lastTestSolution) {
-      return this.solutionString === this.lastTestSolution ? TestStatus.Pass : TestStatus.Fail;
+      if (this.LastTestSolution.final.toString() !== this.Solution.final.toString()) {
+        return TestStatus.FailFinalSolution;
+      }
+      if (this.LastTestSolution.changes.length !== this.Solution.changes.length) {
+        return TestStatus.FailStepCount;
+      }
     }
 
     return TestStatus.Pass;
@@ -25,6 +30,10 @@ export class Test {
 
   public get Solution(): Solution {
     return Solution.fromString(this.solutionString);
+  }
+
+  public get LastTestSolution(): Solution {
+    return Solution.fromString(this.lastTestSolution);
   }
 
   public get formattedCreatedDate(): string {
