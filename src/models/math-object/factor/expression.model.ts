@@ -57,11 +57,12 @@ export class Expression extends Factor {
 
     public replaceChild(previousTerm: Term, newTerm: Term): Expression {
         const currentTermIndex = this.children.findIndex(t => t.id === previousTerm.id);
-        let additionalOperators = this.additionalOperators.filter(o => o.termIndex === currentTermIndex);
+        let additionalOpsForReplacementChild = this.additionalOperators.filter(o => o.termIndex === currentTermIndex);
+        let allOtherAdditionalOps = this.additionalOperators.filter(o => o.termIndex !== currentTermIndex);
 
-        if (additionalOperators.length && newTerm.sign === Sign.Positive) {
-            const additionalOp = additionalOperators[0].addtionalOperator;
-            additionalOperators.pop();
+        if (additionalOpsForReplacementChild.length && newTerm.sign === Sign.Positive) {
+            const additionalOp = additionalOpsForReplacementChild[0].addtionalOperator;
+            additionalOpsForReplacementChild.pop();
 
             if (additionalOp === Operators.Subtraction) {
                 newTerm = newTerm.flipFirstFactorSign();
@@ -69,7 +70,7 @@ export class Expression extends Factor {
         }
 
         const newChildren = this.children.map(c => c.id === previousTerm.id ? newTerm : c) as Term[];
-        return Expression.fromTerms(newChildren, this.sign, additionalOperators);
+        return Expression.fromTerms(newChildren, this.sign, allOtherAdditionalOps.concat(additionalOpsForReplacementChild));
     }
 
     public override toString(): string {

@@ -89,9 +89,9 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Term('-2*x*-3'), finalResult: '6*x', beforeHighlights: [['-2', '-3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('-2*x*-3*(x*4*-2)'), finalResult: '-2*x*-3*(x*-8)', beforeHighlights: [['4', '-2']], afterHighlights: [['-8']], actions: [ActionTypes.constantMultiplication] }),
             new ActionTest({ mo: new Term('-2*x*(-p*10.5*-6)*-3*(x*4*-2)'), finalResult: '-2*x*(-p*-63)*-3*(x*4*-2)', beforeHighlights: [['10.5', '-6']], afterHighlights: [['-63']], actions: [ActionTypes.constantMultiplication] }),
-            // new ActionTest({ mo: new Expression('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantAdditionSubtraction] }),
-            // new ActionTest({ mo: new Term('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantAdditionSubtraction] }),
-            // new ActionTest({ mo: new Term('-a+-b-2*3'), finalResult: '(-a+-b-6)', beforeHighlights: [['-2', '3']], afterHighlights: [['-6']], actions: [ActionTypes.constantAdditionSubtraction] }),
+            new ActionTest({ mo: new Expression('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('a--b+2*3'), finalResult: '(a--b+6)', beforeHighlights: [['2', '3']], afterHighlights: [['6']], actions: [ActionTypes.constantMultiplication] }),
+            new ActionTest({ mo: new Term('-a+-b-2*3'), finalResult: '(-a+-b-6)', beforeHighlights: [['-2', '3']], afterHighlights: [['-6']], actions: [ActionTypes.constantMultiplication] }),
         ];
 
         actionTester('Remove the first constant multiplication found, child first', tests, Actions.constantMultiplication);
