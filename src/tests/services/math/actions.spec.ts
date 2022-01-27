@@ -40,7 +40,7 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Expression('a-0*3'), finalResult: '(a-0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a+3*(b+c*0)*0'), finalResult: '(a+0)', beforeHighlights: [['0']], afterHighlights: [['0']], actions: [ ActionTypes.removeZeroFactor ] }),
             new ActionTest({ mo: new Expression('a+-0*3'), finalResult: '(a+-0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
-            // new ActionTest({ mo: new Expression('a--0*3'), finalResult: '(a--0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
+            new ActionTest({ mo: new Expression('a--0*3'), finalResult: '(a--0)', beforeHighlights: [['-0']], afterHighlights: [['-0']], actions: [ ActionTypes.removeZeroFactor ] }),
         ];
 
         actionTester('Turn any terms with zero factors to a zero', tests, Actions.removeZeroFactor);
@@ -60,10 +60,10 @@ describe('Mathobject Actions', () => {
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0))))'), finalResult: '(a/(x+0*(b^(2))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2+0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Rational('(a/(x+0*(b^(2-0+log[y+0,10]))))'), finalResult: '(a/(x+0*(b^(2+log[(y+0),10]))))', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
-            // new ActionTest({ mo: new Expression('a+-0'), finalResult: '(a)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Expression('a+-0'), finalResult: '(a)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Expression('a+-b-0'), finalResult: '(a+-b)', beforeHighlights: [['-0']], actions: [ ActionTypes.removeZeroTerm ] }),
             new ActionTest({ mo: new Term('-a--b+0'), finalResult: '(-a--b)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
-            // new ActionTest({ mo: new Term('0-a--b'), finalResult: '(-a--b)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
+            new ActionTest({ mo: new Term('0-a--b'), finalResult: '(-a--b)', beforeHighlights: [['0']], actions: [ ActionTypes.removeZeroTerm ] }),
         ];
 
         actionTester('Remove the first zero term it finds', tests, Actions.removeZeroTerm);

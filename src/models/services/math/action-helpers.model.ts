@@ -1,3 +1,4 @@
+import { Operators } from "src/models/math-object/enums.model";
 import { Expression } from "src/models/math-object/factor/expression.model";
 import { Factor } from "src/models/math-object/factor/factor.model";
 import { MathObject } from "src/models/math-object/math-object.model";
@@ -89,11 +90,27 @@ export class ActionHelpers {
 
     switch (parent.constructor) {
       case Expression:
-        return Expression.fromTerms(newChildren as Term[], (parent as Expression).sign, (parent as Expression).additionalOps);
+        const ops = this.getNewAdditionalOpsForReducingChildren(parent as Expression, childrenToReplaceCtxs);
+        return Expression.fromTerms(newChildren as Term[], (parent as Expression).sign, ops);
       case Term:
       default:
         return Term.fromFactors(...newChildren as Factor[])
     }
+  }
+
+  private static getNewAdditionalOpsForReducingChildren(parentExpression: Expression, childrenToReplaceCtxs: Context[]): { termIndex: number; addtionalOperator: Operators; }[] {
+    return parentExpression.additionalOps
+      .filter(op => !childrenToReplaceCtxs.some(ctx => ctx.position.index === op.termIndex))
+      .map(op => {
+        const leftChildrenRemoved = childrenToReplaceCtxs.filter(ctx => ctx.position.index < op.termIndex);
+        if (leftChildrenRemoved.length > 0) {
+          return {
+            ...op,
+            termIndex: op.termIndex - leftChildrenRemoved.length
+          }
+        }
+        return op;
+      });
   }
 
   private static insert(index: number, list: MathObject[], inserting: MathObject[]): MathObject[] {
