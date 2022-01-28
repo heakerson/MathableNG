@@ -44,8 +44,6 @@
       </ng-container>
     </div>
 
-    <div *ngSwitchCase="'Power'">{{this.context.target}}</div>
-
     <!-- BASIC FUNCTIONS -->
     <div *ngSwitchCase="'Function'" class="flex-row flex-align-center">
       <div class="flex-row" *ngIf="!isPositive(mathObject)">
@@ -78,6 +76,15 @@
       <div>[</div>
       <app-math-object  [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
       <div>]</div>
+    </div>
+
+    <!-- POWER -->
+    <div *ngSwitchCase="'Power'" class="flex-row flex-align-center">
+      <app-math-object [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
+      
+      <sup class="superscript">
+        <app-math-object [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
+      </sup>
     </div>
     
     <!-- BASIC FACTORS -->

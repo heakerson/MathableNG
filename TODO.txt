@@ -1,10 +1,11 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
     - create a component for displaying a single mathObject
-        - Display powers
         - Probably remove () from around numerators and denominators
         - Simplify the logic i'm using to get the context and change context? Maybe?
         - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
+    - MAKE UI MORE EFFICIENT!!! Probably fewer getters?
+        - Start with the table
     - create a panel on the right and add the ability to store test inputs and run them
         - also just store the last n distinct tests - n is configurable
     - create a component for viewing a solution using the previous component
