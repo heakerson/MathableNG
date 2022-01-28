@@ -17,7 +17,7 @@
     <app-math-object [context]="getStartContext()"></app-math-object>
   </div>
 
-  <div class="solution-step mt-1 flex-column flex-align-center" *ngFor="let change of solution.changes">
+  <div class="solution-step flex-column flex-align-center" *ngFor="let change of solution.changes">
     <app-math-object [context]="getPreviousMoContext(change)" [changeContext]="change"></app-math-object>
 
     <i class="fas fa-angle-double-down fa-lg mt-1 mb-1"></i>
