@@ -22,59 +22,7 @@ export class MathObjectComponent implements OnInit {
   @Input()
   changeContext?: ChangeContext;
 
-  get mathObject(): MathObject {
-    return this.context?.target;
-  }
-
-  get inFirstTerm(): boolean {
-    if (this.mathObject instanceof Factor) {
-      if (this.context.parent && this.context.parent instanceof Term) {
-        return this.context.parentContext?.position.index === 0;
-      }
-    }
-    return false;
-  }
-
-  get additionalOpString(): string {
-    if (this.mathObject instanceof Term && this.context.parentContext) {
-      const parent = this.context.parent;
-
-      if (parent instanceof Expression) {
-        const termIndex = this.context.position.index;
-        const op = parent.getAdditionalOperatorForIndex(termIndex);
-
-        if (op !== Operators.None) {
-          return ` ${op} `;
-        }
-      }
-    }
-
-    return '';
-  }
-
-  get flippedFactorStr(): string {
-    if (this.mathObject instanceof Factor) {
-      return this.mathObject.flipSign().toString();
-    }
-
-    return '';
-  }
-
-  get functionStr(): string {
-    if (this.mathObject instanceof Function) {
-      return this.mathObject.functionString;
-    }
-
-    return '';
-  }
-
-  get isSubscript(): boolean {
-    if (this.context.parent && this.context.parent instanceof Log) {
-      return this.context.position.index === 1;
-    }
-
-    return false;
-  }
+  vm!: MathObjectViewModel;
 
   constructor() { }
 
@@ -94,17 +42,77 @@ export class MathObjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.context) {
+      this.vm = this.buildViewModel();
+    }
   }
 
-  getCustomStyles(): any {
-    if (this.isSubscript) {
-      return {
+  buildViewModel(): MathObjectViewModel {
+    let isFirstTerm = false;
+
+    if (this.context.target instanceof Factor) {
+      if (this.context.parent && this.context.parent instanceof Term) {
+        isFirstTerm = this.context.parentContext?.position.index === 0;
+      }
+    }
+
+    let additionalOpString = '';
+
+    if (this.context.target instanceof Term && this.context.parentContext) {
+      const parent = this.context.parent;
+
+      if (parent instanceof Expression) {
+        const termIndex = this.context.position.index;
+        const op = parent.getAdditionalOperatorForIndex(termIndex);
+
+        if (op !== Operators.None) {
+          additionalOpString = ` ${op} `;
+        }
+      }
+    }
+
+    const isSubscript = this.context.parent && this.context.parent instanceof Log ? this.context.position.index === 1 : false;
+
+    let customStyles = {};
+
+    if (isSubscript) {
+      customStyles = {
         'font-size': 'smaller'
       }
     } else {
-      return {
+      customStyles = {
         'font-size': '16px'
       }
     }
+
+    return new MathObjectViewModel({
+      mathObject: this.context.target,
+      isRoot: this.context.isRoot,
+      inFirstTerm: isFirstTerm,
+      isFirstSibling: this.context.isFirstSibling,
+      isPositive: this.context.target instanceof Term || this.context.target instanceof Factor ? this.context.target.sign === Sign.Positive : false,
+      flippedFactorStr: this.context.target instanceof Factor ? this.context.target.flipSign().toString() : '',
+      functionStr: this.context.target instanceof Function ? this.context.target.functionString : '',
+      additionalOpString,
+      isSubscript,
+      customStyles
+    });
+  }
+}
+
+class MathObjectViewModel {
+  mathObject!: MathObject;
+  isRoot: boolean = false;
+  isFirstSibling: boolean = false;
+  inFirstTerm: boolean = false;
+  isPositive: boolean = false;
+  flippedFactorStr!: string;
+  functionStr!: string;
+  additionalOpString!: string;
+  isSubscript = false;
+  customStyles: any = {};
+
+  constructor(start: Partial<MathObjectViewModel>) {
+    Object.assign(this, start);
   }
 }

@@ -1,9 +1,9 @@
-<div *ngIf="context" class="math-object-container flex-row flex-align-center" [ngStyle]="getCustomStyles()">
+<div *ngIf="context && vm" class="math-object-container flex-row flex-align-center" [ngStyle]="vm.customStyles">
   <div [ngSwitch]="context.typeString" class="flex-row flex-align-center">
 
     <!-- RATIONAL -->
     <div *ngSwitchCase="'Rational'" class="flex-row flex-align-center">
-      <div *ngIf="!isPositive(mathObject)">&nbsp;&nbsp;-&nbsp;&nbsp;</div>
+      <div *ngIf="!vm.isPositive">&nbsp;&nbsp;-&nbsp;&nbsp;</div>
       <div class="flex-column flex-align-center">
         <app-math-object [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
         <div class="rational-divider"></div>
@@ -14,18 +14,18 @@
     <!-- EXPRESSION -->
     <div *ngSwitchCase="'Expression'" class="flex-row flex-align-center">
 
-      <div class="expression-sign flex-row" *ngIf="!isPositive(mathObject)">
-        <div *ngIf="context.isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
+      <div class="expression-sign flex-row" *ngIf="!vm.isPositive">
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="context.isFirstSibling && !inFirstTerm && !context.isRoot">&nbsp;&nbsp;</div>
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm && !vm.isRoot">&nbsp;&nbsp;</div>
       </div>
 
-      <div *ngIf="!context.isRoot || !isPositive(mathObject)">(&nbsp;</div>
-      <ng-container *ngFor="let term of mathObject.children; let i = index">
+      <div *ngIf="!vm.isRoot || !vm.isPositive">(&nbsp;</div>
+      <ng-container *ngFor="let term of vm.mathObject.children; let i = index">
         <div *ngIf="isPositive(term) && i !== 0">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
         <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
-      <div *ngIf="!context.isRoot || !isPositive(mathObject)">&nbsp;)</div>
+      <div *ngIf="!vm.isRoot || !vm.isPositive">&nbsp;)</div>
 
     </div>
 
@@ -34,11 +34,11 @@
 
       <!-- ADDITIONAL OPERATOR -->
       <div class="flex-row flex-align-center">
-        <div *ngIf="additionalOpString">&nbsp;&nbsp;</div>
-        <div>{{additionalOpString}}</div>
+        <div *ngIf="vm.additionalOpString">&nbsp;&nbsp;</div>
+        <div>{{vm.additionalOpString}}</div>
       </div>
 
-      <ng-container *ngFor="let factor of mathObject.children; let i = index">
+      <ng-container *ngFor="let factor of vm.mathObject.children; let i = index">
         <i *ngIf="i !== 0" class="fas fa-asterisk"></i>
         <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
@@ -46,15 +46,15 @@
 
     <!-- BASIC FUNCTIONS -->
     <div *ngSwitchCase="'Function'" class="flex-row flex-align-center">
-      <div class="flex-row" *ngIf="!isPositive(mathObject)">
-        <div *ngIf="context.isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
+      <div class="flex-row" *ngIf="!vm.isPositive">
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="context.isFirstSibling && !inFirstTerm && !context.isRoot">&nbsp;&nbsp;</div>
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm && !vm.isRoot">&nbsp;&nbsp;</div>
       </div>
-      <div>{{functionStr}}</div>
+      <div>{{vm.functionStr}}</div>
       <div>[</div>
 
-      <ng-container *ngFor="let factor of mathObject.children; let i = index">
+      <ng-container *ngFor="let factor of vm.mathObject.children; let i = index">
         <div *ngIf="i !== 0">,&nbsp;</div>
         <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
       </ng-container>
@@ -64,12 +64,12 @@
 
     <!-- LOG -->
     <div *ngSwitchCase="'Log'" class="flex-row flex-align-center">
-      <div class="flex-row" *ngIf="!isPositive(mathObject)">
-        <div *ngIf="context.isFirstSibling && !inFirstTerm">&nbsp;&nbsp;</div>
+      <div class="flex-row" *ngIf="!vm.isPositive">
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="context.isFirstSibling && !inFirstTerm && !context.isRoot">&nbsp;&nbsp;</div>
+        <div *ngIf="vm.isFirstSibling && !vm.inFirstTerm && !vm.isRoot">&nbsp;&nbsp;</div>
       </div>
-      <div>{{functionStr}}</div>
+      <div>{{vm.functionStr}}</div>
       <sub class="subscript">
         <app-math-object  [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
       </sub>
@@ -89,11 +89,11 @@
     
     <!-- BASIC FACTORS -->
     <div *ngSwitchDefault class="flex-row flex-align-center">
-      <div *ngIf="context.isFirstSibling && !isPositive(mathObject); else positiveFactor" class="flex-row flex-align-center">
-        <div *ngIf="!inFirstTerm">&nbsp;&nbsp;</div>
+      <div *ngIf="vm.isFirstSibling && !vm.isPositive; else positiveFactor" class="flex-row flex-align-center">
+        <div *ngIf="!vm.inFirstTerm">&nbsp;&nbsp;</div>
         <div>-</div>
-        <div *ngIf="!inFirstTerm && !context.isRoot">&nbsp;&nbsp;</div>
-        <div>{{flippedFactorStr}}</div>
+        <div *ngIf="!vm.inFirstTerm && !vm.isRoot">&nbsp;&nbsp;</div>
+        <div>{{vm.flippedFactorStr}}</div>
       </div>
       <ng-template #positiveFactor>{{this.context.target}}</ng-template>
     </div>
