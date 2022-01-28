@@ -26,20 +26,6 @@ export class MathObjectComponent implements OnInit {
     return this.context?.target;
   }
 
-  get mathObjectType(): string {
-    if (this.context.target instanceof Function) {
-      if (this.context.target instanceof Log) {
-        return 'Log';
-      }
-      return 'Function';
-    }
-    return this.context.target.constructor.name;
-  }
-
-  get isFirstSibling(): boolean {
-    return this.context.position.index === 0;
-  }
-
   get inFirstTerm(): boolean {
     if (this.mathObject instanceof Factor) {
       if (this.context.parent && this.context.parent instanceof Term) {
@@ -47,10 +33,6 @@ export class MathObjectComponent implements OnInit {
       }
     }
     return false;
-  }
-
-  get isRoot(): boolean {
-    return this.context.isRoot;
   }
 
   get additionalOpString(): string {

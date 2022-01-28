@@ -3,6 +3,10 @@ import { Position } from "./position.model";
 
 export class Context {
 
+  public get typeString(): string {
+    return this.target.constructor.name;
+  }
+
   public get isRoot(): boolean {
     return !this.parentContext;
   }
@@ -28,6 +32,10 @@ export class Context {
     }
 
     return [];
+  }
+
+  get isFirstSibling(): boolean {
+    return this.position.index === 0;
   }
 
   public get isNumerator(): boolean {
