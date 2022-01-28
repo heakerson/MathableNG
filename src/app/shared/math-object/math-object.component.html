@@ -1,13 +1,13 @@
 <div *ngIf="context && vm" class="math-object-container flex-row flex-align-center" [ngStyle]="vm.customStyles">
-  <div [ngSwitch]="context.typeString" class="flex-row flex-align-center">
+  <div [ngSwitch]="vm.typeString" class="flex-row flex-align-center">
 
     <!-- RATIONAL -->
     <div *ngSwitchCase="'Rational'" class="flex-row flex-align-center">
       <div *ngIf="!vm.isPositive">&nbsp;&nbsp;-&nbsp;&nbsp;</div>
       <div class="flex-column flex-align-center">
-        <app-math-object [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object [context]="vm.childContexts[0]" [changeContext]="changeContext"></app-math-object>
         <div class="rational-divider"></div>
-        <app-math-object [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object [context]="vm.childContexts[1]" [changeContext]="changeContext"></app-math-object>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
       <div *ngIf="!vm.isRoot || !vm.isPositive">(&nbsp;</div>
       <ng-container *ngFor="let term of vm.mathObject.children; let i = index">
         <div *ngIf="isPositive(term) && i !== 0">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
-        <app-math-object [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object [context]="vm.childContexts[i]" [changeContext]="changeContext"></app-math-object>
       </ng-container>
       <div *ngIf="!vm.isRoot || !vm.isPositive">&nbsp;)</div>
 
@@ -40,7 +40,7 @@
 
       <ng-container *ngFor="let factor of vm.mathObject.children; let i = index">
         <i *ngIf="i !== 0" class="fas fa-asterisk"></i>
-        <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object  [context]="vm.childContexts[i]" [changeContext]="changeContext"></app-math-object>
       </ng-container>
     </div>
 
@@ -56,7 +56,7 @@
 
       <ng-container *ngFor="let factor of vm.mathObject.children; let i = index">
         <div *ngIf="i !== 0">,&nbsp;</div>
-        <app-math-object  [context]="getChildContext(i)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object  [context]="vm.childContexts[i]" [changeContext]="changeContext"></app-math-object>
       </ng-container>
 
       <div>]</div>
@@ -71,19 +71,19 @@
       </div>
       <div>{{vm.functionStr}}</div>
       <sub class="subscript">
-        <app-math-object  [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object  [context]="vm.childContexts[1]" [changeContext]="changeContext"></app-math-object>
       </sub>
       <div>[</div>
-      <app-math-object  [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
+      <app-math-object  [context]="vm.childContexts[0]" [changeContext]="changeContext"></app-math-object>
       <div>]</div>
     </div>
 
     <!-- POWER -->
     <div *ngSwitchCase="'Power'" class="flex-row flex-align-center">
-      <app-math-object [context]="getChildContext(0)" [changeContext]="changeContext"></app-math-object>
+      <app-math-object [context]="vm.childContexts[0]" [changeContext]="changeContext"></app-math-object>
       
       <sup class="superscript">
-        <app-math-object [context]="getChildContext(1)" [changeContext]="changeContext"></app-math-object>
+        <app-math-object [context]="vm.childContexts[1]" [changeContext]="changeContext"></app-math-object>
       </sup>
     </div>
     

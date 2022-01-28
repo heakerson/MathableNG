@@ -27,7 +27,11 @@ export class SolutionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getMoContext(changeContext: ChangeContext): Context {
+  getPreviousMoContext(changeContext: ChangeContext): Context {
+    return changeContext.previousMathObject.find(MathObject, (mo) => mo.id === changeContext.previousMathObject.id) as Context;
+  }
+
+  getNewMoContext(changeContext: ChangeContext): Context {
     return changeContext.newMathObject.find(MathObject, (mo) => mo.id === changeContext.newMathObject.id) as Context;
   }
 

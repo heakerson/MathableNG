@@ -1,0 +1,15 @@
+$highlightColor: rgb(2, 186, 192);
+
+.solution-container {
+  max-height: 85vh;
+}
+
+.solution-step {
+  padding: 1em;
+  background-color: rgb(246, 251, 255);
+  border: solid 2px $highlightColor;
+
+  .fa-angle-double-right {
+    color: $highlightColor;
+  }
+}

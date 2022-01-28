@@ -13,10 +13,17 @@
     </div>
   </div> -->
 
-  <div class="solution-step">
+  <div class="solution-start">
     <app-math-object [context]="getStartContext()"></app-math-object>
   </div>
   <div class="solution-step ml-2 mt-1" *ngFor="let change of solution.changes">
-    <app-math-object [context]="getMoContext(change)" [changeContext]="change"></app-math-object>
+    <app-math-object [context]="getPreviousMoContext(change)" [changeContext]="change"></app-math-object>
+
+    <div class="flex-row flex-align-center">
+      <i class="fas fa-angle-double-right fa-lg ml-1"></i>
+      <div class="ml-2">
+        <app-math-object [context]="getNewMoContext(change)" [changeContext]="change"></app-math-object>
+      </div>
+    </div>
   </div>
 </div>

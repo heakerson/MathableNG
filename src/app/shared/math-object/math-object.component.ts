@@ -26,21 +26,6 @@ export class MathObjectComponent implements OnInit {
 
   constructor() { }
 
-  getChild(index: number): MathObject {
-    return this.context.target.children[index];
-  }
-
-  getChildContext(index: number): Context {
-    return this.getChild(index).getContext(this.context.root) as Context;
-  }
-
-  isPositive(mo: MathObject): boolean {
-    if (mo instanceof Term || mo instanceof Factor) {
-      return mo.sign === Sign.Positive;
-    }
-    return false;
-  }
-
   ngOnInit(): void {
     if (this.context) {
       this.vm = this.buildViewModel();
@@ -73,20 +58,17 @@ export class MathObjectComponent implements OnInit {
 
     const isSubscript = this.context.parent && this.context.parent instanceof Log ? this.context.position.index === 1 : false;
 
-    let customStyles = {};
+    const isBeforeHighlight = !!this.changeContext?.previousHighlightObjects.find(mo => mo.id === this.context.target.id);
+    const isAfterHighlight = !!this.changeContext?.newHighlightObjects.find(mo => mo.id === this.context.target.id);
 
-    if (isSubscript) {
-      customStyles = {
-        'font-size': 'smaller'
-      }
-    } else {
-      customStyles = {
-        'font-size': '16px'
-      }
-    }
+    let customStyles = {
+      color: isBeforeHighlight ? 'red' : (isAfterHighlight ? 'limegreen' : 'black'),
+      'font-size': isSubscript ? 'smaller' : '16px'
+    };
 
     return new MathObjectViewModel({
       mathObject: this.context.target,
+      typeString: this.context.typeString,
       isRoot: this.context.isRoot,
       inFirstTerm: isFirstTerm,
       isFirstSibling: this.context.isFirstSibling,
@@ -95,13 +77,22 @@ export class MathObjectComponent implements OnInit {
       functionStr: this.context.target instanceof Function ? this.context.target.functionString : '',
       additionalOpString,
       isSubscript,
-      customStyles
+      customStyles,
+      childContexts: this.context.target.children.map(c => c.getContext(this.context.root) as Context)
     });
+  }
+
+  isPositive(mo: MathObject): boolean {
+    if (mo instanceof Term || mo instanceof Factor) {
+      return mo.sign === Sign.Positive;
+    }
+    return false;
   }
 }
 
 class MathObjectViewModel {
   mathObject!: MathObject;
+  typeString!: string;
   isRoot: boolean = false;
   isFirstSibling: boolean = false;
   inFirstTerm: boolean = false;
@@ -111,6 +102,7 @@ class MathObjectViewModel {
   additionalOpString!: string;
   isSubscript = false;
   customStyles: any = {};
+  childContexts: Context[] = [];
 
   constructor(start: Partial<MathObjectViewModel>) {
     Object.assign(this, start);
