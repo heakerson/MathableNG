@@ -20,7 +20,9 @@ export class ModalService {
   }
 
   openSolutionModal(solution: Solution): void {
-    const ref = this.dialog.open(SolutionComponent);
+    const ref = this.dialog.open(SolutionComponent, {
+      maxHeight: '85vh'
+    });
     ref.componentInstance.solution = solution;
   }
 }
