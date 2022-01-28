@@ -58,8 +58,8 @@ export class MathObjectComponent implements OnInit {
 
     const isSubscript = this.context.parent && this.context.parent instanceof Log ? this.context.position.index === 1 : false;
 
-    const isBeforeHighlight = !!this.changeContext?.previousHighlightObjects.find(mo => mo.id === this.context.target.id);
-    const isAfterHighlight = !!this.changeContext?.newHighlightObjects.find(mo => mo.id === this.context.target.id);
+    const isBeforeHighlight = this.isHighlight(this.context, this.changeContext?.previousHighlightObjects as MathObject[] || []);
+    const isAfterHighlight = this.isHighlight(this.context, this.changeContext?.newHighlightObjects as MathObject[] || []);
 
     let customStyles = {
       color: isBeforeHighlight ? 'red' : (isAfterHighlight ? 'limegreen' : 'black'),
@@ -80,6 +80,21 @@ export class MathObjectComponent implements OnInit {
       customStyles,
       childContexts: this.context.target.children.map(c => c.getContext(this.context.root) as Context)
     });
+  }
+
+  isHighlight(targetContext: Context, highlightObjects: MathObject[]): boolean {
+
+    const isTarget = highlightObjects.find(mo => mo.id === targetContext.target.id);
+
+    if (isTarget) {
+      return true;
+    }
+
+    if (targetContext.parentContext) {
+      return this.isHighlight(targetContext.parentContext, highlightObjects);
+    }
+
+    return false;
   }
 
   isPositive(mo: MathObject): boolean {
