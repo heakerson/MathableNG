@@ -30,6 +30,22 @@ export class Context {
     return [];
   }
 
+  public get isNumerator(): boolean {
+    if (this.parent && this.parent.constructor.name === 'Rational') {
+      return this.position.index === 0;
+    }
+
+    return false;
+  }
+
+  public get isDenominator(): boolean {
+    if (this.parent && this.parent.constructor.name === 'Rational') {
+      return this.position.index === 1;
+    }
+
+    return false;
+  }
+
   constructor(
     public target: MathObject,
     public position: Position,
