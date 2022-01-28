@@ -11,29 +11,29 @@
 
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef> Status </th>
-    <td mat-cell *matCellDef="let element" class="cell"> <div [ngStyle]="getStatusStyling(element.status)">{{element.status}}</div> </td>
+    <td mat-cell *matCellDef="let element" class="cell"> <div [ngStyle]="element.statusStyles">{{element.status}}</div> </td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="final">
     <th mat-header-cell *matHeaderCellDef> Final </th>
-    <td mat-cell *matCellDef="let element" class="cell"> {{element.solutionString ? element.final : '-'}} </td>
+    <td mat-cell *matCellDef="let element" class="cell"> {{element.final}} </td>
   </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="count">
     <th mat-header-cell *matHeaderCellDef> Count </th>
-    <td mat-cell *matCellDef="let element" class="cell"> {{element.solutionString ? element.count : '-'}} </td>
+    <td mat-cell *matCellDef="let element" class="cell"> {{element.count}} </td>
   </ng-container>
 
   <ng-container matColumnDef="updatad">
     <th mat-header-cell *matHeaderCellDef> Updated </th>
-    <td mat-cell *matCellDef="let element" class="cell"> {{element.lastUpdated ? element.formattedUpdatedDate : '-'}} </td>
+    <td mat-cell *matCellDef="let element" class="cell"> {{element.formattedUpdatedDate}} </td>
   </ng-container>
 
   <ng-container matColumnDef="created">
     <th mat-header-cell *matHeaderCellDef> Created </th>
-    <td mat-cell *matCellDef="let element" class="cell"> {{element.created ? element.formattedCreatedDate : '-'}} </td>
+    <td mat-cell *matCellDef="let element" class="cell"> {{element.formattedCreatedDate}} </td>
   </ng-container>
 
     <!-- Weight Column -->
@@ -45,11 +45,11 @@
         </button>
 
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteTest(element)">
+          <button mat-menu-item (click)="deleteTest(element.test)">
             <!-- <mat-icon>dialpad</mat-icon> -->
             <span>Delete</span>
           </button>
-          <button *ngIf="element.solutionString" mat-menu-item (click)="openSolution(element)">
+          <button *ngIf="element.solutionString" mat-menu-item (click)="openSolution(element.test)">
             <!-- <mat-icon>voicemail</mat-icon> -->
             <span>View Solution</span>
           </button>

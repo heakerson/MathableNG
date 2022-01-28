@@ -11,11 +11,11 @@ import { TestDataService } from '@testing/services/test-data.service';
 })
 export class TestsTableComponent implements OnInit {
 
-  dataSource: Test[] = [];
+  dataSource: TestTableViewModel[] = [];
 
   @Input()
   set tests(tests: Test[]) {
-    this.dataSource = tests || [];
+    this.dataSource = this.buildDataList(tests) || [];
   }
 
   displayedColumns: string[] = ['input', 'status', 'final', 'count', 'updatad', 'created', 'menu' ];
@@ -30,6 +30,26 @@ export class TestsTableComponent implements OnInit {
   
   openSolution(test: Test): void {
     this.modalService.openSolutionModal(test.Solution);
+  }
+
+  deleteTest(test: Test): void {
+    this.testDataService.deleteTest(test);
+  }
+
+  buildDataList(tests: Test[]): TestTableViewModel[] {
+    return tests?.map(test => {
+      return new TestTableViewModel({
+        test,
+        input: test.input,
+        status: test.status,
+        final: test.solutionString ? test.final : '-',
+        count: test.solutionString ? test.count.toString() : '-',
+        formattedUpdatedDate: test.lastUpdated ? test.formattedUpdatedDate : '-',
+        formattedCreatedDate: test.created ? test.formattedCreatedDate : '-',
+        statusStyles: this.getStatusStyling(test.status),
+        solutionString: test.solutionString
+      });
+    });
   }
 
   getStatusStyling(status: TestStatus): any {
@@ -52,9 +72,20 @@ export class TestsTableComponent implements OnInit {
         };
     }
   }
+}
 
-  deleteTest(test: Test): void {
-    this.testDataService.deleteTest(test);
+class TestTableViewModel {
+  test!: Test;
+  input!: string;
+  status!: TestStatus;
+  final!: string;
+  count!: string;
+  formattedUpdatedDate!: string;
+  formattedCreatedDate!: string;
+  solutionString!: string;
+  statusStyles!: any;
+
+  constructor(start: Partial<TestTableViewModel>) {
+    Object.assign(this, start);
   }
-
 }
