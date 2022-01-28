@@ -68,7 +68,7 @@ export class MathObjectComponent implements OnInit {
 
     return new MathObjectViewModel({
       mathObject: this.context.target,
-      typeString: this.context.typeString,
+      typeString: this.getTypeString(),
       isRoot: this.context.isRoot,
       inFirstTerm: isFirstTerm,
       isFirstSibling: this.context.isFirstSibling,
@@ -102,6 +102,16 @@ export class MathObjectComponent implements OnInit {
       return mo.sign === Sign.Positive;
     }
     return false;
+  }
+
+  getTypeString(): string {
+    if (this.context.target instanceof Function) {
+      if (this.context.target instanceof Log) {
+        return 'Log';
+      }
+      return 'Function';
+    }
+    return this.context.target.constructor.name;
   }
 }
 

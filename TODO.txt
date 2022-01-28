@@ -1,7 +1,9 @@
 LEFT OFF:
 - Create testing application - sepearate angular module
-    - create a component for displaying a single mathObject
-        - eventually, I can use a changeContext object for additional input along with a flag that says it's the previous object or the new object
+    - add ability to minimize solution steps
+        - Can minimize individual ones to show only final step
+        - Can minimize all at once
+        - Can hide all steps at once and only display accordion showing how many steps exist
     - MAKE UI MORE EFFICIENT!!! Probably fewer getters?
         - Start with the table
     - create a panel on the right and add the ability to store test inputs and run them
